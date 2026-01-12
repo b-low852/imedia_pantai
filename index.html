@@ -31,6 +31,28 @@
             pointer-events: none;
         }
 
+        #backgroundVideo {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+            display: none;
+        }
+
+        /* Show video background only on mobile portrait */
+        @media screen and (max-width: 768px) and (orientation: portrait) {
+            #backgroundVideo {
+                display: block;
+            }
+            
+            body {
+                background: transparent;
+            }
+        }
+
         .wave {
             position: absolute;
             bottom: 0;
@@ -438,28 +460,7 @@
         }
 
         #contributionsContainer {
-            max-height: 300px;
-            overflow-y: auto;
-            overflow-x: hidden;
             padding-right: 5px;
-        }
-
-        #contributionsContainer::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        #contributionsContainer::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 10px;
-        }
-
-        #contributionsContainer::-webkit-scrollbar-thumb {
-            background: #0072ff;
-            border-radius: 10px;
-        }
-
-        #contributionsContainer::-webkit-scrollbar-thumb:hover {
-            background: #0056b3;
         }
 
         .contributions-list h3 {
@@ -806,11 +807,10 @@
             display: inline-block;
             background: #28a745;
             color: white;
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 10px;
             font-weight: bold;
-            margin-left: 8px;
         }
 
         .view-receipt-btn {
@@ -946,6 +946,12 @@
         <h1>🌴🔥 Beach BBQ Party 🔥🌴</h1>
         <p>Tap to view invitation</p>
     </div>
+
+    <!-- Background Video for Mobile Portrait Only -->
+    <video id="backgroundVideo" autoplay loop muted playsinline style="display: none;">
+        <source src="pn.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
 
     <div class="modal" id="inviteModal">
         <div class="modal-content">
@@ -1296,9 +1302,7 @@
                 
                 let receiptBadge = '';
                 if (contribution.receiptBase64) {
-                    receiptBadge = `<span class="receipt-badge">✓ Receipt Uploaded</span>`;
-                } else {
-                    receiptBadge = `<span style="color: #999; font-size: 12px;">No receipt uploaded</span>`;
+                    receiptBadge = `<span class="receipt-badge">✓ Receipt</span>`;
                 }
                 
                 let viewReceiptBtn = '';
@@ -1307,15 +1311,15 @@
                 }
                 
                 item.innerHTML = `
-                    <strong>${contribution.name}</strong>
-                    <span>${contribution.items}</span>
-                    <div style="margin-top: 10px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                        <strong>${contribution.name}</strong>
                         ${receiptBadge}
                     </div>
-                    <div class="contribution-actions">
+                    <span>${contribution.items}</span>
+                    <div class="contribution-actions" style="margin-top: 8px;">
+                        ${viewReceiptBtn}
                         <button class="edit-btn" onclick="editContribution('${contribution.id}')">✏️ Edit</button>
                         <button class="delete-btn" onclick="deleteContribution('${contribution.id}')">🗑️ Delete</button>
-                        ${viewReceiptBtn}
                     </div>
                 `;
                 container.appendChild(item);
