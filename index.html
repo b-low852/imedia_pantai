@@ -729,6 +729,157 @@
             box-shadow: 0 2px 5px rgba(220, 53, 69, 0.3);
         }
 
+        .receipt-section {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .file-upload-wrapper {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .file-upload-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .file-upload-input {
+            width: 100%;
+            padding: 10px;
+            border: 2px dashed #0072ff;
+            border-radius: 8px;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: border-color 0.3s, background 0.3s;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .file-upload-input:hover {
+            border-color: #0056b3;
+            background: #e9ecef;
+        }
+
+        .file-upload-input:focus {
+            outline: none;
+            border-color: #0072ff;
+        }
+
+        .file-name-display {
+            margin-top: 8px;
+            padding: 8px;
+            background: #e7f3ff;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #0056b3;
+            display: none;
+        }
+
+        .file-name-display.show {
+            display: block;
+        }
+
+        .receipt-preview {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .receipt-image {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 10px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .receipt-image:hover {
+            transform: scale(1.05);
+        }
+
+        .receipt-badge {
+            display: inline-block;
+            background: #28a745;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-left: 8px;
+        }
+
+        .view-receipt-btn {
+            background: #17a2b8;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-weight: bold;
+        }
+
+        .view-receipt-btn:hover {
+            background: #138496;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(23, 162, 184, 0.3);
+        }
+
+        .receipt-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 2000;
+        }
+
+        .receipt-modal-content {
+            background: #fff;
+            border-radius: 12px;
+            max-width: 90%;
+            max-height: 90vh;
+            padding: 20px;
+            position: relative;
+            text-align: center;
+        }
+
+        .receipt-modal-image {
+            max-width: 100%;
+            max-height: 70vh;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        .receipt-modal-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #333;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+        .receipt-modal-close:hover {
+            background: #f0f0f0;
+        }
+
         .card {
             background: white;
             border-radius: 16px;
@@ -839,6 +990,12 @@
                         <label for="items">Items you're bringing:</label>
                         <textarea id="items" name="items" required placeholder="e.g., Drinks, Snacks, Chips, etc."></textarea>
                     </div>
+                    <div class="form-group receipt-section">
+                        <label for="receipt" class="file-upload-label">📄 Upload Payment Receipt (Optional, max 700KB):</label>
+                        <input type="file" id="receipt" name="receipt" accept="image/*" class="file-upload-input" onchange="handleFileSelect(event)">
+                        <div id="fileNameDisplay" class="file-name-display"></div>
+                        <div id="receiptPreview" class="receipt-preview"></div>
+                    </div>
                     <button type="submit" class="submit-btn" id="submitBtn">Submit ✨</button>
                     <button type="button" class="submit-btn" id="cancelBtn" onclick="cancelEdit()" style="display: none; margin-top: 10px; background: #6c757d;">Cancel</button>
                 </form>
@@ -848,6 +1005,16 @@
                     <div id="contributionsContainer"></div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Receipt View Modal -->
+    <div class="receipt-modal" id="receiptModal" onclick="closeReceiptModal(event)">
+        <div class="receipt-modal-content" onclick="event.stopPropagation()">
+            <span class="receipt-modal-close" onclick="closeReceiptModal()">✖</span>
+            <h3>Payment Receipt</h3>
+            <img id="receiptModalImage" src="" alt="Receipt" class="receipt-modal-image">
+            <p style="margin-top: 10px; color: #666; font-size: 14px;">Click outside to close</p>
         </div>
     </div>
 
@@ -870,12 +1037,16 @@
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
+        
+        console.log("Firebase Firestore initialized successfully");
 
         // Collection name in Firestore
         const COLLECTION_NAME = "contributions";
 
         let contributions = [];
         let editingDocId = null;
+        let selectedReceiptFile = null;
+        let currentReceiptBase64 = null;
 
         // Load contributions from Firestore on page load
         function loadContributions() {
@@ -888,7 +1059,8 @@
                             id: doc.id,
                             name: doc.data().name,
                             items: doc.data().items,
-                            timestamp: doc.data().timestamp
+                            timestamp: doc.data().timestamp,
+                            receiptBase64: doc.data().receiptBase64 || null
                         });
                     });
                     updateContributionsList();
@@ -931,17 +1103,33 @@
                 submitBtn.textContent = "Saving...";
                 
                 try {
+                    let receiptBase64 = currentReceiptBase64 || null;
+                    
+                    // Convert receipt image to base64 if a new one is selected
+                    if (selectedReceiptFile) {
+                        submitBtn.textContent = "Processing receipt...";
+                        receiptBase64 = await convertImageToBase64(selectedReceiptFile);
+                    }
+                    
                     if (editingDocId) {
                         // Update existing contribution in Firestore
-                        await db.collection(COLLECTION_NAME).doc(editingDocId).update({
+                        const updateData = {
                             name: name,
                             items: items
-                        });
+                        };
+                        
+                        // Only update receipt if a new one was provided
+                        if (receiptBase64) {
+                            updateData.receiptBase64 = receiptBase64;
+                        }
+                        
+                        await db.collection(COLLECTION_NAME).doc(editingDocId).update(updateData);
                     } else {
                         // Add new contribution to Firestore
                         await db.collection(COLLECTION_NAME).add({
                             name: name,
                             items: items,
+                            receiptBase64: receiptBase64,
                             timestamp: firebase.firestore.FieldValue.serverTimestamp()
                         });
                     }
@@ -950,11 +1138,87 @@
                     cancelEdit();
                 } catch (error) {
                     console.error("Error saving contribution:", error);
-                    alert("Error saving contribution. Please try again.");
+                    
+                    // Provide specific error messages
+                    let errorMessage = "Error saving contribution. ";
+                    
+                    if (error.message && error.message.includes('size')) {
+                        errorMessage = "Image is too large! Please use an image smaller than 700KB.";
+                    } else if (error.message) {
+                        errorMessage += error.message;
+                    } else {
+                        errorMessage += "Please try again. Check browser console (F12) for details.";
+                    }
+                    
+                    alert(errorMessage);
                 } finally {
                     submitBtn.disabled = false;
                     submitBtn.textContent = editingDocId ? "Update ✨" : "Submit ✨";
                 }
+            }
+        }
+
+        async function convertImageToBase64(file) {
+            return new Promise((resolve, reject) => {
+                // Firestore has a 1MB document size limit
+                // Base64 encoding increases size by ~33%, so limit to ~700KB
+                const maxSize = 700 * 1024; // 700KB
+                
+                if (file.size > maxSize) {
+                    reject(new Error(`Image size (${(file.size / 1024).toFixed(2)} KB) exceeds the maximum allowed size of 700KB. Please compress or resize your image.`));
+                    return;
+                }
+                
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    const base64String = e.target.result;
+                    console.log("Image converted to base64, size:", (base64String.length / 1024).toFixed(2), "KB");
+                    resolve(base64String);
+                };
+                
+                reader.onerror = function(error) {
+                    console.error("Error reading file:", error);
+                    reject(new Error("Failed to read image file. Please try again."));
+                };
+                
+                // Read file as data URL (base64)
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                // Validate file type
+                if (!file.type.startsWith('image/')) {
+                    alert("Please select an image file.");
+                    event.target.value = '';
+                    return;
+                }
+                
+                // Validate file size (max 700KB for Firestore - accounts for base64 encoding overhead)
+                const maxSize = 700 * 1024; // 700KB
+                if (file.size > maxSize) {
+                    alert(`File size must be less than 700KB. Your file is ${(file.size / 1024).toFixed(2)} KB. Please compress or resize your image.`);
+                    event.target.value = '';
+                    return;
+                }
+                
+                selectedReceiptFile = file;
+                
+                // Display file name
+                const fileNameDisplay = document.getElementById("fileNameDisplay");
+                fileNameDisplay.textContent = `Selected: ${file.name} (${(file.size / 1024).toFixed(2)} KB)`;
+                fileNameDisplay.classList.add("show");
+                
+                // Preview image
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById("receiptPreview");
+                    preview.innerHTML = `<img src="${e.target.result}" alt="Receipt preview" class="receipt-image" style="max-width: 200px;">`;
+                };
+                reader.readAsDataURL(file);
             }
         }
 
@@ -965,6 +1229,20 @@
                 document.getElementById("items").value = contribution.items;
                 document.getElementById("editIndex").value = docId;
                 editingDocId = docId;
+                currentReceiptBase64 = contribution.receiptBase64 || null;
+                selectedReceiptFile = null;
+                
+                // Reset file input
+                document.getElementById("receipt").value = '';
+                document.getElementById("fileNameDisplay").classList.remove("show");
+                
+                // Show existing receipt if available
+                const preview = document.getElementById("receiptPreview");
+                if (currentReceiptBase64) {
+                    preview.innerHTML = `<img src="${currentReceiptBase64}" alt="Current receipt" class="receipt-image" style="max-width: 200px;"><p style="font-size: 12px; color: #666; margin-top: 5px;">Current receipt (upload new to replace)</p>`;
+                } else {
+                    preview.innerHTML = '';
+                }
                 
                 // Update button text and show cancel button
                 document.getElementById("submitBtn").textContent = "Update ✨";
@@ -995,8 +1273,12 @@
             document.getElementById("contributionForm").reset();
             document.getElementById("editIndex").value = "-1";
             editingDocId = null;
+            selectedReceiptFile = null;
+            currentReceiptBase64 = null;
             document.getElementById("submitBtn").textContent = "Submit ✨";
             document.getElementById("cancelBtn").style.display = "none";
+            document.getElementById("fileNameDisplay").classList.remove("show");
+            document.getElementById("receiptPreview").innerHTML = '';
         }
 
         function updateContributionsList() {
@@ -1011,12 +1293,29 @@
             contributions.forEach((contribution) => {
                 const item = document.createElement("div");
                 item.className = "contribution-item";
+                
+                let receiptBadge = '';
+                if (contribution.receiptBase64) {
+                    receiptBadge = `<span class="receipt-badge">✓ Receipt Uploaded</span>`;
+                } else {
+                    receiptBadge = `<span style="color: #999; font-size: 12px;">No receipt uploaded</span>`;
+                }
+                
+                let viewReceiptBtn = '';
+                if (contribution.receiptBase64) {
+                    viewReceiptBtn = `<button class="view-receipt-btn" onclick="viewReceipt('${contribution.receiptBase64}')">📄 View Receipt</button>`;
+                }
+                
                 item.innerHTML = `
                     <strong>${contribution.name}</strong>
                     <span>${contribution.items}</span>
+                    <div style="margin-top: 10px;">
+                        ${receiptBadge}
+                    </div>
                     <div class="contribution-actions">
                         <button class="edit-btn" onclick="editContribution('${contribution.id}')">✏️ Edit</button>
                         <button class="delete-btn" onclick="deleteContribution('${contribution.id}')">🗑️ Delete</button>
+                        ${viewReceiptBtn}
                     </div>
                 `;
                 container.appendChild(item);
@@ -1083,6 +1382,20 @@
                 btn.style.animation = "none";
             }
         }, 100);
+
+        // Receipt modal functions
+        function viewReceipt(receiptBase64) {
+            const modal = document.getElementById("receiptModal");
+            const modalImage = document.getElementById("receiptModalImage");
+            modalImage.src = receiptBase64;
+            modal.style.display = "flex";
+        }
+
+        function closeReceiptModal(event) {
+            if (!event || event.target.id === "receiptModal" || event.target.classList.contains("receipt-modal-close")) {
+                document.getElementById("receiptModal").style.display = "none";
+            }
+        }
     </script>
 
 </body>
