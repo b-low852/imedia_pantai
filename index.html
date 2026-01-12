@@ -40,12 +40,13 @@
             object-fit: cover;
             z-index: -1;
             display: none;
+            pointer-events: none;
         }
 
         /* Show video background only on mobile portrait */
         @media screen and (max-width: 768px) and (orientation: portrait) {
             #backgroundVideo {
-                display: block;
+                display: block !important;
             }
             
             body {
@@ -948,7 +949,7 @@
     </div>
 
     <!-- Background Video for Mobile Portrait Only -->
-    <video id="backgroundVideo" autoplay loop muted playsinline style="display: none;">
+    <video id="backgroundVideo" autoplay loop muted playsinline>
         <source src="pn.mp4" type="video/mp4">
         Your browser does not support the video tag.
     </video>
@@ -1094,15 +1095,55 @@
                 backgroundVideo.muted = true;
                 backgroundVideo.playsInline = true;
                 
-                // Try to play the video
-                backgroundVideo.play().catch(error => {
-                    console.log("Video autoplay prevented, will play on user interaction:", error);
-                });
+                // Check if we're on mobile portrait
+                const isMobilePortrait = window.innerWidth <= 768 && window.matchMedia("(orientation: portrait)").matches;
+                
+                if (isMobilePortrait) {
+                    // Show the video
+                    backgroundVideo.style.display = 'block';
+                    
+                    // Try to play the video
+                    const playPromise = backgroundVideo.play();
+                    if (playPromise !== undefined) {
+                        playPromise.catch(error => {
+                            console.log("Video autoplay prevented:", error);
+                            // Try again after user interaction
+                            document.addEventListener('touchstart', () => {
+                                backgroundVideo.play();
+                            }, { once: true });
+                        });
+                    }
+                }
                 
                 // Ensure it loops
                 backgroundVideo.addEventListener('ended', () => {
                     backgroundVideo.currentTime = 0;
                     backgroundVideo.play();
+                });
+                
+                // Handle orientation/resize changes
+                window.addEventListener('resize', () => {
+                    const isMobilePortrait = window.innerWidth <= 768 && window.matchMedia("(orientation: portrait)").matches;
+                    if (isMobilePortrait) {
+                        backgroundVideo.style.display = 'block';
+                        backgroundVideo.play().catch(() => {});
+                    } else {
+                        backgroundVideo.style.display = 'none';
+                        backgroundVideo.pause();
+                    }
+                });
+                
+                window.addEventListener('orientationchange', () => {
+                    setTimeout(() => {
+                        const isMobilePortrait = window.innerWidth <= 768 && window.matchMedia("(orientation: portrait)").matches;
+                        if (isMobilePortrait) {
+                            backgroundVideo.style.display = 'block';
+                            backgroundVideo.play().catch(() => {});
+                        } else {
+                            backgroundVideo.style.display = 'none';
+                            backgroundVideo.pause();
+                        }
+                    }, 100);
                 });
             }
         });
