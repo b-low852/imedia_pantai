@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Beach Barbecue Invitation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 200%;
+            height: 100px;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.1) 100%);
+            border-radius: 50% 50% 0 0;
+            animation: waveMove 8s ease-in-out infinite;
+        }
+
+        .wave:nth-child(2) {
+            animation-delay: -2s;
+            height: 80px;
+            opacity: 0.7;
+        }
+
+        .wave:nth-child(3) {
+            animation-delay: -4s;
+            height: 60px;
+            opacity: 0.5;
+        }
+
+        @keyframes waveMove {
+
+            0%,
+            100% {
+                transform: translateX(-50%) translateY(0);
+            }
+
+            50% {
+                transform: translateX(-50%) translateY(-20px);
+            }
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            animation: floatParticle 15s infinite ease-in-out;
+        }
+
+        .particle:nth-child(1) {
+            width: 20px;
+            height: 20px;
+            left: 10%;
+            animation-delay: 0s;
+            animation-duration: 12s;
+        }
+
+        .particle:nth-child(2) {
+            width: 15px;
+            height: 15px;
+            left: 30%;
+            animation-delay: 2s;
+            animation-duration: 14s;
+        }
+
+        .particle:nth-child(3) {
+            width: 25px;
+            height: 25px;
+            left: 50%;
+            animation-delay: 4s;
+            animation-duration: 16s;
+        }
+
+        .particle:nth-child(4) {
+            width: 18px;
+            height: 18px;
+            left: 70%;
+            animation-delay: 1s;
+            animation-duration: 13s;
+        }
+
+        .particle:nth-child(5) {
+            width: 22px;
+            height: 22px;
+            left: 85%;
+            animation-delay: 3s;
+            animation-duration: 15s;
+        }
+
+        @keyframes floatParticle {
+            0% {
+                transform: translateY(100vh) translateX(0) scale(0);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-100px) translateX(50px) scale(1);
+                opacity: 0;
+            }
+        }
+
+        .emoji-float {
+            position: absolute;
+            font-size: 30px;
+            animation: floatEmoji 20s infinite ease-in-out;
+            opacity: 0.4;
+        }
+
+        .emoji-float:nth-child(6) {
+            left: 15%;
+            animation-delay: 0s;
+            animation-duration: 18s;
+        }
+
+        .emoji-float:nth-child(7) {
+            left: 45%;
+            animation-delay: 5s;
+            animation-duration: 22s;
+        }
+
+        .emoji-float:nth-child(8) {
+            left: 75%;
+            animation-delay: 10s;
+            animation-duration: 20s;
+        }
+
+        @keyframes floatEmoji {
+            0% {
+                transform: translateY(100vh) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 0.4;
+            }
+
+            90% {
+                opacity: 0.4;
+            }
+
+            100% {
+                transform: translateY(-100px) translateX(100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .card {
+            position: relative;
+            z-index: 10;
+        }
+
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg,
+                    transparent 30%,
+                    rgba(255, 255, 255, 0.5) 50%,
+                    transparent 70%);
+            animation: shimmer 3s infinite;
+            pointer-events: none;
+        }
+
+        .card:hover {
+            animation: cardEntrance 0.8s ease-out, floatingHover 2s ease-in-out infinite, pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes cardEntrance {
+            0% {
+                opacity: 0;
+                transform: translateY(30px) scale(0.8);
+            }
+
+            60% {
+                transform: translateY(-5px) scale(1.02);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes floating {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes floatingHover {
+
+            0%,
+            100% {
+                transform: translateY(-5px) scale(1.08);
+            }
+
+            50% {
+                transform: translateY(-15px) scale(1.1);
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%) translateY(-100%) rotate(45deg);
+            }
+
+            100% {
+                transform: translateX(100%) translateY(100%) rotate(45deg);
+            }
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            }
+
+            50% {
+                box-shadow: 0 15px 40px rgba(0, 114, 255, 0.4);
+            }
+        }
+
+        .card h1 {
+            margin: 0;
+            font-size: 22px;
+            animation: textFadeIn 1s ease-out 0.3s both;
+            position: relative;
+            z-index: 1;
+        }
+
+        .card p {
+            color: #555;
+            animation: textFadeIn 1s ease-out 0.5s both;
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes textFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: #fff;
+            border-radius: 16px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            padding: 25px;
+            position: relative;
+            animation: fadeIn 0.3s ease;
+            overflow-y: auto;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        .modal-content::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .modal-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb {
+            background: #0072ff;
+            border-radius: 10px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb:hover {
+            background: #0056b3;
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 22px;
+            cursor: pointer;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-content h2 {
+            text-align: center;
+        }
+
+        .modal-content p {
+            margin: 8px 0;
+        }
+
+        .form-section {
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #0072ff;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 114, 255, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .contributions-list {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        #contributionsContainer {
+            max-height: 300px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding-right: 5px;
+        }
+
+        #contributionsContainer::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #contributionsContainer::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        #contributionsContainer::-webkit-scrollbar-thumb {
+            background: #0072ff;
+            border-radius: 10px;
+        }
+
+        #contributionsContainer::-webkit-scrollbar-thumb:hover {
+            background: #0056b3;
+        }
+
+        .contributions-list h3 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .contribution-item {
+            background: #f5f5f5;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border-left: 4px solid #0072ff;
+            position: relative;
+        }
+
+        .contribution-item strong {
+            color: #0072ff;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .contribution-item span {
+            color: #555;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .qr-section {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+
+        .qr-section h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .qr-code {
+            max-width: 200px;
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 0 auto;
+            display: block;
+        }
+
+        /* Additional Animations */
+        .star {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 20px;
+            animation: twinkle 3s infinite ease-in-out;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        .bubble {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            animation: bubbleFloat 20s infinite ease-in-out;
+        }
+
+        @keyframes bubbleFloat {
+            0% {
+                transform: translateY(100vh) translateX(0) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100px) translateX(100px) scale(1);
+                opacity: 0;
+            }
+        }
+
+        .rotating-emoji {
+            position: absolute;
+            font-size: 40px;
+            animation: rotateFloat 15s infinite linear;
+            opacity: 0.5;
+        }
+
+        @keyframes rotateFloat {
+            0% {
+                transform: translateY(100vh) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.5;
+            }
+            90% {
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(-100px) translateX(200px) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            animation: sparkleMove 8s infinite ease-in-out;
+            box-shadow: 0 0 6px white;
+        }
+
+        @keyframes sparkleMove {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0;
+            }
+            50% {
+                transform: translate(50px, -50px) scale(1.5);
+                opacity: 1;
+            }
+        }
+
+        /* Music Player */
+        .music-player {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50px;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .music-btn {
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 8px rgba(0, 114, 255, 0.3);
+        }
+
+        .music-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(0, 114, 255, 0.4);
+        }
+
+        .music-btn:active {
+            transform: scale(0.95);
+        }
+
+        .music-label {
+            font-size: 14px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .pulse-ring {
+            position: absolute;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: pulseRing 2s infinite;
+        }
+
+        @keyframes pulseRing {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(2);
+                opacity: 0;
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 2px 8px rgba(0, 114, 255, 0.3);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 4px 15px rgba(0, 114, 255, 0.5);
+            }
+        }
+
+        .floating-shapes {
+            position: absolute;
+            opacity: 0.3;
+            animation: floatShape 25s infinite ease-in-out;
+        }
+
+        @keyframes floatShape {
+            0%, 100% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+            }
+            25% {
+                transform: translateY(-50px) translateX(30px) rotate(90deg);
+            }
+            50% {
+                transform: translateY(-100px) translateX(0) rotate(180deg);
+            }
+            75% {
+                transform: translateY(-50px) translateX(-30px) rotate(270deg);
+            }
+        }
+
+        .contribution-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .edit-btn, .delete-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-weight: bold;
+        }
+
+        .edit-btn {
+            background: #28a745;
+            color: white;
+        }
+
+        .edit-btn:hover {
+            background: #218838;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(40, 167, 69, 0.3);
+        }
+
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+        }
+
+        .delete-btn:hover {
+            background: #c82333;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(220, 53, 69, 0.3);
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            width: 300px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            animation: cardEntrance 0.8s ease-out, floating 3s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
+            z-index: 10;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="background-container">
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="emoji-float">🌴</div>
+        <div class="emoji-float">🔥</div>
+        <div class="emoji-float">🏖️</div>
+        <div class="emoji-float">🌊</div>
+        <div class="emoji-float">☀️</div>
+        <div class="emoji-float">🍹</div>
+        <div class="rotating-emoji" style="left: 20%; animation-delay: 0s;">🌺</div>
+        <div class="rotating-emoji" style="left: 60%; animation-delay: 3s;">🦩</div>
+        <div class="rotating-emoji" style="left: 80%; animation-delay: 6s;">🐚</div>
+        <div class="star" style="top: 15%; left: 25%; animation-delay: 0s;">⭐</div>
+        <div class="star" style="top: 30%; left: 70%; animation-delay: 1s;">✨</div>
+        <div class="star" style="top: 50%; left: 15%; animation-delay: 2s;">⭐</div>
+        <div class="star" style="top: 70%; left: 85%; animation-delay: 0.5s;">✨</div>
+        <div class="bubble" style="width: 30px; height: 30px; left: 25%; animation-delay: 0s;"></div>
+        <div class="bubble" style="width: 40px; height: 40px; left: 55%; animation-delay: 2s;"></div>
+        <div class="bubble" style="width: 25px; height: 25px; left: 75%; animation-delay: 4s;"></div>
+        <div class="bubble" style="width: 35px; height: 35px; left: 40%; animation-delay: 6s;"></div>
+        <div class="sparkle" style="top: 20%; left: 10%; animation-delay: 0s;"></div>
+        <div class="sparkle" style="top: 40%; left: 50%; animation-delay: 2s;"></div>
+        <div class="sparkle" style="top: 60%; left: 30%; animation-delay: 4s;"></div>
+        <div class="sparkle" style="top: 80%; left: 70%; animation-delay: 1s;"></div>
+        <div class="floating-shapes" style="width: 60px; height: 60px; background: rgba(255, 255, 255, 0.2); border-radius: 50%; top: 10%; left: 5%;"></div>
+        <div class="floating-shapes" style="width: 40px; height: 40px; background: rgba(255, 255, 255, 0.15); border-radius: 20%; top: 60%; left: 90%; animation-delay: 2s;"></div>
+    </div>
+
+    <!-- Music Player -->
+    <div class="music-player">
+        <button class="music-btn" id="musicToggle" onclick="toggleMusic()">🎵</button>
+        <span class="music-label" id="musicLabel">Music</span>
+        <audio id="backgroundMusic" loop>
+            <source src="wantan.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+
+    <div class="card" onclick="openInvite()">
+        <h1>🌴🔥 Beach BBQ Party 🔥🌴</h1>
+        <p>Tap to view invitation</p>
+    </div>
+
+    <div class="modal" id="inviteModal">
+        <div class="modal-content">
+            <span class="close" onclick="closeInvite()">✖</span>
+
+            <h2>Beach Barbecue Party</h2>
+            <p><strong>Theme:</strong> Island Chill 🌴😎</p>
+
+            <p>Sunset skies, ocean breeze, and sizzling BBQ — let’s unwind beach-style!</p>
+
+            <p>📅 <strong>Day:</strong> Saturday</p>
+            <p>🗓️ <strong>Date:</strong> 17 January 2026</p>
+            <p>⏰ <strong>Time:</strong> 2:30 PM – 7:00 PM</p>
+            <p>📍 <strong>Place:</strong> Luak Esplanade</p>
+
+            <p><strong>Dress Code:</strong> Tropical / Beachwear<br>
+                (Comfy outfits, beach shorts)
+            </p>
+
+            <p>💰 <strong>Contribution:</strong> RM12 per person</p>
+
+            <p>✨ Bring your own drinks & snacks<br>
+                ✨ Don’t forget sunscreen and a picnic mat
+            </p>
+
+            <p style="text-align:center;">🔥🏖️ See you at the beach! 🌅</p>
+
+            <div class="qr-section">
+                <h3>📱 Scan QR Code</h3>
+                <img src="qr.jpeg" alt="QR Code" class="qr-code">
+            </div>
+
+            <div class="form-section">
+                <h3 style="text-align: center; margin-bottom: 15px;">What will you bring? 🎒</h3>
+                <form id="contributionForm" onsubmit="saveContribution(event)">
+                    <input type="hidden" id="editIndex" value="-1">
+                    <div class="form-group">
+                        <label for="name">Your Name:</label>
+                        <input type="text" id="name" name="name" required placeholder="Enter your name">
+                    </div>
+                    <div class="form-group">
+                        <label for="items">Items you're bringing:</label>
+                        <textarea id="items" name="items" required placeholder="e.g., Drinks, Snacks, Chips, etc."></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn" id="submitBtn">Submit ✨</button>
+                    <button type="button" class="submit-btn" id="cancelBtn" onclick="cancelEdit()" style="display: none; margin-top: 10px; background: #6c757d;">Cancel</button>
+                </form>
+
+                <div class="contributions-list" id="contributionsList" style="display: none;">
+                    <h3>Contributions List:</h3>
+                    <div id="contributionsContainer"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // FIREBASE CONFIGURATION
+        // Replace these values with your Firebase project credentials
+        // Get them from: Firebase Console > Project Settings > General > Your apps
+        // ============================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyAsMqAziqwXuTSqX16Cl09j7ZqNxnn1L_4",
+            authDomain: "beach-e0f41.firebaseapp.com",
+            projectId: "beach-e0f41",
+            storageBucket: "beach-e0f41.firebasestorage.app",
+            messagingSenderId: "491840385634",
+            appId: "1:491840385634:web:601d11fa61a2bb3cf4173b",
+            measurementId: "G-S6X60G886D"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Collection name in Firestore
+        const COLLECTION_NAME = "contributions";
+
+        let contributions = [];
+        let editingDocId = null;
+
+        // Load contributions from Firestore on page load
+        function loadContributions() {
+            db.collection(COLLECTION_NAME)
+                .orderBy("timestamp", "desc")
+                .onSnapshot((snapshot) => {
+                    contributions = [];
+                    snapshot.forEach((doc) => {
+                        contributions.push({
+                            id: doc.id,
+                            name: doc.data().name,
+                            items: doc.data().items,
+                            timestamp: doc.data().timestamp
+                        });
+                    });
+                    updateContributionsList();
+                    
+                    // Show/hide contributions list
+                    if (contributions.length > 0) {
+                        document.getElementById("contributionsList").style.display = "block";
+                    } else {
+                        document.getElementById("contributionsList").style.display = "none";
+                    }
+                }, (error) => {
+                    console.error("Error loading contributions:", error);
+                    alert("Error loading contributions. Please check your Firebase configuration.");
+                });
+        }
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            loadContributions();
+        });
+
+        function openInvite() {
+            document.getElementById("inviteModal").style.display = "flex";
+        }
+
+        function closeInvite() {
+            document.getElementById("inviteModal").style.display = "none";
+        }
+
+        async function saveContribution(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById("name").value.trim();
+            const items = document.getElementById("items").value.trim();
+            const submitBtn = document.getElementById("submitBtn");
+            
+            if (name && items) {
+                // Disable button during save
+                submitBtn.disabled = true;
+                submitBtn.textContent = "Saving...";
+                
+                try {
+                    if (editingDocId) {
+                        // Update existing contribution in Firestore
+                        await db.collection(COLLECTION_NAME).doc(editingDocId).update({
+                            name: name,
+                            items: items
+                        });
+                    } else {
+                        // Add new contribution to Firestore
+                        await db.collection(COLLECTION_NAME).add({
+                            name: name,
+                            items: items,
+                            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                        });
+                    }
+                    
+                    // Reset form and exit edit mode
+                    cancelEdit();
+                } catch (error) {
+                    console.error("Error saving contribution:", error);
+                    alert("Error saving contribution. Please try again.");
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = editingDocId ? "Update ✨" : "Submit ✨";
+                }
+            }
+        }
+
+        function editContribution(docId) {
+            const contribution = contributions.find(c => c.id === docId);
+            if (contribution) {
+                document.getElementById("name").value = contribution.name;
+                document.getElementById("items").value = contribution.items;
+                document.getElementById("editIndex").value = docId;
+                editingDocId = docId;
+                
+                // Update button text and show cancel button
+                document.getElementById("submitBtn").textContent = "Update ✨";
+                document.getElementById("cancelBtn").style.display = "block";
+                
+                // Scroll to form
+                document.querySelector('.form-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        async function deleteContribution(docId) {
+            if (confirm("Are you sure you want to delete this contribution?")) {
+                try {
+                    await db.collection(COLLECTION_NAME).doc(docId).delete();
+                    
+                    // If we were editing this item, cancel edit mode
+                    if (editingDocId === docId) {
+                        cancelEdit();
+                    }
+                } catch (error) {
+                    console.error("Error deleting contribution:", error);
+                    alert("Error deleting contribution. Please try again.");
+                }
+            }
+        }
+
+        function cancelEdit() {
+            document.getElementById("contributionForm").reset();
+            document.getElementById("editIndex").value = "-1";
+            editingDocId = null;
+            document.getElementById("submitBtn").textContent = "Submit ✨";
+            document.getElementById("cancelBtn").style.display = "none";
+        }
+
+        function updateContributionsList() {
+            const container = document.getElementById("contributionsContainer");
+            container.innerHTML = "";
+            
+            if (contributions.length === 0) {
+                container.innerHTML = "<p style='text-align: center; color: #999; padding: 20px;'>No contributions yet. Be the first to add one! 🎉</p>";
+                return;
+            }
+            
+            contributions.forEach((contribution) => {
+                const item = document.createElement("div");
+                item.className = "contribution-item";
+                item.innerHTML = `
+                    <strong>${contribution.name}</strong>
+                    <span>${contribution.items}</span>
+                    <div class="contribution-actions">
+                        <button class="edit-btn" onclick="editContribution('${contribution.id}')">✏️ Edit</button>
+                        <button class="delete-btn" onclick="deleteContribution('${contribution.id}')">🗑️ Delete</button>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        // Music Control
+        let isMusicPlaying = false;
+
+        // Check if audio file loads correctly
+        window.addEventListener('DOMContentLoaded', () => {
+            const music = document.getElementById("backgroundMusic");
+            music.addEventListener('error', (e) => {
+                console.error("Audio file error:", music.error);
+                const label = document.getElementById("musicLabel");
+                if (music.error) {
+                    label.textContent = "File Missing";
+                    label.style.color = "#dc3545";
+                }
+            });
+            music.addEventListener('loadeddata', () => {
+                console.log("Audio file loaded successfully");
+            });
+        });
+
+        function toggleMusic() {
+            const music = document.getElementById("backgroundMusic");
+            const btn = document.getElementById("musicToggle");
+            const label = document.getElementById("musicLabel");
+
+            if (isMusicPlaying) {
+                music.pause();
+                btn.textContent = "🎵";
+                label.textContent = "Music";
+                isMusicPlaying = false;
+            } else {
+                music.play().catch(error => {
+                    console.error("Error playing music:", error);
+                    if (error.name === 'NotAllowedError') {
+                        alert("Please click the music button to play background music!");
+                    } else if (error.name === 'NotSupportedError' || error.code === 4) {
+                        alert("Music file not found. Please check if wantan.mp3 is uploaded correctly.");
+                        label.textContent = "Error";
+                    } else {
+                        alert("Unable to play music. Error: " + error.message);
+                        label.textContent = "Error";
+                    }
+                });
+                if (!music.error) {
+                    btn.textContent = "⏸️";
+                    label.textContent = "Playing";
+                    isMusicPlaying = true;
+                }
+            }
+        }
+
+        // Add pulsing effect to music button when playing
+        setInterval(() => {
+            const music = document.getElementById("backgroundMusic");
+            const btn = document.getElementById("musicToggle");
+            if (!music.paused && !music.ended) {
+                btn.style.animation = "pulse 1.5s ease-in-out infinite";
+            } else {
+                btn.style.animation = "none";
+            }
+        }, 100);
+    </script>
+
+</body>
+
+</html>
