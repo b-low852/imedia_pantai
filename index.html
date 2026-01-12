@@ -1086,6 +1086,25 @@
         // Initialize on page load
         window.addEventListener('DOMContentLoaded', () => {
             loadContributions();
+            
+            // Ensure background video autoplays and loops
+            const backgroundVideo = document.getElementById('backgroundVideo');
+            if (backgroundVideo) {
+                backgroundVideo.loop = true;
+                backgroundVideo.muted = true;
+                backgroundVideo.playsInline = true;
+                
+                // Try to play the video
+                backgroundVideo.play().catch(error => {
+                    console.log("Video autoplay prevented, will play on user interaction:", error);
+                });
+                
+                // Ensure it loops
+                backgroundVideo.addEventListener('ended', () => {
+                    backgroundVideo.currentTime = 0;
+                    backgroundVideo.play();
+                });
+            }
         });
 
         function openInvite() {
