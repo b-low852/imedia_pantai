@@ -444,31 +444,71 @@
             min-height: 80px;
         }
 
+        /* Pixel-style submit button with duck icon */
         .submit-btn {
-            background: linear-gradient(135deg, #00c6ff, #0072ff);
-            color: white;
-            border: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: #2d5a27;
+            color: #fff;
+            border: 3px solid #1a3518;
             padding: 12px 24px;
-            border-radius: 8px;
+            border-radius: 0;
             font-size: 16px;
             font-weight: bold;
+            font-family: Arial, sans-serif;
             cursor: pointer;
             width: 100%;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+            box-shadow: 4px 4px 0 #1a3518;
         }
 
         .submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 114, 255, 0.3);
+            transform: translate(-1px, -1px);
+            box-shadow: 5px 5px 0 #1a3518;
         }
 
         .submit-btn:active {
-            transform: translateY(0);
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0 #1a3518;
         }
 
         .submit-btn:disabled {
             opacity: 0.6;
             cursor: not-allowed;
+            transform: none;
+        }
+
+        .submit-btn-icon {
+            width: 28px;
+            height: 28px;
+            object-fit: contain;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+            vertical-align: middle;
+        }
+
+        .submit-btn-text {
+            vertical-align: middle;
+        }
+
+        .submit-btn.cancel-edit-btn {
+            background: #4a4a4a;
+            border-color: #2d2d2d;
+            box-shadow: 4px 4px 0 #2d2d2d;
+        }
+
+        .submit-btn.cancel-edit-btn:hover {
+            box-shadow: 5px 5px 0 #2d2d2d;
+        }
+
+        .submit-btn.cancel-edit-btn:active {
+            box-shadow: 2px 2px 0 #2d2d2d;
         }
 
         .contributions-list {
@@ -841,12 +881,12 @@
                 min-height: -webkit-fill-available;
             }
 
-            /* Same design: coin.gif frame, same proportions, same animation */
+            /* Same design: coin.gif frame, same proportions, same animation - bigger on phone */
             .card-wrapper {
                 min-width: 0 !important;
                 min-height: 0 !important;
-                width: min(92vw, 340px);
-                height: min(92vw, 340px);
+                width: min(94vw, 90vmin, 420px);
+                height: min(94vw, 90vmin, 420px);
                 padding: 18px;
                 border-radius: 44px;
                 background: url('coin.gif') center center / contain no-repeat;
@@ -944,10 +984,13 @@
             }
 
             .submit-btn {
-                background: linear-gradient(135deg, #00c6ff, #0072ff);
                 padding: 12px 24px;
-                border-radius: 8px;
                 font-size: 16px;
+            }
+
+            .submit-btn-icon {
+                width: 28px;
+                height: 28px;
             }
 
             .edit-btn, .delete-btn {
@@ -994,10 +1037,10 @@
         }
 
         @media screen and (max-width: 480px) {
-            /* Same design, slightly smaller card to fit */
+            /* Same design, bigger coin on small phone */
             .card-wrapper {
-                width: min(96vw, 320px);
-                height: min(96vw, 320px);
+                width: min(96vw, 92vmin, 380px);
+                height: min(96vw, 92vmin, 380px);
                 padding: 14px;
                 border-radius: 44px;
                 background: url('coin.gif') center center / contain no-repeat;
@@ -1034,9 +1077,7 @@
 
             .submit-btn {
                 padding: 12px 24px;
-                border-radius: 8px;
                 font-size: 16px;
-                background: linear-gradient(135deg, #00c6ff, #0072ff);
             }
         }
     </style>
@@ -1136,8 +1177,11 @@
                         <label for="items">Items you're bringing:</label>
                         <textarea id="items" name="items" required placeholder="e.g., Drinks, Snacks, Chips, etc."></textarea>
                     </div>
-                    <button type="submit" class="submit-btn" id="submitBtn">Submit ✨</button>
-                    <button type="button" class="submit-btn" id="cancelBtn" onclick="cancelEdit()" style="display: none; margin-top: 10px; background: #6c757d;">Cancel</button>
+                    <button type="submit" class="submit-btn" id="submitBtn">
+                        <img src="duck.gif" alt="" class="submit-btn-icon" aria-hidden="true">
+                        <span class="submit-btn-text">Submit</span>
+                    </button>
+                    <button type="button" class="submit-btn cancel-edit-btn" id="cancelBtn" onclick="cancelEdit()" style="display: none; margin-top: 10px;">Cancel</button>
                 </form>
 
                 <div class="contributions-list" id="contributionsList" style="display: none;">
@@ -1236,7 +1280,8 @@
             
             if (name && items) {
                 submitBtn.disabled = true;
-                submitBtn.textContent = "Saving...";
+                const btnText = submitBtn.querySelector('.submit-btn-text');
+                if (btnText) btnText.textContent = "Saving...";
                 
                 try {
                     if (editingDocId) {
@@ -1257,7 +1302,8 @@
                     alert("Error saving contribution. Please try again.");
                 } finally {
                     submitBtn.disabled = false;
-                    submitBtn.textContent = editingDocId ? "Update ✨" : "Submit ✨";
+                    const btnText = submitBtn.querySelector('.submit-btn-text');
+                    if (btnText) btnText.textContent = editingDocId ? "Update" : "Submit";
                 }
             }
         }
@@ -1271,7 +1317,9 @@
                 editingDocId = docId;
                 
                 // Update button text and show cancel button
-                document.getElementById("submitBtn").textContent = "Update ✨";
+                const submitBtn = document.getElementById("submitBtn");
+                const btnText = submitBtn && submitBtn.querySelector('.submit-btn-text');
+                if (btnText) btnText.textContent = "Update";
                 document.getElementById("cancelBtn").style.display = "block";
                 
                 // Scroll to form
@@ -1296,7 +1344,9 @@
             document.getElementById("contributionForm").reset();
             document.getElementById("editIndex").value = "-1";
             editingDocId = null;
-            document.getElementById("submitBtn").textContent = "Submit ✨";
+            const sb = document.getElementById("submitBtn");
+            const bt = sb && sb.querySelector('.submit-btn-text');
+            if (bt) bt.textContent = "Submit";
             document.getElementById("cancelBtn").style.display = "none";
         }
 
