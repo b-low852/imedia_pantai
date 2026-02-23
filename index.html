@@ -19,6 +19,11 @@
         html {
             overflow-x: hidden;
             -webkit-text-size-adjust: 100%;
+            height: 100%;
+            min-height: 100%;
+            /* Full viewport on mobile (address bar, safe area) */
+            min-height: 100vh;
+            min-height: 100dvh;
         }
 
         body {
@@ -27,6 +32,7 @@
             background-color: #0072ff;
             height: 100vh;
             min-height: 100vh;
+            min-height: 100dvh;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -41,8 +47,12 @@
             position: fixed;
             top: 0;
             left: 0;
+            right: 0;
+            bottom: 0;
             width: 100%;
             height: 100%;
+            min-height: 100vh;
+            min-height: 100dvh;
             z-index: 0;
             pointer-events: none;
         }
@@ -805,13 +815,33 @@
 
         /* Tablet and phone: same design, responsive sizing only */
         @media screen and (max-width: 900px) {
+            html {
+                min-height: 100vh;
+                min-height: 100dvh;
+                -webkit-fill-available: 100%;
+            }
+
             body {
                 padding: 10px;
                 box-sizing: border-box;
                 overflow-x: hidden;
-                /* same background as desktop */
+                min-height: 100vh;
+                min-height: 100dvh;
+                min-height: -webkit-fill-available;
+                /* full bg on phone: fixed so it fills viewport when scrolling */
                 background: url('pixel.gif') center center / cover no-repeat;
                 background-color: #0072ff;
+                background-attachment: fixed;
+            }
+
+            .background-container {
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                min-height: 100vh;
+                min-height: 100dvh;
+                min-height: -webkit-fill-available;
             }
 
             /* Same design: coin.gif frame, same proportions, same animation */
