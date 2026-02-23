@@ -4,25 +4,37 @@
 <head>
     <meta charset="UTF-8">
     <title>Beach Barbecue Invitation</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            overflow-x: hidden;
+            -webkit-text-size-adjust: 100%;
+        }
+
         body {
-            font-family: 'Nunito', 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            font-family: Arial, sans-serif;
+            background: url('pixel.gif') center center / cover no-repeat;
+            background-color: #0072ff;
             height: 100vh;
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0;
             position: relative;
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto;
+            max-width: 100vw;
         }
 
         .background-container {
@@ -33,29 +45,6 @@
             height: 100%;
             z-index: 0;
             pointer-events: none;
-        }
-
-        #backgroundVideo {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: -1;
-            display: none;
-            pointer-events: none;
-        }
-
-        /* Show video background only on mobile portrait */
-        @media screen and (max-width: 768px) and (orientation: portrait) {
-            #backgroundVideo {
-                display: block !important;
-            }
-            
-            body {
-                background: transparent;
-            }
         }
 
         .wave {
@@ -210,44 +199,6 @@
             z-index: 10;
         }
 
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg,
-                    transparent 30%,
-                    rgba(255, 255, 255, 0.6) 50%,
-                    transparent 70%);
-            animation: shimmer 3s infinite;
-            pointer-events: none;
-            opacity: 0.7;
-        }
-        
-        .card::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.3) 0%, transparent 50%);
-            border-radius: 24px;
-            pointer-events: none;
-        }
-
-        .card:hover {
-            transform: translateY(-8px) scale(1.03);
-            box-shadow: 0 30px 80px rgba(255, 105, 180, 0.5),
-                        0 15px 40px rgba(255, 182, 193, 0.4),
-                        0 8px 20px rgba(255, 192, 203, 0.3),
-                        inset 0 1px 0 rgba(255, 255, 255, 0.6);
-            animation: cardEntrance 0.8s ease-out, floatingHover 2s ease-in-out infinite, pulsePink 1.5s ease-in-out infinite;
-        }
-
         @keyframes cardEntrance {
             0% {
                 opacity: 0;
@@ -309,65 +260,17 @@
                 box-shadow: 0 15px 40px rgba(0, 114, 255, 0.4);
             }
         }
-        
-        @keyframes pulsePink {
-            0%, 100% {
-                box-shadow: 0 20px 60px rgba(255, 105, 180, 0.4),
-                            0 10px 30px rgba(255, 182, 193, 0.3),
-                            0 5px 15px rgba(255, 192, 203, 0.2);
-            }
-            50% {
-                box-shadow: 0 30px 80px rgba(255, 105, 180, 0.6),
-                            0 15px 40px rgba(255, 182, 193, 0.5),
-                            0 8px 20px rgba(255, 192, 203, 0.4);
-            }
-        }
 
         .card h1 {
             margin: 0;
-            font-size: 18px;
-            animation: textFadeIn 1s ease-out 0.3s both;
-            position: relative;
-            z-index: 1;
-            color: #8b1a5c;
-            text-shadow: 0 2px 10px rgba(255, 255, 255, 0.8),
-                         0 1px 3px rgba(139, 26, 92, 0.3);
-            font-weight: 600;
-            transition: transform 0.3s ease;
-            letter-spacing: 0.5px;
-            white-space: nowrap;
-            line-height: 1.4;
-            display: inline-block;
-        }
-        
-        .card h1 span {
-            font-size: 16px;
-        }
-        
-        .card h1 span {
-            display: inline-block;
-            vertical-align: middle;
-        }
-        
-        .card:hover h1 {
-            transform: scale(1.05);
+            font-size: 22px;
+            color: white;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.7);
         }
 
         .card p {
-            color: #b84d7a;
-            animation: textFadeIn 1s ease-out 0.5s both;
-            position: relative;
-            z-index: 1;
-            font-weight: 400;
-            text-shadow: 0 1px 5px rgba(255, 255, 255, 0.6);
-            transition: color 0.3s ease;
-            letter-spacing: 0.3px;
-            font-size: 14px;
-            margin-top: 8px;
-        }
-        
-        .card:hover p {
-            color: #9a3d6b;
+            color: white;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.7);
         }
 
         @keyframes textFadeIn {
@@ -395,9 +298,10 @@
         }
 
         .modal-content {
-            background: #fff;
+            background: url('pixel.gif') center center / cover no-repeat;
+            background-color: #1a1a2e;
             border-radius: 16px;
-            max-width: 500px;
+            max-width: min(500px, calc(100vw - 24px));
             width: 100%;
             max-height: 90vh;
             padding: 25px;
@@ -406,6 +310,7 @@
             overflow-y: auto;
             overflow-x: hidden;
             scroll-behavior: smooth;
+            box-shadow: 0 0 0 3px rgba(255,255,255,0.15), 0 10px 40px rgba(0,0,0,0.5);
         }
 
         .modal-content::-webkit-scrollbar {
@@ -413,7 +318,7 @@
         }
 
         .modal-content::-webkit-scrollbar-track {
-            background: #f1f1f1;
+            background: rgba(255,255,255,0.15);
             border-radius: 10px;
         }
 
@@ -448,16 +353,42 @@
 
         .modal-content h2 {
             text-align: center;
+            color: #fff;
+            text-shadow: 0 2px 6px rgba(0,0,0,1), 0 0 20px rgba(0,0,0,0.6);
+            font-weight: bold;
         }
 
         .modal-content p {
             margin: 8px 0;
+            color: #fff;
+            text-shadow: 0 1px 4px rgba(0,0,0,1), 0 0 12px rgba(0,0,0,0.5);
+            line-height: 1.5;
+        }
+
+        .modal-content strong {
+            color: #fff;
+            text-shadow: 0 1px 4px rgba(0,0,0,1);
+        }
+
+        .modal-content .close {
+            color: #fff;
+            text-shadow: 0 1px 4px rgba(0,0,0,1);
+            font-weight: bold;
+        }
+
+        .event-info {
+            margin: 0 0 1rem 0;
+        }
+
+        .event-info p {
+            margin: 10px 0;
+            line-height: 1.5;
         }
 
         .form-section {
             margin-top: 25px;
             padding-top: 25px;
-            border-top: 2px solid #e0e0e0;
+            border-top: 2px solid rgba(255,255,255,0.25);
         }
 
         .form-group {
@@ -466,27 +397,38 @@
 
         .form-group label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
             font-weight: bold;
-            color: #333;
+            color: #fff;
+            text-shadow: 0 1px 4px rgba(0,0,0,1), 0 0 8px rgba(0,0,0,0.6);
+            font-size: 15px;
         }
 
         .form-group input,
         .form-group textarea {
             width: 100%;
-            padding: 10px;
-            border: 2px solid #ddd;
+            padding: 12px 14px;
+            border: 2px solid rgba(255,255,255,0.6);
             border-radius: 8px;
-            font-size: 14px;
-            font-family: 'Nunito', 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 16px;
+            font-family: Arial, sans-serif;
             box-sizing: border-box;
-            transition: border-color 0.3s;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            background: #fff;
+            color: #0d3b66;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #5a7a9a;
         }
 
         .form-group input:focus,
         .form-group textarea:focus {
             outline: none;
             border-color: #0072ff;
+            box-shadow: 0 2px 12px rgba(0,114,255,0.4);
         }
 
         .form-group textarea {
@@ -524,51 +466,78 @@
         .contributions-list {
             margin-top: 20px;
             padding-top: 20px;
-            border-top: 2px solid #e0e0e0;
+            border-top: 2px solid rgba(255,255,255,0.25);
         }
 
         #contributionsContainer {
+            max-height: 300px;
+            overflow-y: auto;
+            overflow-x: hidden;
             padding-right: 5px;
+        }
+
+        #contributionsContainer::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #contributionsContainer::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.15);
+            border-radius: 10px;
+        }
+
+        #contributionsContainer::-webkit-scrollbar-thumb {
+            background: #0072ff;
+            border-radius: 10px;
+        }
+
+        #contributionsContainer::-webkit-scrollbar-thumb:hover {
+            background: #0056b3;
         }
 
         .contributions-list h3 {
             margin-bottom: 15px;
-            color: #333;
+            color: #fff;
+            text-shadow: 0 1px 4px rgba(0,0,0,1), 0 0 10px rgba(0,0,0,0.5);
         }
 
         .contribution-item {
-            background: #f5f5f5;
-            padding: 12px;
+            background: rgba(255,255,255,0.92);
+            padding: 14px;
             margin-bottom: 10px;
             border-radius: 8px;
             border-left: 4px solid #0072ff;
             position: relative;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
         }
 
         .contribution-item strong {
-            color: #0072ff;
+            color: #0d3b66;
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
+            font-size: 15px;
         }
 
         .contribution-item span {
-            color: #555;
+            color: #1e4d6b;
             display: block;
             margin-bottom: 8px;
+            line-height: 1.4;
         }
 
         .qr-section {
             text-align: center;
             margin: 20px 0;
             padding: 15px;
-            background: #f8f9fa;
+            background: rgba(255,255,255,0.2);
             border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.35);
         }
 
         .qr-section h3 {
             margin: 0 0 10px 0;
-            color: #333;
+            color: #fff;
             font-size: 16px;
+            text-shadow: 0 1px 4px rgba(0,0,0,1), 0 0 10px rgba(0,0,0,0.5);
         }
 
         .qr-code {
@@ -706,7 +675,7 @@
 
         .music-label {
             font-size: 14px;
-            color: #333;
+            color: #0d3b66;
             font-weight: bold;
         }
 
@@ -779,6 +748,7 @@
         .edit-btn {
             background: #28a745;
             color: white;
+            font-weight: 600;
         }
 
         .edit-btn:hover {
@@ -790,6 +760,7 @@
         .delete-btn {
             background: #dc3545;
             color: white;
+            font-weight: 600;
         }
 
         .delete-btn:hover {
@@ -798,267 +769,249 @@
             box-shadow: 0 2px 5px rgba(220, 53, 69, 0.3);
         }
 
-        .receipt-section {
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid #e0e0e0;
-        }
-
-        .file-upload-wrapper {
-            position: relative;
-            margin-bottom: 15px;
-        }
-
-        .file-upload-label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .file-upload-input {
-            width: 100%;
-            padding: 10px;
-            border: 2px dashed #0072ff;
-            border-radius: 8px;
-            background: #f8f9fa;
-            cursor: pointer;
-            transition: border-color 0.3s, background 0.3s;
-            font-size: 14px;
-            box-sizing: border-box;
-        }
-
-        .file-upload-input:hover {
-            border-color: #0056b3;
-            background: #e9ecef;
-        }
-
-        .file-upload-input:focus {
-            outline: none;
-            border-color: #0072ff;
-        }
-
-        .file-name-display {
-            margin-top: 8px;
-            padding: 8px;
-            background: #e7f3ff;
-            border-radius: 6px;
-            font-size: 13px;
-            color: #0056b3;
-            display: none;
-        }
-
-        .file-name-display.show {
-            display: block;
-        }
-
-        .receipt-preview {
-            margin-top: 10px;
-            text-align: center;
-        }
-
-        .receipt-image {
-            max-width: 100%;
-            max-height: 200px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            margin-top: 10px;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .receipt-image:hover {
-            transform: scale(1.05);
-        }
-
-        .receipt-badge {
+        .card-wrapper {
             display: inline-block;
-            background: #28a745;
-            color: white;
-            padding: 2px 6px;
-            border-radius: 10px;
-            font-size: 10px;
-            font-weight: bold;
-        }
-
-        .view-receipt-btn {
-            background: #17a2b8;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 12px;
+            padding: 28px;
+            background: url('coin.gif') center center / contain no-repeat;
+            background-color: transparent;
+            border-radius: 44px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+            animation: cardEntrance 0.8s ease-out, floating 3s ease-in-out infinite;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            font-weight: bold;
-        }
-
-        .view-receipt-btn:hover {
-            background: #138496;
-            transform: translateY(-1px);
-            box-shadow: 0 2px 5px rgba(23, 162, 184, 0.3);
-        }
-
-        .receipt-modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.8);
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            z-index: 2000;
-        }
-
-        .receipt-modal-content {
-            background: #fff;
-            border-radius: 12px;
-            max-width: 90%;
-            max-height: 90vh;
-            padding: 20px;
+            z-index: 10;
             position: relative;
-            text-align: center;
-        }
-
-        .receipt-modal-image {
-            max-width: 100%;
-            max-height: 70vh;
-            border-radius: 8px;
-            margin: 10px 0;
-        }
-
-        .receipt-modal-close {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 28px;
-            cursor: pointer;
-            color: #333;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 50%;
-            width: 35px;
-            height: 35px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.2s;
-        }
-
-        .receipt-modal-close:hover {
-            background: #f0f0f0;
-        }
-
-        /* Confirmation Modal */
-        .confirm-modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.5);
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            z-index: 2000;
-            backdrop-filter: blur(5px);
-        }
-
-        .confirm-modal-content {
-            background: linear-gradient(135deg, #ffb3d9 0%, #ffcce5 50%, #ffe6f2 100%);
-            border-radius: 20px;
-            max-width: 400px;
-            width: 100%;
-            padding: 30px;
-            position: relative;
-            animation: fadeIn 0.3s ease;
-            box-shadow: 0 20px 60px rgba(255, 105, 180, 0.4),
-                        0 10px 30px rgba(255, 182, 193, 0.3);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            text-align: center;
-        }
-
-        .confirm-modal-content h3 {
-            margin: 0 0 15px 0;
-            color: #8b1a5c;
-            font-size: 20px;
-            text-shadow: 0 1px 3px rgba(255, 255, 255, 0.8);
-        }
-
-        .confirm-modal-content p {
-            margin: 0 0 25px 0;
-            color: #b84d7a;
-            font-size: 16px;
-            line-height: 1.5;
-        }
-
-        .confirm-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-        }
-
-        .confirm-btn {
-            padding: 12px 30px;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            min-width: 100px;
-        }
-
-        .confirm-btn-yes {
-            background: linear-gradient(135deg, #ff6b9d, #ff8fab);
-            color: white;
-            box-shadow: 0 4px 15px rgba(255, 107, 157, 0.4);
-        }
-
-        .confirm-btn-yes:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 107, 157, 0.5);
-        }
-
-        .confirm-btn-yes:active {
-            transform: translateY(0);
-        }
-
-        .confirm-btn-no {
-            background: linear-gradient(135deg, #e0e0e0, #f5f5f5);
-            color: #666;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .confirm-btn-no:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-            background: linear-gradient(135deg, #d0d0d0, #e5e5e5);
-        }
-
-        .confirm-btn-no:active {
-            transform: translateY(0);
+            min-width: 640px;
+            min-height: 640px;
         }
 
         .card {
-            background: linear-gradient(135deg, #ffb3d9 0%, #ffcce5 50%, #ffe6f2 100%);
-            border-radius: 20px;
-            padding: 25px;
+            background: transparent;
+            border-radius: 24px;
+            padding: 24px;
             text-align: center;
-            width: 260px;
-            box-shadow: 0 20px 60px rgba(255, 105, 180, 0.4),
-                        0 10px 30px rgba(255, 182, 193, 0.3),
-                        0 5px 15px rgba(255, 192, 203, 0.2),
-                        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+            width: 584px;
+            min-height: 584px;
             cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            animation: cardEntrance 0.8s ease-out, floating 3s ease-in-out infinite;
+            transition: transform 0.3s;
             position: relative;
             overflow: hidden;
             z-index: 10;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(10px);
         }
-        
-        .card:active {
-            transform: scale(0.95);
+
+        .card h1, .card p {
+            color: white;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.6);
+        }
+
+        /* Tablet and phone: same design, responsive sizing only */
+        @media screen and (max-width: 900px) {
+            body {
+                padding: 10px;
+                box-sizing: border-box;
+                overflow-x: hidden;
+                /* same background as desktop */
+                background: url('pixel.gif') center center / cover no-repeat;
+                background-color: #0072ff;
+            }
+
+            /* Same design: coin.gif frame, same proportions, same animation */
+            .card-wrapper {
+                min-width: 0 !important;
+                min-height: 0 !important;
+                width: min(92vw, 340px);
+                height: min(92vw, 340px);
+                padding: 18px;
+                border-radius: 44px;
+                background: url('coin.gif') center center / contain no-repeat;
+                background-color: transparent;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+                animation: cardEntrance 0.8s ease-out, floating 3s ease-in-out infinite;
+            }
+
+            .card {
+                width: 100% !important;
+                min-height: 0 !important;
+                height: 100% !important;
+                max-height: none;
+                padding: 16px;
+                border-radius: 24px;
+                box-sizing: border-box;
+                background: transparent;
+            }
+
+            /* Same design: centered modal, same overlay, same padding feel */
+            .modal {
+                padding: 20px;
+                align-items: center;
+                justify-content: center;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            /* Same design: pixel.gif bg, same border, same shadow, same radius */
+            .modal-content {
+                max-width: min(500px, calc(100vw - 40px));
+                width: 100%;
+                max-height: 90vh;
+                padding: 25px;
+                margin: 0;
+                box-sizing: border-box;
+                background: url('pixel.gif') center center / cover no-repeat;
+                background-color: #1a1a2e;
+                border-radius: 16px;
+                box-shadow: 0 0 0 3px rgba(255,255,255,0.15), 0 10px 40px rgba(0,0,0,0.5);
+            }
+
+            .modal-content h2 {
+                font-size: 1.35rem;
+                text-align: center;
+                color: #fff;
+                text-shadow: 0 2px 6px rgba(0,0,0,1), 0 0 20px rgba(0,0,0,0.6);
+            }
+
+            .modal-content p {
+                font-size: 0.95rem;
+                margin: 8px 0;
+                color: #fff;
+                text-shadow: 0 1px 4px rgba(0,0,0,1), 0 0 12px rgba(0,0,0,0.5);
+                line-height: 1.5;
+            }
+
+            .event-info {
+                margin: 0 0 1rem 0;
+            }
+
+            .event-info p {
+                margin: 10px 0;
+                line-height: 1.5;
+            }
+
+            /* Same form design: border, inputs, submit button gradient */
+            .form-section {
+                margin-top: 25px;
+                padding-top: 25px;
+                border-top: 2px solid rgba(255,255,255,0.25);
+            }
+
+            .form-group input,
+            .form-group textarea {
+                padding: 12px 14px;
+                font-size: 16px;
+                border: 2px solid rgba(255,255,255,0.6);
+                border-radius: 8px;
+                background: #fff;
+                color: #0d3b66;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            }
+
+            .contributions-list {
+                margin-top: 20px;
+                padding-top: 20px;
+                border-top: 2px solid rgba(255,255,255,0.25);
+            }
+
+            .contribution-item {
+                padding: 14px;
+                background: rgba(255,255,255,0.92);
+                border-radius: 8px;
+                border-left: 4px solid #0072ff;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            }
+
+            .submit-btn {
+                background: linear-gradient(135deg, #00c6ff, #0072ff);
+                padding: 12px 24px;
+                border-radius: 8px;
+                font-size: 16px;
+            }
+
+            .edit-btn, .delete-btn {
+                padding: 6px 12px;
+                border-radius: 6px;
+                font-size: 12px;
+            }
+
+            .qr-section {
+                padding: 15px;
+                background: rgba(255,255,255,0.2);
+                border-radius: 12px;
+                border: 1px solid rgba(255,255,255,0.35);
+            }
+
+            .qr-code {
+                max-width: 200px;
+                border-radius: 8px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            .close {
+                top: 10px;
+                right: 15px;
+                font-size: 22px;
+                color: #fff;
+                text-shadow: 0 1px 4px rgba(0,0,0,1);
+            }
+
+            /* Music player: same design on phone */
+            .music-player {
+                bottom: 20px;
+                right: 20px;
+                background: rgba(255, 255, 255, 0.9);
+                border-radius: 50px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            }
+
+            .music-btn {
+                background: linear-gradient(135deg, #00c6ff, #0072ff);
+                border-radius: 50%;
+                box-shadow: 0 2px 8px rgba(0, 114, 255, 0.3);
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            /* Same design, slightly smaller card to fit */
+            .card-wrapper {
+                width: min(96vw, 320px);
+                height: min(96vw, 320px);
+                padding: 14px;
+                border-radius: 44px;
+                background: url('coin.gif') center center / contain no-repeat;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+            }
+
+            .card {
+                padding: 12px;
+                border-radius: 24px;
+            }
+
+            .modal-content {
+                padding: 25px 20px;
+                border-radius: 16px;
+                box-shadow: 0 0 0 3px rgba(255,255,255,0.15), 0 10px 40px rgba(0,0,0,0.5);
+            }
+
+            .modal-content h2 {
+                font-size: 1.25rem;
+                text-align: center;
+                color: #fff;
+                text-shadow: 0 2px 6px rgba(0,0,0,1), 0 0 20px rgba(0,0,0,0.6);
+            }
+
+            .modal-content p {
+                color: #fff;
+                text-shadow: 0 1px 4px rgba(0,0,0,1), 0 0 12px rgba(0,0,0,0.5);
+            }
+
+            .event-info p {
+                margin: 10px 0;
+                line-height: 1.5;
+            }
+
+            .submit-btn {
+                padding: 12px 24px;
+                border-radius: 8px;
+                font-size: 16px;
+                background: linear-gradient(135deg, #00c6ff, #0072ff);
+            }
         }
     </style>
 </head>
@@ -1073,12 +1026,12 @@
         <div class="particle"></div>
         <div class="particle"></div>
         <div class="particle"></div>
-        <div class="emoji-float">🌺</div>
-        <div class="emoji-float">✨</div>
+        <div class="emoji-float">🌴</div>
+        <div class="emoji-float">🔥</div>
         <div class="emoji-float">🏖️</div>
         <div class="emoji-float">🌊</div>
         <div class="emoji-float">☀️</div>
-        <div class="emoji-float">🌸</div>
+        <div class="emoji-float">🍹</div>
         <div class="rotating-emoji" style="left: 20%; animation-delay: 0s;">🌺</div>
         <div class="rotating-emoji" style="left: 60%; animation-delay: 3s;">🦩</div>
         <div class="rotating-emoji" style="left: 80%; animation-delay: 6s;">🐚</div>
@@ -1108,50 +1061,45 @@
         </audio>
     </div>
 
-    <div class="card" onclick="openInvite()">
-        <h1><span>🌺✨</span> Beach BBQ Party <span>✨🌺</span></h1>
-        <p>Tap to view invitation</p>
+    <div class="card-wrapper" onclick="openInvite()">
+        <div class="card"></div>
     </div>
-
-    <!-- Background Video for Mobile Portrait Only -->
-    <video id="backgroundVideo" autoplay loop muted playsinline>
-        <source src="pn.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
 
     <div class="modal" id="inviteModal">
         <div class="modal-content">
             <span class="close" onclick="closeInvite()">✖</span>
 
             <h2>Beach Barbecue Party</h2>
-            <p><strong>Theme:</strong> Island Chill 🌺✨</p>
+            <div class="event-info">
+                <p><strong>Theme:</strong> Island Chill 🌴😎</p>
 
             <p>Sunset skies, ocean breeze, and sizzling BBQ — let’s unwind beach-style!</p>
 
-            <p>📆 <strong>Day:</strong> Saturday</p>
-            <p>📅 <strong>Date:</strong> 17 January 2026</p>
-            <p>🕐 <strong>Time:</strong> 2:30 PM – 7:00 PM</p>
+            <p>📅 <strong>Day:</strong> Saturday</p>
+            <p>🗓️ <strong>Date:</strong> 28 Februari 2026</p>
+            <p>⏰ <strong>Time:</strong> 2:30 PM – 7:00 PM</p>
             <p>📍 <strong>Place:</strong> Luak Esplanade</p>
 
             <p><strong>Dress Code:</strong> Tropical / Beachwear<br>
                 (Comfy outfits, beach shorts)
             </p>
 
-            <p>💝 <strong>Contribution:</strong> RM12 per person</p>
+            <p>💰 <strong>Contribution:</strong> RM12 per person</p>
 
             <p>✨ Bring your own drinks & snacks<br>
                 ✨ Don’t forget sunscreen and a picnic mat
             </p>
 
-            <p style="text-align:center;">✨🏖️ See you at the beach! 🌅✨</p>
+                <p style="text-align:center;">🔥🏖️ See you at the beach! 🌅</p>
+            </div>
 
             <div class="qr-section">
-                <h3>📲 Scan QR Code</h3>
+                <h3>📱 Scan QR Code</h3>
                 <img src="qr.jpeg" alt="QR Code" class="qr-code">
             </div>
 
             <div class="form-section">
-                <h3 style="text-align: center; margin-bottom: 15px;">What will you bring? 🧺</h3>
+                <h3 style="text-align: center; margin-bottom: 15px;">What will you bring? 🎒</h3>
                 <form id="contributionForm" onsubmit="saveContribution(event)">
                     <input type="hidden" id="editIndex" value="-1">
                     <div class="form-group">
@@ -1162,12 +1110,6 @@
                         <label for="items">Items you're bringing:</label>
                         <textarea id="items" name="items" required placeholder="e.g., Drinks, Snacks, Chips, etc."></textarea>
                     </div>
-                    <div class="form-group receipt-section">
-                        <label for="receipt" class="file-upload-label">📋 Upload Payment Receipt (Optional, max 700KB):</label>
-                        <input type="file" id="receipt" name="receipt" accept="image/*" class="file-upload-input" onchange="handleFileSelect(event)">
-                        <div id="fileNameDisplay" class="file-name-display"></div>
-                        <div id="receiptPreview" class="receipt-preview"></div>
-                    </div>
                     <button type="submit" class="submit-btn" id="submitBtn">Submit ✨</button>
                     <button type="button" class="submit-btn" id="cancelBtn" onclick="cancelEdit()" style="display: none; margin-top: 10px; background: #6c757d;">Cancel</button>
                 </form>
@@ -1176,28 +1118,6 @@
                     <h3>Contributions List:</h3>
                     <div id="contributionsContainer"></div>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Receipt View Modal -->
-    <div class="receipt-modal" id="receiptModal" onclick="closeReceiptModal(event)">
-        <div class="receipt-modal-content" onclick="event.stopPropagation()">
-            <span class="receipt-modal-close" onclick="closeReceiptModal()">✖</span>
-            <h3>Payment Receipt</h3>
-            <img id="receiptModalImage" src="" alt="Receipt" class="receipt-modal-image">
-            <p style="margin-top: 10px; color: #666; font-size: 14px;">Click outside to close</p>
-        </div>
-    </div>
-
-    <!-- Confirmation Modal -->
-    <div class="confirm-modal" id="confirmModal">
-        <div class="confirm-modal-content" onclick="event.stopPropagation()">
-            <h3>✨ Delete Contribution</h3>
-            <p>Are you sure you want to delete this contribution?<br>This action cannot be undone.</p>
-            <div class="confirm-buttons">
-                <button class="confirm-btn confirm-btn-yes" id="confirmYes">Yes, Delete</button>
-                <button class="confirm-btn confirm-btn-no" id="confirmNo">Cancel</button>
             </div>
         </div>
     </div>
@@ -1218,111 +1138,56 @@
             measurementId: "G-S6X60G886D"
         };
 
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-        
-        console.log("Firebase Firestore initialized successfully");
+        // Initialize Firebase (with fallback if opened as file:// or config error)
+        let db = null;
+        try {
+            if (typeof firebase !== 'undefined') {
+                firebase.initializeApp(firebaseConfig);
+                db = firebase.firestore();
+            }
+        } catch (e) {
+            console.warn("Firebase init failed (e.g. file:// or network):", e);
+        }
 
         // Collection name in Firestore
         const COLLECTION_NAME = "contributions";
 
         let contributions = [];
         let editingDocId = null;
-        let selectedReceiptFile = null;
-        let currentReceiptBase64 = null;
 
-        // Load contributions from Firestore on page load
+        // Load contributions from Firestore on page load (no orderBy to avoid index requirement; sort in memory)
         function loadContributions() {
+            if (!db) {
+                updateContributionsList();
+                return;
+            }
             db.collection(COLLECTION_NAME)
-                .orderBy("timestamp", "desc")
                 .onSnapshot((snapshot) => {
                     contributions = [];
                     snapshot.forEach((doc) => {
+                        const d = doc.data();
                         contributions.push({
                             id: doc.id,
-                            name: doc.data().name,
-                            items: doc.data().items,
-                            timestamp: doc.data().timestamp,
-                            receiptBase64: doc.data().receiptBase64 || null
+                            name: d.name,
+                            items: d.items,
+                            timestamp: d.timestamp ? (d.timestamp.toMillis ? d.timestamp.toMillis() : d.timestamp) : 0
                         });
                     });
+                    contributions.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
                     updateContributionsList();
-                    
-                    // Show/hide contributions list
-                    if (contributions.length > 0) {
-                        document.getElementById("contributionsList").style.display = "block";
-                    } else {
-                        document.getElementById("contributionsList").style.display = "none";
-                    }
+                    const listEl = document.getElementById("contributionsList");
+                    if (listEl) listEl.style.display = contributions.length > 0 ? "block" : "none";
                 }, (error) => {
                     console.error("Error loading contributions:", error);
-                    alert("Error loading contributions. Please check your Firebase configuration.");
+                    updateContributionsList();
+                    const listEl = document.getElementById("contributionsList");
+                    if (listEl) listEl.style.display = "none";
                 });
         }
 
         // Initialize on page load
         window.addEventListener('DOMContentLoaded', () => {
             loadContributions();
-            
-            // Ensure background video autoplays and loops
-            const backgroundVideo = document.getElementById('backgroundVideo');
-            if (backgroundVideo) {
-                backgroundVideo.loop = true;
-                backgroundVideo.muted = true;
-                backgroundVideo.playsInline = true;
-                
-                // Check if we're on mobile portrait
-                const isMobilePortrait = window.innerWidth <= 768 && window.matchMedia("(orientation: portrait)").matches;
-                
-                if (isMobilePortrait) {
-                    // Show the video
-                    backgroundVideo.style.display = 'block';
-                    
-                    // Try to play the video
-                    const playPromise = backgroundVideo.play();
-                    if (playPromise !== undefined) {
-                        playPromise.catch(error => {
-                            console.log("Video autoplay prevented:", error);
-                            // Try again after user interaction
-                            document.addEventListener('touchstart', () => {
-                                backgroundVideo.play();
-                            }, { once: true });
-                        });
-                    }
-                }
-                
-                // Ensure it loops
-                backgroundVideo.addEventListener('ended', () => {
-                    backgroundVideo.currentTime = 0;
-                    backgroundVideo.play();
-                });
-                
-                // Handle orientation/resize changes
-                window.addEventListener('resize', () => {
-                    const isMobilePortrait = window.innerWidth <= 768 && window.matchMedia("(orientation: portrait)").matches;
-                    if (isMobilePortrait) {
-                        backgroundVideo.style.display = 'block';
-                        backgroundVideo.play().catch(() => {});
-                    } else {
-                        backgroundVideo.style.display = 'none';
-                        backgroundVideo.pause();
-                    }
-                });
-                
-                window.addEventListener('orientationchange', () => {
-                    setTimeout(() => {
-                        const isMobilePortrait = window.innerWidth <= 768 && window.matchMedia("(orientation: portrait)").matches;
-                        if (isMobilePortrait) {
-                            backgroundVideo.style.display = 'block';
-                            backgroundVideo.play().catch(() => {});
-                        } else {
-                            backgroundVideo.style.display = 'none';
-                            backgroundVideo.pause();
-                        }
-                    }, 100);
-                });
-            }
         });
 
         function openInvite() {
@@ -1335,133 +1200,39 @@
 
         async function saveContribution(event) {
             event.preventDefault();
-            
+            if (!db) {
+                alert("Database not available. Open this page over HTTP (e.g. use a local server) and check Firebase config.");
+                return;
+            }
             const name = document.getElementById("name").value.trim();
             const items = document.getElementById("items").value.trim();
             const submitBtn = document.getElementById("submitBtn");
             
             if (name && items) {
-                // Disable button during save
                 submitBtn.disabled = true;
                 submitBtn.textContent = "Saving...";
                 
                 try {
-                    let receiptBase64 = currentReceiptBase64 || null;
-                    
-                    // Convert receipt image to base64 if a new one is selected
-                    if (selectedReceiptFile) {
-                        submitBtn.textContent = "Processing receipt...";
-                        receiptBase64 = await convertImageToBase64(selectedReceiptFile);
-                    }
-                    
                     if (editingDocId) {
-                        // Update existing contribution in Firestore
-                        const updateData = {
+                        await db.collection(COLLECTION_NAME).doc(editingDocId).update({
                             name: name,
                             items: items
-                        };
-                        
-                        // Only update receipt if a new one was provided
-                        if (receiptBase64) {
-                            updateData.receiptBase64 = receiptBase64;
-                        }
-                        
-                        await db.collection(COLLECTION_NAME).doc(editingDocId).update(updateData);
+                        });
                     } else {
-                        // Add new contribution to Firestore
                         await db.collection(COLLECTION_NAME).add({
                             name: name,
                             items: items,
-                            receiptBase64: receiptBase64,
                             timestamp: firebase.firestore.FieldValue.serverTimestamp()
                         });
                     }
-                    
-                    // Reset form and exit edit mode
                     cancelEdit();
                 } catch (error) {
                     console.error("Error saving contribution:", error);
-                    
-                    // Provide specific error messages
-                    let errorMessage = "Error saving contribution. ";
-                    
-                    if (error.message && error.message.includes('size')) {
-                        errorMessage = "Image is too large! Please use an image smaller than 700KB.";
-                    } else if (error.message) {
-                        errorMessage += error.message;
-                    } else {
-                        errorMessage += "Please try again. Check browser console (F12) for details.";
-                    }
-                    
-                    alert(errorMessage);
+                    alert("Error saving contribution. Please try again.");
                 } finally {
                     submitBtn.disabled = false;
                     submitBtn.textContent = editingDocId ? "Update ✨" : "Submit ✨";
                 }
-            }
-        }
-
-        async function convertImageToBase64(file) {
-            return new Promise((resolve, reject) => {
-                // Firestore has a 1MB document size limit
-                // Base64 encoding increases size by ~33%, so limit to ~700KB
-                const maxSize = 700 * 1024; // 700KB
-                
-                if (file.size > maxSize) {
-                    reject(new Error(`Image size (${(file.size / 1024).toFixed(2)} KB) exceeds the maximum allowed size of 700KB. Please compress or resize your image.`));
-                    return;
-                }
-                
-                const reader = new FileReader();
-                
-                reader.onload = function(e) {
-                    const base64String = e.target.result;
-                    console.log("Image converted to base64, size:", (base64String.length / 1024).toFixed(2), "KB");
-                    resolve(base64String);
-                };
-                
-                reader.onerror = function(error) {
-                    console.error("Error reading file:", error);
-                    reject(new Error("Failed to read image file. Please try again."));
-                };
-                
-                // Read file as data URL (base64)
-                reader.readAsDataURL(file);
-            });
-        }
-
-        function handleFileSelect(event) {
-            const file = event.target.files[0];
-            if (file) {
-                // Validate file type
-                if (!file.type.startsWith('image/')) {
-                    alert("Please select an image file.");
-                    event.target.value = '';
-                    return;
-                }
-                
-                // Validate file size (max 700KB for Firestore - accounts for base64 encoding overhead)
-                const maxSize = 700 * 1024; // 700KB
-                if (file.size > maxSize) {
-                    alert(`File size must be less than 700KB. Your file is ${(file.size / 1024).toFixed(2)} KB. Please compress or resize your image.`);
-                    event.target.value = '';
-                    return;
-                }
-                
-                selectedReceiptFile = file;
-                
-                // Display file name
-                const fileNameDisplay = document.getElementById("fileNameDisplay");
-                fileNameDisplay.textContent = `Selected: ${file.name} (${(file.size / 1024).toFixed(2)} KB)`;
-                fileNameDisplay.classList.add("show");
-                
-                // Preview image
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const preview = document.getElementById("receiptPreview");
-                    preview.innerHTML = `<img src="${e.target.result}" alt="Receipt preview" class="receipt-image" style="max-width: 200px;">`;
-                };
-                reader.readAsDataURL(file);
             }
         }
 
@@ -1472,20 +1243,6 @@
                 document.getElementById("items").value = contribution.items;
                 document.getElementById("editIndex").value = docId;
                 editingDocId = docId;
-                currentReceiptBase64 = contribution.receiptBase64 || null;
-                selectedReceiptFile = null;
-                
-                // Reset file input
-                document.getElementById("receipt").value = '';
-                document.getElementById("fileNameDisplay").classList.remove("show");
-                
-                // Show existing receipt if available
-                const preview = document.getElementById("receiptPreview");
-                if (currentReceiptBase64) {
-                    preview.innerHTML = `<img src="${currentReceiptBase64}" alt="Current receipt" class="receipt-image" style="max-width: 200px;"><p style="font-size: 12px; color: #666; margin-top: 5px;">Current receipt (upload new to replace)</p>`;
-                } else {
-                    preview.innerHTML = '';
-                }
                 
                 // Update button text and show cancel button
                 document.getElementById("submitBtn").textContent = "Update ✨";
@@ -1496,53 +1253,25 @@
             }
         }
 
-        let pendingDeleteId = null;
-
-        function showConfirmModal(docId) {
-            pendingDeleteId = docId;
-            const modal = document.getElementById("confirmModal");
-            modal.style.display = "flex";
-        }
-
-        function closeConfirmModal() {
-            const modal = document.getElementById("confirmModal");
-            modal.style.display = "none";
-            pendingDeleteId = null;
-        }
-
-        async function confirmDelete() {
-            if (pendingDeleteId) {
+        async function deleteContribution(docId) {
+            if (!db) return;
+            if (confirm("Are you sure you want to delete this contribution?")) {
                 try {
-                    await db.collection(COLLECTION_NAME).doc(pendingDeleteId).delete();
-                    
-                    // If we were editing this item, cancel edit mode
-                    if (editingDocId === pendingDeleteId) {
-                        cancelEdit();
-                    }
-                    
-                    closeConfirmModal();
+                    await db.collection(COLLECTION_NAME).doc(docId).delete();
+                    if (editingDocId === docId) cancelEdit();
                 } catch (error) {
                     console.error("Error deleting contribution:", error);
                     alert("Error deleting contribution. Please try again.");
-                    closeConfirmModal();
                 }
             }
-        }
-
-        async function deleteContribution(docId) {
-            showConfirmModal(docId);
         }
 
         function cancelEdit() {
             document.getElementById("contributionForm").reset();
             document.getElementById("editIndex").value = "-1";
             editingDocId = null;
-            selectedReceiptFile = null;
-            currentReceiptBase64 = null;
             document.getElementById("submitBtn").textContent = "Submit ✨";
             document.getElementById("cancelBtn").style.display = "none";
-            document.getElementById("fileNameDisplay").classList.remove("show");
-            document.getElementById("receiptPreview").innerHTML = '';
         }
 
         function updateContributionsList() {
@@ -1550,32 +1279,17 @@
             container.innerHTML = "";
             
             if (contributions.length === 0) {
-                container.innerHTML = "<p style='text-align: center; color: #999; padding: 20px;'>No contributions yet. Be the first to add one! 🎉</p>";
+                container.innerHTML = "<p style='text-align: center; color: #0d3b66; padding: 20px; background: rgba(255,255,255,0.92); border-radius: 8px; margin: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.2);'>No contributions yet. Be the first to add one! 🎉</p>";
                 return;
             }
             
             contributions.forEach((contribution) => {
                 const item = document.createElement("div");
                 item.className = "contribution-item";
-                
-                let receiptBadge = '';
-                if (contribution.receiptBase64) {
-                    receiptBadge = `<span class="receipt-badge">✨ Receipt</span>`;
-                }
-                
-                let viewReceiptBtn = '';
-                if (contribution.receiptBase64) {
-                    viewReceiptBtn = `<button class="view-receipt-btn" onclick="viewReceipt('${contribution.receiptBase64}')">📋 View Receipt</button>`;
-                }
-                
                 item.innerHTML = `
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
-                        <strong>${contribution.name}</strong>
-                        ${receiptBadge}
-                    </div>
+                    <strong>${contribution.name}</strong>
                     <span>${contribution.items}</span>
-                    <div class="contribution-actions" style="margin-top: 8px;">
-                        ${viewReceiptBtn}
+                    <div class="contribution-actions">
                         <button class="edit-btn" onclick="editContribution('${contribution.id}')">✏️ Edit</button>
                         <button class="delete-btn" onclick="deleteContribution('${contribution.id}')">🗑️ Delete</button>
                     </div>
@@ -1586,22 +1300,6 @@
 
         // Music Control
         let isMusicPlaying = false;
-
-        // Check if audio file loads correctly
-        window.addEventListener('DOMContentLoaded', () => {
-            const music = document.getElementById("backgroundMusic");
-            music.addEventListener('error', (e) => {
-                console.error("Audio file error:", music.error);
-                const label = document.getElementById("musicLabel");
-                if (music.error) {
-                    label.textContent = "File Missing";
-                    label.style.color = "#dc3545";
-                }
-            });
-            music.addEventListener('loadeddata', () => {
-                console.log("Audio file loaded successfully");
-            });
-        });
 
         function toggleMusic() {
             const music = document.getElementById("backgroundMusic");
@@ -1615,22 +1313,13 @@
                 isMusicPlaying = false;
             } else {
                 music.play().catch(error => {
-                    console.error("Error playing music:", error);
-                    if (error.name === 'NotAllowedError') {
-                        alert("Please click the music button to play background music!");
-                    } else if (error.name === 'NotSupportedError' || error.code === 4) {
-                        alert("Music file not found. Please check if wantan.mp3 is uploaded correctly.");
-                        label.textContent = "Error";
-                    } else {
-                        alert("Unable to play music. Error: " + error.message);
-                        label.textContent = "Error";
-                    }
+                    console.log("Auto-play was prevented. User interaction required.");
+                    // If autoplay is blocked, show a message
+                    alert("Click the music button to play background music!");
                 });
-                if (!music.error) {
-                    btn.textContent = "⏸️";
-                    label.textContent = "Playing";
-                    isMusicPlaying = true;
-                }
+                btn.textContent = "⏸️";
+                label.textContent = "Playing";
+                isMusicPlaying = true;
             }
         }
 
@@ -1644,44 +1333,6 @@
                 btn.style.animation = "none";
             }
         }, 100);
-
-        // Receipt modal functions
-        function viewReceipt(receiptBase64) {
-            const modal = document.getElementById("receiptModal");
-            const modalImage = document.getElementById("receiptModalImage");
-            modalImage.src = receiptBase64;
-            modal.style.display = "flex";
-        }
-
-        function closeReceiptModal(event) {
-            if (!event || event.target.id === "receiptModal" || event.target.classList.contains("receipt-modal-close")) {
-                document.getElementById("receiptModal").style.display = "none";
-            }
-        }
-
-        // Confirmation modal event listeners
-        window.addEventListener('DOMContentLoaded', () => {
-            const confirmYes = document.getElementById("confirmYes");
-            const confirmNo = document.getElementById("confirmNo");
-            const confirmModal = document.getElementById("confirmModal");
-            
-            if (confirmYes) {
-                confirmYes.addEventListener('click', confirmDelete);
-            }
-            
-            if (confirmNo) {
-                confirmNo.addEventListener('click', closeConfirmModal);
-            }
-            
-            // Close modal when clicking outside
-            if (confirmModal) {
-                confirmModal.addEventListener('click', (e) => {
-                    if (e.target === confirmModal) {
-                        closeConfirmModal();
-                    }
-                });
-            }
-        });
     </script>
 
 </body>
