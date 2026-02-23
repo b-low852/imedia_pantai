@@ -659,50 +659,54 @@
             }
         }
 
-        /* Music Player */
+        /* Music Player – pixel style */
         .music-player {
             position: fixed;
             bottom: 20px;
             right: 20px;
             z-index: 1000;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 50px;
-            padding: 10px 20px;
+            background: #e8e0d0;
+            border: 3px solid #5a5248;
+            border-radius: 0;
+            padding: 8px 14px;
             display: flex;
             align-items: center;
             gap: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(10px);
+            box-shadow: 4px 4px 0 #5a5248;
         }
 
         .music-btn {
-            background: linear-gradient(135deg, #00c6ff, #0072ff);
-            border: none;
-            border-radius: 50%;
-            width: 45px;
-            height: 45px;
+            background: #2d5a27;
+            border: 3px solid #1a3518;
+            border-radius: 0;
+            width: 44px;
+            height: 44px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            font-size: 22px;
             color: white;
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 2px 8px rgba(0, 114, 255, 0.3);
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            box-shadow: 3px 3px 0 #1a3518;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
         }
 
         .music-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 4px 12px rgba(0, 114, 255, 0.4);
+            transform: translate(-1px, -1px);
+            box-shadow: 4px 4px 0 #1a3518;
         }
 
         .music-btn:active {
-            transform: scale(0.95);
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0 #1a3518;
         }
 
         .music-label {
             font-size: 14px;
-            color: #0d3b66;
+            color: #2d2d2d;
             font-weight: bold;
         }
 
@@ -999,19 +1003,15 @@
                 text-shadow: 0 1px 4px rgba(0,0,0,1);
             }
 
-            /* Music player: same design on phone */
+            /* Music player: pixel style on phone */
             .music-player {
                 bottom: 20px;
                 right: 20px;
-                background: rgba(255, 255, 255, 0.9);
-                border-radius: 50px;
-                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             }
 
             .music-btn {
-                background: linear-gradient(135deg, #00c6ff, #0072ff);
-                border-radius: 50%;
-                box-shadow: 0 2px 8px rgba(0, 114, 255, 0.3);
+                width: 44px;
+                height: 44px;
             }
         }
 
