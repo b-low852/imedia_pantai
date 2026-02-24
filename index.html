@@ -444,6 +444,30 @@
             min-height: 80px;
         }
 
+        .form-receipt-section {
+            margin-bottom: 15px;
+        }
+
+        .form-receipt-section .form-receipt-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 0 1px 4px rgba(0,0,0,1);
+            font-size: 15px;
+        }
+
+        .form-receipt-controls {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-receipt-controls .receipt-done-badge {
+            margin: 0;
+        }
+
         /* Pixel-style submit button with duck icon */
         .submit-btn {
             display: inline-flex;
@@ -535,6 +559,22 @@
             border-left: 4px solid #0072ff;
             position: relative;
             box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .contribution-item-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 6px;
+        }
+
+        .contribution-item-header strong {
+            color: #0d3b66;
+            margin: 0;
+            font-size: 15px;
+            flex-shrink: 1;
+            min-width: 0;
         }
 
         .contribution-item strong {
@@ -798,6 +838,145 @@
             background: #c82333;
             transform: translateY(-1px);
             box-shadow: 0 2px 5px rgba(220, 53, 69, 0.3);
+        }
+
+        .upload-receipt-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            background: #f0a500;
+            color: white;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .upload-receipt-btn:hover {
+            background: #d4920a;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(240, 165, 0, 0.35);
+        }
+
+        .view-receipt-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            background: #17a2b8;
+            color: white;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .view-receipt-btn:hover {
+            background: #138496;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(23, 162, 184, 0.35);
+        }
+
+        .receipt-done-badge {
+            flex-shrink: 0;
+            display: inline-block;
+            padding: 2px 6px;
+            background: #d4edda;
+            color: #155724;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            border: 1px solid #c3e6cb;
+            white-space: nowrap;
+        }
+
+        /* Receipt viewer modal */
+        .receipt-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 20px;
+        }
+
+        .receipt-modal-inner {
+            position: relative;
+            max-width: min(480px, calc(100vw - 40px));
+            width: 100%;
+            background: #1a1a2e;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+            animation: fadeIn 0.25s ease;
+        }
+
+        .receipt-modal-inner h3 {
+            color: #fff;
+            text-align: center;
+            margin: 0 0 14px 0;
+            font-size: 16px;
+        }
+
+        .receipt-img {
+            width: 100%;
+            border-radius: 10px;
+            display: block;
+            max-height: 70vh;
+            object-fit: contain;
+            background: #000;
+        }
+
+        .receipt-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 22px;
+            cursor: pointer;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        /* Success video popup */
+        .success-video-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.9);
+            align-items: center;
+            justify-content: center;
+            z-index: 2100;
+            padding: 20px;
+        }
+
+        .success-video-modal-inner {
+            position: relative;
+            max-width: min(420px, calc(100vw - 40px));
+            width: 100%;
+            background: #1a1a2e;
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .success-video-modal-inner .success-close {
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            font-size: 22px;
+            cursor: pointer;
+            color: #fff;
+            font-weight: bold;
+            z-index: 1;
+        }
+
+        .success-video-modal-inner video {
+            width: 100%;
+            border-radius: 12px;
+            display: block;
+            background: #000;
         }
 
         .card-wrapper {
@@ -1154,6 +1333,10 @@
                         <label for="items">Items you're bringing:</label>
                         <textarea id="items" name="items" required placeholder="e.g., Drinks, Snacks, Chips, etc."></textarea>
                     </div>
+                    <div class="form-receipt-section" id="formReceiptSection" style="display: none;">
+                        <label class="form-receipt-label">🧾 Payment receipt</label>
+                        <div class="form-receipt-controls" id="formReceiptControls"></div>
+                    </div>
                     <button type="submit" class="submit-btn" id="submitBtn">
                         <img src="duck.gif" alt="" class="submit-btn-icon" aria-hidden="true">
                         <span class="submit-btn-text">Submit</span>
@@ -1166,6 +1349,22 @@
                     <div id="contributionsContainer"></div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Receipt Viewer Modal -->
+    <div class="receipt-modal" id="receiptModal">
+        <div class="receipt-modal-inner">
+            <span class="receipt-close" onclick="closeReceiptModal()">✖</span>
+            <h3>🧾 Payment Receipt</h3>
+            <img src="" alt="Receipt" class="receipt-img" id="receiptImage">
+        </div>
+    </div>
+
+    <div class="success-video-modal" id="successVideoModal">
+        <div class="success-video-modal-inner">
+            <span class="success-close" onclick="closeSuccessVideoModal()">✖</span>
+            <video id="successVideo" src="cat.mp4" playsinline></video>
         </div>
     </div>
 
@@ -1217,11 +1416,13 @@
                             id: doc.id,
                             name: d.name,
                             items: d.items,
+                            receipt: d.receipt || null,
                             timestamp: d.timestamp ? (d.timestamp.toMillis ? d.timestamp.toMillis() : d.timestamp) : 0
                         });
                     });
                     contributions.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
                     updateContributionsList();
+                    if (editingDocId) updateFormReceiptSection();
                     const listEl = document.getElementById("contributionsList");
                     if (listEl) listEl.style.display = contributions.length > 0 ? "block" : "none";
                 }, (error) => {
@@ -1274,6 +1475,7 @@
                         });
                     }
                     cancelEdit();
+                    showSuccessVideoPopup();
                 } catch (error) {
                     console.error("Error saving contribution:", error);
                     alert("Error saving contribution. Please try again.");
@@ -1282,6 +1484,30 @@
                     const btnText = submitBtn.querySelector('.submit-btn-text');
                     if (btnText) btnText.textContent = editingDocId ? "Update" : "Submit";
                 }
+            }
+        }
+
+        function updateFormReceiptSection() {
+            const section = document.getElementById("formReceiptSection");
+            const controls = document.getElementById("formReceiptControls");
+            if (!section || !controls) return;
+            if (!editingDocId) {
+                section.style.display = "none";
+                return;
+            }
+            const contribution = contributions.find(c => c.id === editingDocId);
+            section.style.display = "block";
+            const hasReceipt = contribution && !!contribution.receipt;
+            if (hasReceipt) {
+                controls.innerHTML = `
+                    <span class="receipt-done-badge">✅ Receipt submitted</span>
+                    <button type="button" class="view-receipt-btn" onclick="viewReceipt('${editingDocId}')">👁️ View</button>
+                    <button type="button" class="upload-receipt-btn" onclick="uploadReceipt('${editingDocId}')">🔄 Replace receipt</button>
+                `;
+            } else {
+                controls.innerHTML = `
+                    <button type="button" class="upload-receipt-btn" onclick="uploadReceipt('${editingDocId}')">📎 Upload receipt</button>
+                `;
             }
         }
 
@@ -1299,7 +1525,7 @@
                 if (btnText) btnText.textContent = "Update";
                 document.getElementById("cancelBtn").style.display = "block";
                 
-                // Scroll to form
+                updateFormReceiptSection();
                 document.querySelector('.form-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         }
@@ -1325,6 +1551,7 @@
             const bt = sb && sb.querySelector('.submit-btn-text');
             if (bt) bt.textContent = "Submit";
             document.getElementById("cancelBtn").style.display = "none";
+            updateFormReceiptSection();
         }
 
         function updateContributionsList() {
@@ -1339,19 +1566,109 @@
             contributions.forEach((contribution) => {
                 const item = document.createElement("div");
                 item.className = "contribution-item";
+                const hasReceipt = !!contribution.receipt;
                 item.innerHTML = `
-                    <strong>${contribution.name}</strong>
+                    <div class="contribution-item-header">
+                        <strong>${contribution.name}</strong>
+                        ${hasReceipt ? '<span class="receipt-done-badge">✅ Receipt Submitted</span>' : ''}
+                    </div>
                     <span>${contribution.items}</span>
                     <div class="contribution-actions">
                         <button class="edit-btn" onclick="editContribution('${contribution.id}')">✏️ Edit</button>
                         <button class="delete-btn" onclick="deleteContribution('${contribution.id}')">🗑️ Delete</button>
+                        ${hasReceipt
+                            ? `<button class="view-receipt-btn" onclick="viewReceipt('${contribution.id}')">👁️ View Receipt</button>`
+                            : `<button class="upload-receipt-btn" onclick="uploadReceipt('${contribution.id}')">📎 Upload Receipt</button>`
+                        }
                     </div>
                 `;
                 container.appendChild(item);
             });
         }
 
-        // Music Control
+        // ── Receipt helpers ──────────────────────────────────────────
+
+        function compressImage(file, maxWidth, quality) {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        let w = img.width, h = img.height;
+                        if (w > maxWidth) { h = Math.round(h * maxWidth / w); w = maxWidth; }
+                        canvas.width = w;
+                        canvas.height = h;
+                        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                        resolve(canvas.toDataURL('image/jpeg', quality));
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function uploadReceipt(docId) {
+            if (!db) { alert("Firebase not available."); return; }
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.onchange = async (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const btn = document.querySelector(`[onclick="uploadReceipt('${docId}')"]`);
+                if (btn) { btn.disabled = true; btn.textContent = '⏳ Saving...'; }
+                try {
+                    const compressed = await compressImage(file, 900, 0.75);
+                    await db.collection(COLLECTION_NAME).doc(docId).update({ receipt: compressed });
+                } catch (err) {
+                    console.error("Receipt upload error:", err);
+                    alert("Failed to upload receipt. Please try again.");
+                    if (btn) { btn.disabled = false; btn.textContent = '📎 Upload Receipt'; }
+                }
+            };
+            input.click();
+        }
+
+        function viewReceipt(docId) {
+            const c = contributions.find(x => x.id === docId);
+            if (c && c.receipt) {
+                document.getElementById('receiptImage').src = c.receipt;
+                document.getElementById('receiptModal').style.display = 'flex';
+            }
+        }
+
+        function closeReceiptModal() {
+            document.getElementById('receiptModal').style.display = 'none';
+            document.getElementById('receiptImage').src = '';
+        }
+
+        function showSuccessVideoPopup() {
+            const modal = document.getElementById('successVideoModal');
+            const video = document.getElementById('successVideo');
+            if (modal && video) {
+                modal.style.display = 'flex';
+                video.currentTime = 0;
+                video.onended = function() { closeSuccessVideoModal(); };
+                video.play().catch(function() {});
+            }
+        }
+
+        function closeSuccessVideoModal() {
+            const modal = document.getElementById('successVideoModal');
+            const video = document.getElementById('successVideo');
+            if (modal) modal.style.display = 'none';
+            if (video) { video.pause(); video.currentTime = 0; }
+        }
+
+        document.addEventListener('click', (e) => {
+            const receiptModal = document.getElementById('receiptModal');
+            if (e.target === receiptModal) closeReceiptModal();
+            const successModal = document.getElementById('successVideoModal');
+            if (e.target === successModal) closeSuccessVideoModal();
+        });
+
+        // ── Music Control ────────────────────────────────────────────
         let isMusicPlaying = false;
 
         function toggleMusic() {
