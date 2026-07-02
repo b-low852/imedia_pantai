@@ -770,8 +770,8 @@
     <!-- ── MUSIC PLAYER ──────────────────────────────────── -->
     <div class="music-player">
         <button class="music-btn" id="musicToggle" onclick="toggleMusic()">🎵</button>
-        <span class="music-label" id="musicLabel">Music</span>
-        <audio id="backgroundMusic" loop autoplay playsinline preload="auto">
+        <span class="music-label" id="musicLabel">Tap ▶ Music</span>
+        <audio id="backgroundMusic" loop playsinline preload="auto">
             <source src="dai.mp3" type="audio/mpeg">
         </audio>
     </div>
@@ -970,7 +970,7 @@
             const pg = document.getElementById(pageId);
             if (pg) pg.classList.add('active');
             window.scrollTo(0, 0);
-            ensureMusicPlaying();
+            if (!musicStarted) playMusic();
         }
 
         // ── FIREBASE LISTENER ────────────────────────────────────────
@@ -1002,10 +1002,6 @@
             initMusic();
         });
 
-        // Start music immediately if page already loaded
-        if (document.readyState !== 'loading') {
-            initMusic();
-        }
 
         // ── RENDER PEOPLE LIST ───────────────────────────────────────
         function renderList() {
@@ -1334,88 +1330,58 @@
         }
 
         // ── MUSIC ────────────────────────────────────────────────────
+        // Rules:
+        //  - Never mark as "Playing" unless sound is audible (not muted)
+        //  - Autoplay with sound is only allowed after user interaction (browser rule)
+        //  - On first tap anywhere, start audible music automatically
         let isMusicPlaying = false;
-        let musicUnlockBound = false;
+        let musicStarted    = false;
 
         function setMusicUI(playing) {
             const btn   = document.getElementById('musicToggle');
             const label = document.getElementById('musicLabel');
             isMusicPlaying = playing;
-            if (playing) {
-                btn.textContent = '⏸️';
-                label.textContent = 'Playing';
-                btn.style.animation = 'musicPulse 1.5s ease-in-out infinite';
-            } else {
-                btn.textContent = '🎵';
-                label.textContent = 'Music';
-                btn.style.animation = 'none';
-            }
+            btn.textContent      = playing ? '⏸️' : '🎵';
+            label.textContent    = playing ? 'Playing' : 'Tap ▶ Music';
+            btn.style.animation  = playing ? 'musicPulse 1.5s ease-in-out infinite' : 'none';
         }
 
-        async function ensureMusicPlaying() {
+        async function playMusic() {
             const music = document.getElementById('backgroundMusic');
-            if (!music || isMusicPlaying) return true;
-
+            if (!music) return;
+            music.muted  = false;
             music.volume = 1;
-            music.muted = false;
-
-            // Try unmuted autoplay first (works on some desktop browsers)
             try {
                 await music.play();
+                musicStarted = true;
                 setMusicUI(true);
-                return true;
             } catch (e) {
-                // Fallback: muted autoplay (allowed on Chrome & most phones)
-                try {
-                    music.muted = true;
-                    await music.play();
-                    setMusicUI(true);
-
-                    const unmute = async () => {
-                        music.muted = false;
-                        music.volume = 1;
-                        try { await music.play(); } catch (err) {}
-                    };
-                    ['click', 'touchstart', 'keydown'].forEach(evt => {
-                        document.addEventListener(evt, unmute, { once: true, passive: evt === 'touchstart' });
-                    });
-                    return true;
-                } catch (e2) {
-                    return false;
-                }
+                // Play failed (still no user interaction) — do nothing, stay silent
+                setMusicUI(false);
             }
-        }
-
-        function bindMusicUnlock() {
-            if (musicUnlockBound) return;
-            musicUnlockBound = true;
-            const unlock = () => { if (!isMusicPlaying) ensureMusicPlaying(); };
-            document.addEventListener('click', unlock);
-            document.addEventListener('touchstart', unlock, { passive: true });
-            document.addEventListener('keydown', unlock);
         }
 
         function initMusic() {
-            const music = document.getElementById('backgroundMusic');
-            if (!music) return;
+            // On first ANY user interaction, start music with sound
+            const startOnInteraction = () => {
+                if (!musicStarted) playMusic();
+            };
+            document.addEventListener('click',      startOnInteraction, { passive: true });
+            document.addEventListener('touchstart', startOnInteraction, { passive: true });
+            document.addEventListener('keydown',    startOnInteraction, { passive: true });
 
-            ensureMusicPlaying();
-            music.addEventListener('canplaythrough', ensureMusicPlaying, { once: true });
-            window.addEventListener('load', ensureMusicPlaying);
-            window.addEventListener('pageshow', ensureMusicPlaying);
-            [100, 400, 800, 1500].forEach(ms => setTimeout(ensureMusicPlaying, ms));
-            bindMusicUnlock();
+            // Try autoplay immediately — works in Chrome if user has previously interacted with the site
+            playMusic();
         }
 
         function toggleMusic() {
             const music = document.getElementById('backgroundMusic');
+            if (!music) return;
             if (isMusicPlaying) {
                 music.pause();
-                music.muted = false;
                 setMusicUI(false);
             } else {
-                music.muted = false;
-                ensureMusicPlaying();
+                playMusic();
             }
         }
     </script>
