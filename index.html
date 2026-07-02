@@ -766,7 +766,7 @@
                 <li><span class="event-label">Day</span><span>Monday</span></li>
                 <li><span class="event-label">Date</span><span>11 July 2016</span></li>
                 <li><span class="event-label">Time</span><span>2:30 PM – 7:00 PM</span></li>
-                <li><span class="event-label">Venue</span><span>📍 Luak Esplanade</span></li>
+                <li><span class="event-label">Venue</span><span>📍 Happy Seaside Miri</span></li>
                 <li><span class="event-label">Dress Code</span><span>FIFA team outfit</span></li>
                 <li><span class="event-label">Payment</span><span>💰 RM12 per person</span></li>
             </ul>
@@ -869,7 +869,7 @@
             </div>
 
             <div class="upload-progress-wrap" id="uploadProgressWrap">
-                <p id="uploadProgressText">Processing...</p>
+                <p id="uploadProgressText">Uploading...</p>
                 <div class="upload-progress-bar-outer">
                     <div class="upload-progress-bar-inner" id="uploadProgressBar"></div>
                 </div>
@@ -1195,20 +1195,20 @@
             }
 
             btn.disabled = true;
-            btn.textContent = 'Saving...';
+            btn.textContent = 'Uploading...';
 
             const progressWrap = document.getElementById('uploadProgressWrap');
             const progressBar  = document.getElementById('uploadProgressBar');
             const progressText = document.getElementById('uploadProgressText');
             progressWrap.style.display = 'block';
-            progressText.textContent = 'Processing receipt...';
+            progressText.textContent = 'Uploading...';
             progressBar.style.width = '40%';
 
             try {
                 const receiptUrl = await compressImageToBase64(file);
 
                 progressBar.style.width = '70%';
-                progressText.textContent = 'Saving to database...';
+                progressText.textContent = 'Uploading...';
 
                 await db.collection(COLLECTION).doc(currentPayDocId).update({
                     paid: true,
@@ -1216,7 +1216,7 @@
                 });
 
                 progressBar.style.width = '100%';
-                progressText.textContent = 'Saved! ✅';
+                progressText.textContent = 'Uploaded! ✅';
 
                 await new Promise(r => setTimeout(r, 600));
                 currentPayDocId = null;
