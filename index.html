@@ -1,474 +1,359 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <title>Beach Barbecue Invitation</title>
+    <title>FIFA World Cup Invitation</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
     <style>
-        * {
-            box-sizing: border-box;
-        }
+        /* ── RESET ─────────────────────────────────────────── */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         html {
             overflow-x: hidden;
             -webkit-text-size-adjust: 100%;
             height: 100%;
-            min-height: 100%;
-            /* Full viewport on mobile (address bar, safe area) */
             min-height: 100vh;
             min-height: 100dvh;
         }
 
         body {
             font-family: Arial, sans-serif;
-            background: url('pixel.gif') center center / cover no-repeat;
-            height: 100vh;
+            background: url('pixel.gif') center center / cover no-repeat fixed;
             min-height: 100vh;
             min-height: 100dvh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0;
-            position: relative;
             overflow-x: hidden;
             overflow-y: auto;
-            max-width: 100vw;
         }
 
+        /* ── BACKGROUND LAYER ──────────────────────────────── */
         .background-container {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            width: 100%;
-            height: 100%;
+            inset: 0;
+            width: 100%; height: 100%;
             min-height: 100vh;
             min-height: 100dvh;
             z-index: 0;
             pointer-events: none;
+            overflow: hidden;
         }
 
         .wave {
             position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 200%;
-            height: 100px;
-            background: linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.1) 100%);
+            bottom: 0; left: 0;
+            width: 200%; height: 100px;
+            background: linear-gradient(90deg,
+                rgba(255,255,255,0.1) 0%,
+                rgba(255,255,255,0.2) 50%,
+                rgba(255,255,255,0.1) 100%);
             border-radius: 50% 50% 0 0;
             animation: waveMove 8s ease-in-out infinite;
         }
-
-        .wave:nth-child(2) {
-            animation-delay: -2s;
-            height: 80px;
-            opacity: 0.7;
-        }
-
-        .wave:nth-child(3) {
-            animation-delay: -4s;
-            height: 60px;
-            opacity: 0.5;
-        }
+        .wave:nth-child(2) { animation-delay:-2s; height:80px; opacity:0.7; }
+        .wave:nth-child(3) { animation-delay:-4s; height:60px; opacity:0.5; }
 
         @keyframes waveMove {
-
-            0%,
-            100% {
-                transform: translateX(-50%) translateY(0);
-            }
-
-            50% {
-                transform: translateX(-50%) translateY(-20px);
-            }
+            0%,100% { transform:translateX(-50%) translateY(0); }
+            50%     { transform:translateX(-50%) translateY(-20px); }
         }
 
         .particle {
             position: absolute;
-            background: rgba(255, 255, 255, 0.6);
+            background: rgba(255,255,255,0.6);
             border-radius: 50%;
             animation: floatParticle 15s infinite ease-in-out;
         }
-
-        .particle:nth-child(1) {
-            width: 20px;
-            height: 20px;
-            left: 10%;
-            animation-delay: 0s;
-            animation-duration: 12s;
-        }
-
-        .particle:nth-child(2) {
-            width: 15px;
-            height: 15px;
-            left: 30%;
-            animation-delay: 2s;
-            animation-duration: 14s;
-        }
-
-        .particle:nth-child(3) {
-            width: 25px;
-            height: 25px;
-            left: 50%;
-            animation-delay: 4s;
-            animation-duration: 16s;
-        }
-
-        .particle:nth-child(4) {
-            width: 18px;
-            height: 18px;
-            left: 70%;
-            animation-delay: 1s;
-            animation-duration: 13s;
-        }
-
-        .particle:nth-child(5) {
-            width: 22px;
-            height: 22px;
-            left: 85%;
-            animation-delay: 3s;
-            animation-duration: 15s;
-        }
+        .particle:nth-child(1) { width:20px;height:20px;left:10%;animation-delay:0s;animation-duration:12s; }
+        .particle:nth-child(2) { width:15px;height:15px;left:30%;animation-delay:2s;animation-duration:14s; }
+        .particle:nth-child(3) { width:25px;height:25px;left:50%;animation-delay:4s;animation-duration:16s; }
+        .particle:nth-child(4) { width:18px;height:18px;left:70%;animation-delay:1s;animation-duration:13s; }
+        .particle:nth-child(5) { width:22px;height:22px;left:85%;animation-delay:3s;animation-duration:15s; }
 
         @keyframes floatParticle {
-            0% {
-                transform: translateY(100vh) translateX(0) scale(0);
-                opacity: 0;
-            }
-
-            10% {
-                opacity: 1;
-            }
-
-            90% {
-                opacity: 1;
-            }
-
-            100% {
-                transform: translateY(-100px) translateX(50px) scale(1);
-                opacity: 0;
-            }
+            0%   { transform:translateY(100vh) translateX(0) scale(0); opacity:0; }
+            10%  { opacity:1; }
+            90%  { opacity:1; }
+            100% { transform:translateY(-100px) translateX(50px) scale(1); opacity:0; }
         }
 
-        .emoji-float {
-            position: absolute;
-            font-size: 30px;
-            animation: floatEmoji 20s infinite ease-in-out;
-            opacity: 0.4;
-        }
-
-        .emoji-float:nth-child(6) {
-            left: 15%;
-            animation-delay: 0s;
-            animation-duration: 18s;
-        }
-
-        .emoji-float:nth-child(7) {
-            left: 45%;
-            animation-delay: 5s;
-            animation-duration: 22s;
-        }
-
-        .emoji-float:nth-child(8) {
-            left: 75%;
-            animation-delay: 10s;
-            animation-duration: 20s;
-        }
+        .emoji-float { position:absolute; font-size:30px; animation:floatEmoji 20s infinite ease-in-out; opacity:0.4; }
+        .emoji-float:nth-child(6)  { left:15%; animation-delay:0s;  animation-duration:18s; }
+        .emoji-float:nth-child(7)  { left:45%; animation-delay:5s;  animation-duration:22s; }
+        .emoji-float:nth-child(8)  { left:75%; animation-delay:10s; animation-duration:20s; }
 
         @keyframes floatEmoji {
-            0% {
-                transform: translateY(100vh) translateX(0) rotate(0deg);
-                opacity: 0;
-            }
-
-            10% {
-                opacity: 0.4;
-            }
-
-            90% {
-                opacity: 0.4;
-            }
-
-            100% {
-                transform: translateY(-100px) translateX(100px) rotate(360deg);
-                opacity: 0;
-            }
+            0%   { transform:translateY(100vh) translateX(0) rotate(0deg); opacity:0; }
+            10%  { opacity:0.4; }
+            90%  { opacity:0.4; }
+            100% { transform:translateY(-100px) translateX(100px) rotate(360deg); opacity:0; }
         }
 
-        .card {
+        .star { position:absolute; color:rgba(255,255,255,0.8); font-size:20px; animation:twinkle 3s infinite ease-in-out; }
+        @keyframes twinkle {
+            0%,100% { opacity:0.3; transform:scale(1); }
+            50%     { opacity:1; transform:scale(1.2); }
+        }
+
+        .bubble { position:absolute; background:rgba(255,255,255,0.3); border-radius:50%; animation:bubbleFloat 20s infinite ease-in-out; }
+        @keyframes bubbleFloat {
+            0%   { transform:translateY(100vh) translateX(0) scale(0); opacity:0; }
+            10%  { opacity:0.6; }
+            90%  { opacity:0.6; }
+            100% { transform:translateY(-100px) translateX(100px) scale(1); opacity:0; }
+        }
+
+        .rotating-emoji { position:absolute; font-size:40px; animation:rotateFloat 15s infinite linear; opacity:0.5; }
+        @keyframes rotateFloat {
+            0%   { transform:translateY(100vh) translateX(0) rotate(0deg); opacity:0; }
+            10%  { opacity:0.5; }
+            90%  { opacity:0.5; }
+            100% { transform:translateY(-100px) translateX(200px) rotate(720deg); opacity:0; }
+        }
+
+        .sparkle { position:absolute; width:4px; height:4px; background:white; border-radius:50%; animation:sparkleMove 8s infinite ease-in-out; box-shadow:0 0 6px white; }
+        @keyframes sparkleMove {
+            0%,100% { transform:translate(0,0) scale(1); opacity:0; }
+            50%     { transform:translate(50px,-50px) scale(1.5); opacity:1; }
+        }
+
+        .floating-shapes { position:absolute; opacity:0.3; animation:floatShape 25s infinite ease-in-out; }
+        @keyframes floatShape {
+            0%,100% { transform:translateY(0) translateX(0) rotate(0deg); }
+            25%     { transform:translateY(-50px) translateX(30px) rotate(90deg); }
+            50%     { transform:translateY(-100px) translateX(0) rotate(180deg); }
+            75%     { transform:translateY(-50px) translateX(-30px) rotate(270deg); }
+        }
+
+        /* ── PAGE SYSTEM ──────────────────────────────────── */
+        .page {
+            display: none;
             position: relative;
             z-index: 10;
-        }
-
-        @keyframes cardEntrance {
-            0% {
-                opacity: 0;
-                transform: translateY(30px) scale(0.8);
-            }
-
-            60% {
-                transform: translateY(-5px) scale(1.02);
-            }
-
-            100% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        @keyframes floating {
-
-            0%,
-            100% {
-                transform: translateY(0px);
-            }
-
-            50% {
-                transform: translateY(-10px);
-            }
-        }
-
-        @keyframes floatingHover {
-
-            0%,
-            100% {
-                transform: translateY(-5px) scale(1.08);
-            }
-
-            50% {
-                transform: translateY(-15px) scale(1.1);
-            }
-        }
-
-        @keyframes shimmer {
-            0% {
-                transform: translateX(-100%) translateY(-100%) rotate(45deg);
-            }
-
-            100% {
-                transform: translateX(100%) translateY(100%) rotate(45deg);
-            }
-        }
-
-        @keyframes pulse {
-
-            0%,
-            100% {
-                box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-            }
-
-            50% {
-                box-shadow: 0 15px 40px rgba(0, 114, 255, 0.4);
-            }
-        }
-
-        .card h1 {
-            margin: 0;
-            font-size: 22px;
-            color: white;
-            text-shadow: 0 2px 6px rgba(0,0,0,0.7);
-        }
-
-        .card p {
-            color: white;
-            text-shadow: 0 2px 6px rgba(0,0,0,0.7);
-        }
-
-        @keyframes textFadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.6);
+            width: 100%;
+            min-height: 100vh;
+            min-height: 100dvh;
             align-items: center;
             justify-content: center;
+            flex-direction: column;
             padding: 20px;
-            z-index: 1000;
         }
 
-        .modal-content {
-            background: url('pixel.gif') center center / cover no-repeat;
-            border-radius: 16px;
-            max-width: min(500px, calc(100vw - 24px));
-            width: 100%;
-            max-height: 90vh;
-            padding: 25px;
+        .page.active {
+            display: flex;
+            animation: pageFadeIn 0.3s ease;
+        }
+
+        @keyframes pageFadeIn {
+            from { opacity:0; transform:translateY(8px); }
+            to   { opacity:1; transform:translateY(0); }
+        }
+
+        /* ── LANDING PAGE ─────────────────────────────────── */
+        @keyframes cardEntrance {
+            0%   { opacity:0; transform:translateY(30px) scale(0.8); }
+            60%  { transform:translateY(-5px) scale(1.02); }
+            100% { opacity:1; transform:translateY(0) scale(1); }
+        }
+        @keyframes floating {
+            0%,100% { transform:translateY(0); }
+            50%     { transform:translateY(-10px); }
+        }
+
+        .card-wrapper {
+            display: inline-block;
+            padding: 28px;
+            background: url('coin.gif') center center / contain no-repeat;
+            background-color: transparent;
+            border-radius: 44px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+            animation: cardEntrance 0.8s ease-out, floating 3s ease-in-out infinite;
+            cursor: pointer;
             position: relative;
-            animation: fadeIn 0.3s ease;
+            width: 520px;
+            height: 520px;
+        }
+        .card-wrapper:hover { filter:brightness(1.06); }
+
+        .tap-hint {
+            color: rgba(255,255,255,0.85);
+            font-size: 14px;
+            margin-top: 14px;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+            animation: pageFadeIn 1s ease 0.8s both;
+        }
+
+        /* ── PAGE PANEL ───────────────────────────────────── */
+        .page-panel {
+            background: url('pixel.gif') center center / cover no-repeat;
+            border: 3px solid rgba(255,255,255,0.35);
+            padding: 26px 24px 24px;
+            width: 100%;
+            max-width: 520px;
+            max-height: calc(100vh - 40px);
+            max-height: calc(100dvh - 40px);
             overflow-y: auto;
             overflow-x: hidden;
-            scroll-behavior: smooth;
-            box-shadow: 0 0 0 3px rgba(255,255,255,0.15), 0 10px 40px rgba(0,0,0,0.5);
+            box-shadow: 6px 6px 0 rgba(0,0,0,0.5);
         }
 
-        .modal-content::-webkit-scrollbar {
-            width: 10px;
-        }
+        .page-panel::-webkit-scrollbar { width: 8px; }
+        .page-panel::-webkit-scrollbar-track { background: rgba(255,255,255,0.1); }
+        .page-panel::-webkit-scrollbar-thumb { background: #2d5a27; }
 
-        .modal-content::-webkit-scrollbar-track {
-            background: rgba(255,255,255,0.15);
-            border-radius: 10px;
-        }
-
-        .modal-content::-webkit-scrollbar-thumb {
-            background: #0072ff;
-            border-radius: 10px;
-        }
-
-        .modal-content::-webkit-scrollbar-thumb:hover {
-            background: #0056b3;
-        }
-
-        .close {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 22px;
-            cursor: pointer;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: scale(0.9);
-            }
-
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        .modal-content h2 {
+        .page-panel h2 {
             text-align: center;
             color: #fff;
-            text-shadow: 0 2px 6px rgba(0,0,0,1), 0 0 20px rgba(0,0,0,0.6);
+            font-size: 1.4rem;
             font-weight: bold;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid rgba(255,255,255,0.25);
+            text-shadow: 0 2px 6px rgba(0,0,0,1), 0 0 20px rgba(0,0,0,0.6);
         }
 
-        .modal-content p {
-            margin: 8px 0;
+        .page-panel p {
             color: #fff;
             text-shadow: 0 1px 4px rgba(0,0,0,1), 0 0 12px rgba(0,0,0,0.5);
-            line-height: 1.5;
+            line-height: 1.6;
+            margin: 8px 0;
         }
 
-        .modal-content strong {
-            color: #fff;
-            text-shadow: 0 1px 4px rgba(0,0,0,1);
+        .page-panel strong { color:#fff; text-shadow:0 1px 4px rgba(0,0,0,1); }
+
+        /* ── EVENT INFO LIST ──────────────────────────────── */
+        .event-info-list {
+            list-style: none;
+            margin-bottom: 14px;
         }
 
-        .modal-content .close {
+        .event-info-list li {
+            display: flex;
+            gap: 10px;
+            padding: 9px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.15);
             color: #fff;
+            font-size: 14px;
             text-shadow: 0 1px 4px rgba(0,0,0,1);
+            line-height: 1.4;
+        }
+        .event-info-list li:last-child { border-bottom: none; }
+
+        .event-label {
+            color: #ffd700;
             font-weight: bold;
+            min-width: 90px;
+            flex-shrink: 0;
+            text-shadow: 0 1px 4px rgba(0,0,0,1);
         }
 
-        .event-info {
-            margin: 0 0 1rem 0;
+        .event-note {
+            text-align: center;
+            padding: 10px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 0;
+            font-size: 13px;
+            margin-top: 4px;
         }
 
-        .event-info p {
-            margin: 10px 0;
-            line-height: 1.5;
+        /* ── PIXEL BUTTONS ────────────────────────────────── */
+        .pixel-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            background: #2d5a27;
+            color: #fff;
+            border: 3px solid #1a3518;
+            border-radius: 0;
+            padding: 10px 16px;
+            font-size: 14px;
+            font-weight: bold;
+            font-family: Arial, sans-serif;
+            cursor: pointer;
+            transition: transform 0.12s, box-shadow 0.12s;
+            box-shadow: 4px 4px 0 #1a3518;
+            white-space: nowrap;
         }
+        .pixel-btn:hover  { transform:translate(-1px,-1px); box-shadow:5px 5px 0 #1a3518; }
+        .pixel-btn:active { transform:translate(2px,2px); box-shadow:2px 2px 0 #1a3518; }
+        .pixel-btn:disabled { opacity:0.6; cursor:not-allowed; transform:none !important; }
 
-        .form-section {
-            margin-top: 25px;
-            padding-top: 25px;
-            border-top: 2px solid rgba(255,255,255,0.25);
+        .pixel-btn.secondary {
+            background:#4a4a4a; border-color:#2d2d2d; box-shadow:4px 4px 0 #2d2d2d;
         }
+        .pixel-btn.secondary:hover  { box-shadow:5px 5px 0 #2d2d2d; }
+        .pixel-btn.secondary:active { box-shadow:2px 2px 0 #2d2d2d; }
 
-        .form-group {
-            margin-bottom: 15px;
+        .pixel-btn.danger {
+            background:#8b1a1a; border-color:#5a0e0e; box-shadow:4px 4px 0 #5a0e0e;
         }
+        .pixel-btn.danger:hover  { box-shadow:5px 5px 0 #5a0e0e; }
+        .pixel-btn.danger:active { box-shadow:2px 2px 0 #5a0e0e; }
+
+        .pixel-btn.pay-btn {
+            background:#1a4a7a; border-color:#0e2d4a; box-shadow:4px 4px 0 #0e2d4a;
+        }
+        .pixel-btn.pay-btn:hover  { box-shadow:5px 5px 0 #0e2d4a; }
+        .pixel-btn.pay-btn:active { box-shadow:2px 2px 0 #0e2d4a; }
+
+        .pixel-btn.success-big {
+            background:#1a6b3a; border-color:#0e4a28; box-shadow:4px 4px 0 #0e4a28;
+            font-size:16px; padding:14px 24px; width:100%; margin-top:6px;
+        }
+        .pixel-btn.success-big:hover  { box-shadow:5px 5px 0 #0e4a28; }
+        .pixel-btn.success-big:active { box-shadow:2px 2px 0 #0e4a28; }
+
+        /* ── NAV ROW ──────────────────────────────────────── */
+        .nav-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+        .nav-row .pixel-btn { flex: 1; min-width: 120px; }
+        .nav-row .pixel-btn.full { width:100%; flex:none; }
+
+        /* ── FORM ─────────────────────────────────────────── */
+        .form-group { margin-bottom: 14px; }
 
         .form-group label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             font-weight: bold;
             color: #fff;
-            text-shadow: 0 1px 4px rgba(0,0,0,1), 0 0 8px rgba(0,0,0,0.6);
-            font-size: 15px;
+            text-shadow: 0 1px 4px rgba(0,0,0,1);
+            font-size: 14px;
         }
 
         .form-group input,
         .form-group textarea {
             width: 100%;
-            padding: 12px 14px;
-            border: 2px solid rgba(255,255,255,0.6);
-            border-radius: 8px;
-            font-size: 16px;
+            padding: 10px 12px;
+            border: 3px solid rgba(255,255,255,0.6);
+            border-radius: 0;
+            font-size: 15px;
             font-family: Arial, sans-serif;
-            box-sizing: border-box;
-            transition: border-color 0.3s, box-shadow 0.3s;
             background: #fff;
             color: #0d3b66;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            box-shadow: 3px 3px 0 rgba(0,0,0,0.3);
         }
-
-        .form-group input::placeholder,
-        .form-group textarea::placeholder {
-            color: #5a7a9a;
-        }
-
         .form-group input:focus,
         .form-group textarea:focus {
             outline: none;
-            border-color: #0072ff;
-            box-shadow: 0 2px 12px rgba(0,114,255,0.4);
+            border-color: #ffd700;
+            box-shadow: 3px 3px 0 rgba(255,215,0,0.4);
         }
+        .form-group input::placeholder,
+        .form-group textarea::placeholder { color:#5a7a9a; }
+        .form-group textarea { resize:vertical; min-height:80px; }
 
-        .form-group textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
-
-        .form-receipt-section {
-            margin-bottom: 15px;
-        }
-
-        .form-receipt-section .form-receipt-label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: #fff;
-            text-shadow: 0 1px 4px rgba(0,0,0,1);
-            font-size: 15px;
-        }
-
-        .form-receipt-controls {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .form-receipt-controls .receipt-done-badge {
-            margin: 0;
-        }
-
-        /* Pixel-style submit button with duck icon */
+        /* Duck submit button */
         .submit-btn {
             display: inline-flex;
             align-items: center;
@@ -477,229 +362,152 @@
             background: #2d5a27;
             color: #fff;
             border: 3px solid #1a3518;
-            padding: 12px 24px;
             border-radius: 0;
+            padding: 12px 24px;
             font-size: 16px;
             font-weight: bold;
             font-family: Arial, sans-serif;
             cursor: pointer;
             width: 100%;
-            transition: transform 0.15s ease, box-shadow 0.15s ease;
-            image-rendering: pixelated;
-            image-rendering: -moz-crisp-edges;
-            image-rendering: crisp-edges;
+            transition: transform 0.12s, box-shadow 0.12s;
             box-shadow: 4px 4px 0 #1a3518;
         }
-
-        .submit-btn:hover {
-            transform: translate(-1px, -1px);
-            box-shadow: 5px 5px 0 #1a3518;
-        }
-
-        .submit-btn:active {
-            transform: translate(2px, 2px);
-            box-shadow: 2px 2px 0 #1a3518;
-        }
-
-        .submit-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
+        .submit-btn:hover  { transform:translate(-1px,-1px); box-shadow:5px 5px 0 #1a3518; }
+        .submit-btn:active { transform:translate(2px,2px); box-shadow:2px 2px 0 #1a3518; }
+        .submit-btn:disabled { opacity:0.6; cursor:not-allowed; transform:none; }
 
         .submit-btn-icon {
-            width: 28px;
-            height: 28px;
+            width:28px; height:28px;
             object-fit: contain;
             image-rendering: pixelated;
-            image-rendering: -moz-crisp-edges;
             image-rendering: crisp-edges;
-            vertical-align: middle;
         }
 
-        .submit-btn-text {
-            vertical-align: middle;
-        }
-
-        .submit-btn.cancel-edit-btn {
-            background: #4a4a4a;
-            border-color: #2d2d2d;
-            box-shadow: 4px 4px 0 #2d2d2d;
-        }
-
-        .submit-btn.cancel-edit-btn:hover {
-            box-shadow: 5px 5px 0 #2d2d2d;
-        }
-
-        .submit-btn.cancel-edit-btn:active {
-            box-shadow: 2px 2px 0 #2d2d2d;
-        }
-
-        .contributions-list {
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 2px solid rgba(255,255,255,0.25);
-        }
-
-        #contributionsContainer {
-            /* no separate scroll – scrolls with modal content */
-        }
-
-        .contributions-list h3 {
-            margin-bottom: 15px;
-            color: #fff;
-            text-shadow: 0 1px 4px rgba(0,0,0,1), 0 0 10px rgba(0,0,0,0.5);
-        }
-
-        .contribution-item {
-            background: rgba(255,255,255,0.92);
-            padding: 14px;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            border-left: 4px solid #0072ff;
-            position: relative;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-        }
-
-        .contribution-item-header {
+        /* ── PEOPLE LIST ──────────────────────────────────── */
+        .list-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 10px;
-            margin-bottom: 6px;
+            margin-bottom: 12px;
         }
 
-        .contribution-item-header strong {
+        .list-count {
+            font-size: 12px;
+            color: rgba(255,255,255,0.7);
+            text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+        }
+
+        .person-item {
+            background: rgba(255,255,255,0.93);
+            border: 3px solid #ddd;
+            border-left: 5px solid #4a4a6a;
+            padding: 12px 14px;
+            margin-bottom: 10px;
+            box-shadow: 3px 3px 0 rgba(0,0,0,0.2);
+        }
+        .person-item.is-paid { border-left-color: #28a745; }
+
+        .person-name {
             color: #0d3b66;
-            margin: 0;
+            font-weight: bold;
             font-size: 15px;
-            flex-shrink: 1;
-            min-width: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 4px;
         }
 
-        .contribution-item strong {
-            color: #0d3b66;
-            display: block;
-            margin-bottom: 6px;
-            font-size: 15px;
-        }
-
-        .contribution-item span {
+        .person-items {
             color: #1e4d6b;
-            display: block;
+            font-size: 13px;
             margin-bottom: 8px;
             line-height: 1.4;
         }
 
-        .qr-section {
-            text-align: center;
-            margin: 20px 0;
-            padding: 15px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.35);
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            font-size: 10px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            border: 2px solid;
+            flex-shrink: 0;
+        }
+        .badge-paid   { background:#28a745; color:#fff; border-color:#1a7032; }
+        .badge-unpaid { background:#6c757d; color:#fff; border-color:#495057; }
+
+        .person-actions {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
         }
 
-        .qr-section h3 {
-            margin: 0 0 10px 0;
-            color: #fff;
+        .person-actions .pixel-btn {
+            font-size: 11px;
+            padding: 5px 9px;
+            box-shadow: 2px 2px 0 #1a3518;
+            flex: none;
+        }
+        .person-actions .pixel-btn.secondary { box-shadow:2px 2px 0 #2d2d2d; }
+        .person-actions .pixel-btn.danger    { box-shadow:2px 2px 0 #5a0e0e; }
+        .person-actions .pixel-btn.pay-btn   { box-shadow:2px 2px 0 #0e2d4a; }
+
+        .empty-msg {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255,255,255,0.85);
+            color: #0d3b66;
+            font-size: 14px;
+            border: 2px dashed #4a4a6a;
+        }
+
+        /* ── PAYMENT PAGE ─────────────────────────────────── */
+        .payment-for {
+            text-align: center;
+            padding: 12px;
+            background: rgba(255,255,255,0.15);
+            border: 2px solid rgba(255,255,255,0.4);
             font-size: 16px;
-            text-shadow: 0 1px 4px rgba(0,0,0,1), 0 0 10px rgba(0,0,0,0.5);
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 0 1px 4px rgba(0,0,0,1);
+            margin-bottom: 12px;
+        }
+
+        .qr-section {
+            text-align: center;
+            padding: 16px;
+            background: rgba(255,255,255,0.15);
+            border: 2px solid rgba(255,255,255,0.25);
+            margin: 10px 0 16px;
         }
 
         .qr-code {
             max-width: 200px;
             width: 100%;
             height: auto;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin: 0 auto;
             display: block;
+            margin: 0 auto;
+            box-shadow: 4px 4px 0 rgba(0,0,0,0.3);
         }
 
-        /* Additional Animations */
-        .star {
-            position: absolute;
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 20px;
-            animation: twinkle 3s infinite ease-in-out;
+        .amount-badge {
+            display: inline-block;
+            background: #ffd700;
+            color: #0d3b66;
+            font-size: 22px;
+            font-weight: bold;
+            padding: 8px 20px;
+            border: 3px solid #b8960c;
+            box-shadow: 4px 4px 0 #b8960c;
+            margin: 8px auto;
+            display: block;
+            width: fit-content;
+            text-align: center;
         }
 
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.3; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.2); }
-        }
-
-        .bubble {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            animation: bubbleFloat 20s infinite ease-in-out;
-        }
-
-        @keyframes bubbleFloat {
-            0% {
-                transform: translateY(100vh) translateX(0) scale(0);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.6;
-            }
-            90% {
-                opacity: 0.6;
-            }
-            100% {
-                transform: translateY(-100px) translateX(100px) scale(1);
-                opacity: 0;
-            }
-        }
-
-        .rotating-emoji {
-            position: absolute;
-            font-size: 40px;
-            animation: rotateFloat 15s infinite linear;
-            opacity: 0.5;
-        }
-
-        @keyframes rotateFloat {
-            0% {
-                transform: translateY(100vh) translateX(0) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.5;
-            }
-            90% {
-                opacity: 0.5;
-            }
-            100% {
-                transform: translateY(-100px) translateX(200px) rotate(720deg);
-                opacity: 0;
-            }
-        }
-
-        .sparkle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: white;
-            border-radius: 50%;
-            animation: sparkleMove 8s infinite ease-in-out;
-            box-shadow: 0 0 6px white;
-        }
-
-        @keyframes sparkleMove {
-            0%, 100% {
-                transform: translate(0, 0) scale(1);
-                opacity: 0;
-            }
-            50% {
-                transform: translate(50px, -50px) scale(1.5);
-                opacity: 1;
-            }
-        }
-
-        /* Music Player – pixel style */
+        /* ── MUSIC PLAYER ─────────────────────────────────── */
         .music-player {
             position: fixed;
             bottom: 20px;
@@ -719,529 +527,183 @@
             background: #2d5a27;
             border: 3px solid #1a3518;
             border-radius: 0;
-            width: 44px;
-            height: 44px;
+            width: 44px; height: 44px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 22px;
             color: white;
-            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            transition: transform 0.12s, box-shadow 0.12s;
             box-shadow: 3px 3px 0 #1a3518;
-            image-rendering: pixelated;
-            image-rendering: -moz-crisp-edges;
-            image-rendering: crisp-edges;
+        }
+        .music-btn:hover  { transform:translate(-1px,-1px); box-shadow:4px 4px 0 #1a3518; }
+        .music-btn:active { transform:translate(2px,2px); box-shadow:1px 1px 0 #1a3518; }
+
+        .music-label { font-size:14px; color:#2d2d2d; font-weight:bold; }
+
+        @keyframes musicPulse {
+            0%,100% { box-shadow:3px 3px 0 #1a3518; }
+            50%     { box-shadow:4px 4px 0 #1a3518; transform:scale(1.05); }
         }
 
-        .music-btn:hover {
-            transform: translate(-1px, -1px);
-            box-shadow: 4px 4px 0 #1a3518;
+        /* ── RECEIPT UPLOAD ───────────────────────────────── */
+        .upload-area {
+            border: 3px dashed rgba(255,255,255,0.5);
+            padding: 16px;
+            text-align: center;
+            margin: 12px 0;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+            background: rgba(255,255,255,0.08);
+        }
+        .upload-area:hover { border-color:#ffd700; background:rgba(255,255,255,0.14); }
+        .upload-area.has-file { border-color:#28a745; background:rgba(40,167,69,0.12); }
+
+        .upload-area input[type="file"] {
+            display: none;
         }
 
-        .music-btn:active {
-            transform: translate(2px, 2px);
-            box-shadow: 1px 1px 0 #1a3518;
-        }
-
-        .music-label {
-            font-size: 14px;
-            color: #2d2d2d;
+        .upload-label {
+            color: #fff;
+            font-size: 13px;
             font-weight: bold;
-        }
-
-        .pulse-ring {
-            position: absolute;
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            border-radius: 50%;
-            animation: pulseRing 2s infinite;
-        }
-
-        @keyframes pulseRing {
-            0% {
-                transform: scale(1);
-                opacity: 1;
-            }
-            100% {
-                transform: scale(2);
-                opacity: 0;
-            }
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
-                box-shadow: 0 2px 8px rgba(0, 114, 255, 0.3);
-            }
-            50% {
-                transform: scale(1.05);
-                box-shadow: 0 4px 15px rgba(0, 114, 255, 0.5);
-            }
-        }
-
-        .floating-shapes {
-            position: absolute;
-            opacity: 0.3;
-            animation: floatShape 25s infinite ease-in-out;
-        }
-
-        @keyframes floatShape {
-            0%, 100% {
-                transform: translateY(0) translateX(0) rotate(0deg);
-            }
-            25% {
-                transform: translateY(-50px) translateX(30px) rotate(90deg);
-            }
-            50% {
-                transform: translateY(-100px) translateX(0) rotate(180deg);
-            }
-            75% {
-                transform: translateY(-50px) translateX(-30px) rotate(270deg);
-            }
-        }
-
-        .contribution-actions {
+            text-shadow: 0 1px 4px rgba(0,0,0,1);
+            cursor: pointer;
             display: flex;
-            gap: 8px;
-            margin-top: 8px;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
         }
 
-        .edit-btn, .delete-btn {
-            padding: 6px 12px;
-            border: none;
-            border-radius: 6px;
+        .upload-label span { font-size: 28px; }
+        .upload-label small { font-size: 11px; opacity: 0.75; font-weight: normal; }
+
+        .receipt-preview {
+            max-width: 100%;
+            max-height: 160px;
+            object-fit: contain;
+            display: none;
+            margin: 8px auto 0;
+            border: 2px solid #28a745;
+            box-shadow: 3px 3px 0 rgba(0,0,0,0.3);
+        }
+
+        /* Upload progress bar */
+        .upload-progress-wrap {
+            display: none;
+            margin: 8px 0 2px;
+        }
+        .upload-progress-wrap p {
             font-size: 12px;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            font-weight: bold;
+            color: #fff;
+            text-shadow: 0 1px 3px rgba(0,0,0,1);
+            margin-bottom: 4px;
+            text-align: center;
         }
-
-        .edit-btn {
+        .upload-progress-bar-outer {
+            width: 100%;
+            height: 14px;
+            border: 2px solid rgba(255,255,255,0.4);
+            background: rgba(0,0,0,0.3);
+        }
+        .upload-progress-bar-inner {
+            height: 100%;
+            width: 0%;
             background: #28a745;
-            color: white;
-            font-weight: 600;
+            transition: width 0.2s;
         }
 
-        .edit-btn:hover {
-            background: #218838;
-            transform: translateY(-1px);
-            box-shadow: 0 2px 5px rgba(40, 167, 69, 0.3);
+        /* Receipt view button */
+        .receipt-btn {
+            background: #6a3d9a;
+            border-color: #3d1f5a;
+            box-shadow: 2px 2px 0 #3d1f5a;
         }
+        .receipt-btn:hover { box-shadow:3px 3px 0 #3d1f5a; }
 
-        .delete-btn {
-            background: #dc3545;
-            color: white;
-            font-weight: 600;
-        }
-
-        .delete-btn:hover {
-            background: #c82333;
-            transform: translateY(-1px);
-            box-shadow: 0 2px 5px rgba(220, 53, 69, 0.3);
-        }
-
-        .upload-receipt-btn {
-            padding: 6px 12px;
-            border: none;
-            border-radius: 6px;
-            font-size: 12px;
-            cursor: pointer;
-            font-weight: 600;
-            background: #f0a500;
-            color: white;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .upload-receipt-btn:hover {
-            background: #d4920a;
-            transform: translateY(-1px);
-            box-shadow: 0 2px 5px rgba(240, 165, 0, 0.35);
-        }
-
-        .view-receipt-btn {
-            padding: 6px 12px;
-            border: none;
-            border-radius: 6px;
-            font-size: 12px;
-            cursor: pointer;
-            font-weight: 600;
-            background: #17a2b8;
-            color: white;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .view-receipt-btn:hover {
-            background: #138496;
-            transform: translateY(-1px);
-            box-shadow: 0 2px 5px rgba(23, 162, 184, 0.35);
-        }
-
-        .receipt-done-badge {
-            flex-shrink: 0;
-            display: inline-block;
-            padding: 2px 6px;
-            background: #d4edda;
-            color: #155724;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: 700;
-            border: 1px solid #c3e6cb;
-            white-space: nowrap;
-        }
-
-        /* Receipt viewer modal */
-        .receipt-modal {
+        /* ── LIGHTBOX ─────────────────────────────────────── */
+        .lightbox {
             display: none;
             position: fixed;
             inset: 0;
             background: rgba(0,0,0,0.85);
-            align-items: center;
-            justify-content: center;
             z-index: 2000;
-            padding: 20px;
-        }
-
-        .receipt-modal-inner {
-            position: relative;
-            max-width: min(480px, calc(100vw - 40px));
-            width: 100%;
-            background: #1a1a2e;
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
-            animation: fadeIn 0.25s ease;
-        }
-
-        .receipt-modal-inner h3 {
-            color: #fff;
-            text-align: center;
-            margin: 0 0 14px 0;
-            font-size: 16px;
-        }
-
-        .receipt-img {
-            width: 100%;
-            border-radius: 10px;
-            display: block;
-            max-height: 70vh;
-            object-fit: contain;
-            background: #000;
-        }
-
-        .receipt-close {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 22px;
-            cursor: pointer;
-            color: #fff;
-            font-weight: bold;
-        }
-
-        /* Success video popup */
-        .success-video-modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.9);
             align-items: center;
             justify-content: center;
-            z-index: 2100;
+            flex-direction: column;
             padding: 20px;
         }
+        .lightbox.open { display: flex; }
 
-        .success-video-modal-inner {
-            position: relative;
-            max-width: min(420px, calc(100vw - 40px));
-            width: 100%;
-            background: #1a1a2e;
-            border-radius: 16px;
-            padding: 16px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
-            animation: fadeIn 0.3s ease;
+        .lightbox-img {
+            max-width: min(90vw, 500px);
+            max-height: 75vh;
+            object-fit: contain;
+            border: 4px solid #fff;
+            box-shadow: 6px 6px 0 rgba(0,0,0,0.5);
         }
 
-        .success-video-modal-inner .success-close {
-            position: absolute;
-            top: 8px;
-            right: 12px;
-            font-size: 22px;
-            cursor: pointer;
+        .lightbox-label {
             color: #fff;
+            font-size: 13px;
             font-weight: bold;
-            z-index: 1;
+            margin-bottom: 12px;
+            text-shadow: 0 1px 4px rgba(0,0,0,1);
         }
 
-        .success-video-modal-inner video {
-            width: 100%;
-            border-radius: 12px;
-            display: block;
-            background: #000;
-        }
-
-        .card-wrapper {
-            display: inline-block;
-            padding: 28px;
-            background: url('coin.gif') center center / contain no-repeat;
-            background-color: transparent;
-            border-radius: 44px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-            animation: cardEntrance 0.8s ease-out, floating 3s ease-in-out infinite;
+        .lightbox-close {
+            margin-top: 14px;
+            background: #8b1a1a;
+            color: #fff;
+            border: 3px solid #5a0e0e;
+            padding: 10px 24px;
+            font-size: 15px;
+            font-weight: bold;
+            font-family: Arial, sans-serif;
             cursor: pointer;
-            z-index: 10;
-            position: relative;
-            min-width: 640px;
-            min-height: 640px;
+            box-shadow: 4px 4px 0 #5a0e0e;
         }
+        .lightbox-close:hover { transform:translate(-1px,-1px); box-shadow:5px 5px 0 #5a0e0e; }
 
-        .card {
-            background: transparent;
-            border-radius: 24px;
-            padding: 24px;
-            text-align: center;
-            width: 584px;
-            min-height: 584px;
-            cursor: pointer;
-            transition: transform 0.3s;
-            position: relative;
-            overflow: hidden;
-            z-index: 10;
-        }
+        /* ── RESPONSIVE ───────────────────────────────────── */
+        @media (max-width: 900px) {
+            .page { padding: 12px; }
 
-        .card h1, .card p {
-            color: white;
-            text-shadow: 0 2px 6px rgba(0,0,0,0.6);
-        }
-
-        /* Tablet and phone: same design, responsive sizing only */
-        @media screen and (max-width: 900px) {
-            html {
-                min-height: 100vh;
-                min-height: 100dvh;
-                -webkit-fill-available: 100%;
-            }
-
-            body {
-                padding: 10px;
-                box-sizing: border-box;
-                overflow-x: hidden;
-                min-height: 100vh;
-                min-height: 100dvh;
-                min-height: -webkit-fill-available;
-                /* full bg on phone: fixed so it fills viewport when scrolling */
-                background: url('pixel.gif') center center / cover no-repeat;
-                background-attachment: fixed;
-            }
-
-            .background-container {
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                min-height: 100vh;
-                min-height: 100dvh;
-                min-height: -webkit-fill-available;
-            }
-
-            /* Same design: coin.gif frame, same proportions, same animation - bigger on phone */
             .card-wrapper {
-                min-width: 0 !important;
-                min-height: 0 !important;
                 width: min(94vw, 90vmin, 420px);
                 height: min(94vw, 90vmin, 420px);
                 padding: 18px;
-                border-radius: 44px;
-                background: url('coin.gif') center center / contain no-repeat;
-                background-color: transparent;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-                animation: cardEntrance 0.8s ease-out, floating 3s ease-in-out infinite;
             }
 
-            .card {
-                width: 100% !important;
-                min-height: 0 !important;
-                height: 100% !important;
-                max-height: none;
-                padding: 16px;
-                border-radius: 24px;
-                box-sizing: border-box;
-                background: transparent;
+            .page-panel {
+                max-width: 100%;
+                padding: 18px 14px;
+                max-height: calc(100vh - 24px);
+                max-height: calc(100dvh - 24px);
             }
 
-            /* Same design: centered modal, same overlay, same padding feel */
-            .modal {
-                padding: 20px;
-                align-items: center;
-                justify-content: center;
-                -webkit-overflow-scrolling: touch;
-            }
-
-            /* Same design: pixel.gif bg, same border, same shadow, same radius */
-            .modal-content {
-                max-width: min(500px, calc(100vw - 40px));
-                width: 100%;
-                max-height: 90vh;
-                padding: 25px;
-                margin: 0;
-                box-sizing: border-box;
-                background: url('pixel.gif') center center / cover no-repeat;
-                border-radius: 16px;
-                box-shadow: 0 0 0 3px rgba(255,255,255,0.15), 0 10px 40px rgba(0,0,0,0.5);
-            }
-
-            .modal-content h2 {
-                font-size: 1.35rem;
-                text-align: center;
-                color: #fff;
-                text-shadow: 0 2px 6px rgba(0,0,0,1), 0 0 20px rgba(0,0,0,0.6);
-            }
-
-            .modal-content p {
-                font-size: 0.95rem;
-                margin: 8px 0;
-                color: #fff;
-                text-shadow: 0 1px 4px rgba(0,0,0,1), 0 0 12px rgba(0,0,0,0.5);
-                line-height: 1.5;
-            }
-
-            .event-info {
-                margin: 0 0 1rem 0;
-            }
-
-            .event-info p {
-                margin: 10px 0;
-                line-height: 1.5;
-            }
-
-            /* Same form design: border, inputs, submit button gradient */
-            .form-section {
-                margin-top: 25px;
-                padding-top: 25px;
-                border-top: 2px solid rgba(255,255,255,0.25);
-            }
-
-            .form-group input,
-            .form-group textarea {
-                padding: 12px 14px;
-                font-size: 16px;
-                border: 2px solid rgba(255,255,255,0.6);
-                border-radius: 8px;
-                background: #fff;
-                color: #0d3b66;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-            }
-
-            .contributions-list {
-                margin-top: 20px;
-                padding-top: 20px;
-                border-top: 2px solid rgba(255,255,255,0.25);
-            }
-
-            .contribution-item {
-                padding: 14px;
-                background: rgba(255,255,255,0.92);
-                border-radius: 8px;
-                border-left: 4px solid #0072ff;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-            }
-
-            .submit-btn {
-                padding: 12px 24px;
-                font-size: 16px;
-            }
-
-            .submit-btn-icon {
-                width: 28px;
-                height: 28px;
-            }
-
-            .edit-btn, .delete-btn {
-                padding: 6px 12px;
-                border-radius: 6px;
-                font-size: 12px;
-            }
-
-            .qr-section {
-                padding: 15px;
-                background: rgba(255,255,255,0.2);
-                border-radius: 12px;
-                border: 1px solid rgba(255,255,255,0.35);
-            }
-
-            .qr-code {
-                max-width: 200px;
-                border-radius: 8px;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            }
-
-            .close {
-                top: 10px;
-                right: 15px;
-                font-size: 22px;
-                color: #fff;
-                text-shadow: 0 1px 4px rgba(0,0,0,1);
-            }
-
-            /* Music player: pixel style on phone */
-            .music-player {
-                bottom: 20px;
-                right: 20px;
-            }
-
-            .music-btn {
-                width: 44px;
-                height: 44px;
-            }
+            .page-panel h2 { font-size:1.2rem; }
         }
 
-        @media screen and (max-width: 480px) {
-            /* Same design, bigger coin on small phone */
+        @media (max-width: 480px) {
             .card-wrapper {
                 width: min(96vw, 92vmin, 380px);
                 height: min(96vw, 92vmin, 380px);
                 padding: 14px;
-                border-radius: 44px;
-                background: url('coin.gif') center center / contain no-repeat;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
             }
 
-            .card {
-                padding: 12px;
-                border-radius: 24px;
-            }
-
-            .modal-content {
-                padding: 25px 20px;
-                border-radius: 16px;
-                box-shadow: 0 0 0 3px rgba(255,255,255,0.15), 0 10px 40px rgba(0,0,0,0.5);
-            }
-
-            .modal-content h2 {
-                font-size: 1.25rem;
-                text-align: center;
-                color: #fff;
-                text-shadow: 0 2px 6px rgba(0,0,0,1), 0 0 20px rgba(0,0,0,0.6);
-            }
-
-            .modal-content p {
-                color: #fff;
-                text-shadow: 0 1px 4px rgba(0,0,0,1), 0 0 12px rgba(0,0,0,0.5);
-            }
-
-            .event-info p {
-                margin: 10px 0;
-                line-height: 1.5;
-            }
-
-            .submit-btn {
-                padding: 12px 24px;
-                font-size: 16px;
-            }
+            .page-panel { padding:14px 11px; }
+            .pixel-btn  { font-size:12px; padding:9px 12px; }
+            .nav-row .pixel-btn { min-width:100px; }
+            .music-player { padding:6px 10px; }
+            .music-btn { width:38px; height:38px; font-size:18px; }
         }
     </style>
 </head>
-
 <body>
+
+    <!-- ── BACKGROUND ───────────────────────────────────── -->
     <div class="background-container">
         <div class="wave"></div>
         <div class="wave"></div>
@@ -1257,123 +719,183 @@
         <div class="emoji-float">🌊</div>
         <div class="emoji-float">☀️</div>
         <div class="emoji-float">🍹</div>
-        <div class="rotating-emoji" style="left: 20%; animation-delay: 0s;">🌺</div>
-        <div class="rotating-emoji" style="left: 60%; animation-delay: 3s;">🦩</div>
-        <div class="rotating-emoji" style="left: 80%; animation-delay: 6s;">🐚</div>
-        <div class="star" style="top: 15%; left: 25%; animation-delay: 0s;">⭐</div>
-        <div class="star" style="top: 30%; left: 70%; animation-delay: 1s;">✨</div>
-        <div class="star" style="top: 50%; left: 15%; animation-delay: 2s;">⭐</div>
-        <div class="star" style="top: 70%; left: 85%; animation-delay: 0.5s;">✨</div>
-        <div class="bubble" style="width: 30px; height: 30px; left: 25%; animation-delay: 0s;"></div>
-        <div class="bubble" style="width: 40px; height: 40px; left: 55%; animation-delay: 2s;"></div>
-        <div class="bubble" style="width: 25px; height: 25px; left: 75%; animation-delay: 4s;"></div>
-        <div class="bubble" style="width: 35px; height: 35px; left: 40%; animation-delay: 6s;"></div>
-        <div class="sparkle" style="top: 20%; left: 10%; animation-delay: 0s;"></div>
-        <div class="sparkle" style="top: 40%; left: 50%; animation-delay: 2s;"></div>
-        <div class="sparkle" style="top: 60%; left: 30%; animation-delay: 4s;"></div>
-        <div class="sparkle" style="top: 80%; left: 70%; animation-delay: 1s;"></div>
-        <div class="floating-shapes" style="width: 60px; height: 60px; background: rgba(255, 255, 255, 0.2); border-radius: 50%; top: 10%; left: 5%;"></div>
-        <div class="floating-shapes" style="width: 40px; height: 40px; background: rgba(255, 255, 255, 0.15); border-radius: 20%; top: 60%; left: 90%; animation-delay: 2s;"></div>
+        <div class="rotating-emoji" style="left:20%;animation-delay:0s;">🌺</div>
+        <div class="rotating-emoji" style="left:60%;animation-delay:3s;">🦩</div>
+        <div class="rotating-emoji" style="left:80%;animation-delay:6s;">🐚</div>
+        <div class="star" style="top:15%;left:25%;animation-delay:0s;">⭐</div>
+        <div class="star" style="top:30%;left:70%;animation-delay:1s;">✨</div>
+        <div class="star" style="top:50%;left:15%;animation-delay:2s;">⭐</div>
+        <div class="star" style="top:70%;left:85%;animation-delay:0.5s;">✨</div>
+        <div class="bubble" style="width:30px;height:30px;left:25%;animation-delay:0s;"></div>
+        <div class="bubble" style="width:40px;height:40px;left:55%;animation-delay:2s;"></div>
+        <div class="bubble" style="width:25px;height:25px;left:75%;animation-delay:4s;"></div>
+        <div class="bubble" style="width:35px;height:35px;left:40%;animation-delay:6s;"></div>
+        <div class="sparkle" style="top:20%;left:10%;animation-delay:0s;"></div>
+        <div class="sparkle" style="top:40%;left:50%;animation-delay:2s;"></div>
+        <div class="sparkle" style="top:60%;left:30%;animation-delay:4s;"></div>
+        <div class="sparkle" style="top:80%;left:70%;animation-delay:1s;"></div>
+        <div class="floating-shapes" style="width:60px;height:60px;background:rgba(255,255,255,0.2);border-radius:50%;top:10%;left:5%;"></div>
+        <div class="floating-shapes" style="width:40px;height:40px;background:rgba(255,255,255,0.15);border-radius:20%;top:60%;left:90%;animation-delay:2s;"></div>
     </div>
 
-    <!-- Music Player -->
+    <!-- ── MUSIC PLAYER ──────────────────────────────────── -->
     <div class="music-player">
         <button class="music-btn" id="musicToggle" onclick="toggleMusic()">🎵</button>
         <span class="music-label" id="musicLabel">Music</span>
         <audio id="backgroundMusic" loop>
             <source src="wantan.mp3" type="audio/mpeg">
-            Your browser does not support the audio element.
         </audio>
     </div>
 
-    <div class="card-wrapper" onclick="openInvite()">
-        <div class="card"></div>
+    <!-- ════════════════════════════════════════════════════ -->
+    <!-- PAGE 1 · LANDING                                     -->
+    <!-- ════════════════════════════════════════════════════ -->
+    <div id="page-landing" class="page active">
+        <div class="card-wrapper" onclick="goTo('page-details')"></div>
+        <p class="tap-hint">Tap to open invite ✨</p>
     </div>
 
-    <div class="modal" id="inviteModal">
-        <div class="modal-content">
-            <span class="close" onclick="closeInvite()">✖</span>
+    <!-- ════════════════════════════════════════════════════ -->
+    <!-- PAGE 2 · EVENT DETAILS                               -->
+    <!-- ════════════════════════════════════════════════════ -->
+    <div id="page-details" class="page">
+        <div class="page-panel">
+            <h2>⚽ FIFA World Cup</h2>
 
-            <h2>Beach Barbecue Party</h2>
-            <div class="event-info">
-                <p><strong>Theme:</strong> Sekuntap Style</p>
+            <ul class="event-info-list">
+                <li><span class="event-label">Theme</span><span>FIFA World Cup ⚽🏆</span></li>
+                <li><span class="event-label">Day</span><span>Monday</span></li>
+                <li><span class="event-label">Date</span><span>11 July 2016</span></li>
+                <li><span class="event-label">Time</span><span>2:30 PM – 7:00 PM</span></li>
+                <li><span class="event-label">Venue</span><span>📍 Luak Esplanade</span></li>
+                <li><span class="event-label">Dress Code</span><span>FIFA team outfit</span></li>
+                <li><span class="event-label">Payment</span><span>💰 RM12 per person</span></li>
+            </ul>
 
-            <p>Sunset skies, ocean breeze, and sizzling BBQ — let’s unwind beach-style!</p>
-
-            <p>📅 <strong>Day:</strong> Saturday</p>
-            <p>🗓️ <strong>Date:</strong> 28 Februari 2026</p>
-            <p>⏰ <strong>Time:</strong> 2:30 PM – 7:00 PM</p>
-            <p>📍 <strong>Place:</strong> Luak Esplanade</p>
-
-            <p><strong>Dress Code:</strong> Sekuntap outfit / Black outfit</p>
-
-            <p>💰 <strong>Contribution:</strong> RM12 per person</p>
-
-            <p>✨ Bring your own drinks & snacks<br>
-                ✨ Don’t forget sunscreen and a picnic mat
-            </p>
-
-                <p style="text-align:center;">🔥🏖️ See you at the beach! 🌅</p>
+            <div class="event-note">
+                <p>✨ Wear your favourite team jersey or colours</p>
+                <p>✨ Bring your own drinks &amp; snacks</p>
+                <p style="margin-top:6px;">⚽🏆 See you at the watch party!</p>
             </div>
 
+            <div class="nav-row">
+                <button class="pixel-btn secondary" onclick="goTo('page-landing')">← Back</button>
+                <button class="pixel-btn" onclick="goTo('page-people')">Who's Coming? →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════ -->
+    <!-- PAGE 3 · PEOPLE LIST                                 -->
+    <!-- ════════════════════════════════════════════════════ -->
+    <div id="page-people" class="page">
+        <div class="page-panel">
+            <div class="list-header">
+                <h2 style="margin-bottom:0;border-bottom:none;padding-bottom:0;font-size:1.2rem;">Who's Coming? 🎉</h2>
+                <span class="list-count" id="listCount">0 people</span>
+            </div>
+            <div style="border-bottom:2px solid rgba(255,255,255,0.25);margin-bottom:14px;"></div>
+
+            <div id="peopleContainer">
+                <div class="empty-msg">Loading... 🌊</div>
+            </div>
+
+            <div class="nav-row">
+                <button class="pixel-btn secondary" onclick="goTo('page-details')">← Details</button>
+                <button class="pixel-btn" onclick="openAddForm()">+ Add Me 🦆</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════ -->
+    <!-- PAGE 4 · ADD / EDIT FORM                             -->
+    <!-- ════════════════════════════════════════════════════ -->
+    <div id="page-form" class="page">
+        <div class="page-panel">
+            <h2 id="formTitle">What will you bring? 🎒</h2>
+
+            <form id="contributionForm" onsubmit="saveContribution(event)">
+                <input type="hidden" id="editDocId" value="">
+
+                <div class="form-group">
+                    <label for="name">Your Name:</label>
+                    <input type="text" id="name" required placeholder="Enter your name">
+                </div>
+
+                <div class="form-group">
+                    <label for="items">Items you're bringing:</label>
+                    <textarea id="items" required placeholder="e.g., Drinks, Snacks, Chips, etc."></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    <img src="duck.gif" alt="" class="submit-btn-icon">
+                    <span class="submit-btn-text">Submit</span>
+                </button>
+            </form>
+
+            <div class="nav-row" style="margin-top:10px;">
+                <button class="pixel-btn secondary full" onclick="cancelForm()">← Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════ -->
+    <!-- PAGE 5 · PAYMENT                                     -->
+    <!-- ════════════════════════════════════════════════════ -->
+    <div id="page-payment" class="page">
+        <div class="page-panel">
+            <h2>💳 Payment</h2>
+
+            <div id="paymentFor" class="payment-for">—</div>
+
+            <span class="amount-badge">RM 12.00</span>
+
+            <p style="text-align:center;font-size:13px;margin-top:10px;">Scan QR code below to pay:</p>
+
             <div class="qr-section">
-                <h3>📱 Scan QR Code</h3>
                 <img src="qr.jpeg" alt="QR Code" class="qr-code">
             </div>
 
-            <div class="form-section">
-                <h3 style="text-align: center; margin-bottom: 15px; color: #fff; text-shadow: 0 1px 4px rgba(0,0,0,1), 0 0 10px rgba(0,0,0,0.5);">What will you bring? 🎒</h3>
-                <form id="contributionForm" onsubmit="saveContribution(event)">
-                    <input type="hidden" id="editIndex" value="-1">
-                    <div class="form-group">
-                        <label for="name">Your Name:</label>
-                        <input type="text" id="name" name="name" required placeholder="Enter your name">
-                    </div>
-                    <div class="form-group">
-                        <label for="items">Items you're bringing:</label>
-                        <textarea id="items" name="items" required placeholder="e.g., Drinks, Snacks, Chips, etc."></textarea>
-                    </div>
-                    <div class="form-receipt-section" id="formReceiptSection" style="display: none;">
-                        <label class="form-receipt-label">🧾 Payment receipt</label>
-                        <div class="form-receipt-controls" id="formReceiptControls"></div>
-                    </div>
-                    <button type="submit" class="submit-btn" id="submitBtn">
-                        <img src="duck.gif" alt="" class="submit-btn-icon" aria-hidden="true">
-                        <span class="submit-btn-text">Submit</span>
-                    </button>
-                    <button type="button" class="submit-btn cancel-edit-btn" id="cancelBtn" onclick="cancelEdit()" style="display: none; margin-top: 10px;">Cancel</button>
-                </form>
+            <!-- Receipt Upload (required) -->
+            <p style="text-align:center;font-size:13px;margin:10px 0 4px;">Upload your payment receipt <strong style="color:#ffd700;">*</strong> (required):</p>
 
-                <div class="contributions-list" id="contributionsList" style="display: none;">
-                    <h3>Contributions List:</h3>
-                    <div id="contributionsContainer"></div>
+            <div class="upload-area" id="uploadArea" onclick="document.getElementById('receiptFile').click()">
+                <label class="upload-label">
+                    <span>📎</span>
+                    <span id="uploadText">Tap to upload receipt</span>
+                    <small>JPG, PNG or PDF</small>
+                </label>
+                <input type="file" id="receiptFile" accept="image/*,application/pdf" capture="environment" onchange="previewReceipt(event)">
+                <img id="receiptPreview" class="receipt-preview" alt="Receipt preview">
+            </div>
+
+            <div class="upload-progress-wrap" id="uploadProgressWrap">
+                <p id="uploadProgressText">Uploading... 0%</p>
+                <div class="upload-progress-bar-outer">
+                    <div class="upload-progress-bar-inner" id="uploadProgressBar"></div>
                 </div>
+            </div>
+
+            <button class="pixel-btn success-big" id="markPaidBtn" onclick="markAsPaid()" disabled>
+                ✅ I've Paid!
+            </button>
+            <p id="receiptRequiredHint" style="text-align:center;font-size:12px;color:#ffd700;margin-top:8px;text-shadow:0 1px 3px rgba(0,0,0,1);">Upload receipt first to continue</p>
+
+            <div class="nav-row" style="margin-top:10px;">
+                <button class="pixel-btn secondary full" onclick="goTo('page-people')">← Back to List</button>
             </div>
         </div>
     </div>
 
-    <!-- Receipt Viewer Modal -->
-    <div class="receipt-modal" id="receiptModal">
-        <div class="receipt-modal-inner">
-            <span class="receipt-close" onclick="closeReceiptModal()">✖</span>
-            <h3>🧾 Payment Receipt</h3>
-            <img src="" alt="Receipt" class="receipt-img" id="receiptImage">
-        </div>
-    </div>
-
-    <div class="success-video-modal" id="successVideoModal">
-        <div class="success-video-modal-inner">
-            <span class="success-close" onclick="closeSuccessVideoModal()">✖</span>
-            <video id="successVideo" src="cat.mp4" playsinline></video>
-        </div>
+    <!-- ── RECEIPT LIGHTBOX ──────────────────────────────── -->
+    <div class="lightbox" id="receiptLightbox" onclick="closeLightbox()">
+        <p class="lightbox-label" id="lightboxLabel">Receipt</p>
+        <img class="lightbox-img" id="lightboxImg" src="" alt="Receipt">
+        <button class="lightbox-close" onclick="closeLightbox()">✖ Close</button>
     </div>
 
     <script>
-        // ============================================
-        // FIREBASE CONFIGURATION
-        // Replace these values with your Firebase project credentials
-        // Get them from: Firebase Console > Project Settings > General > Your apps
-        // ============================================
+        // ── FIREBASE ─────────────────────────────────────────────────
         const firebaseConfig = {
             apiKey: "AIzaSyAsMqAziqwXuTSqX16Cl09j7ZqNxnn1L_4",
             authDomain: "beach-e0f41.firebaseapp.com",
@@ -1384,327 +906,329 @@
             measurementId: "G-S6X60G886D"
         };
 
-        // Initialize Firebase (with fallback if opened as file:// or config error)
         let db = null;
+        let storage = null;
         try {
             if (typeof firebase !== 'undefined') {
                 firebase.initializeApp(firebaseConfig);
                 db = firebase.firestore();
+                storage = firebase.storage();
             }
         } catch (e) {
-            console.warn("Firebase init failed (e.g. file:// or network):", e);
+            console.warn("Firebase init failed:", e);
         }
 
-        // Collection name in Firestore
-        const COLLECTION_NAME = "contributions";
-
+        const COLLECTION = "contributions";
         let contributions = [];
-        let editingDocId = null;
+        let currentPayDocId = null;
 
-        // Load contributions from Firestore on page load (no orderBy to avoid index requirement; sort in memory)
+        // ── NAVIGATION ───────────────────────────────────────────────
+        function goTo(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            const pg = document.getElementById(pageId);
+            if (pg) pg.classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        // ── FIREBASE LISTENER ────────────────────────────────────────
         function loadContributions() {
-            if (!db) {
-                updateContributionsList();
-                return;
-            }
-            db.collection(COLLECTION_NAME)
-                .onSnapshot((snapshot) => {
-                    contributions = [];
-                    snapshot.forEach((doc) => {
-                        const d = doc.data();
-                        contributions.push({
-                            id: doc.id,
-                            name: d.name,
-                            items: d.items,
-                            receipt: d.receipt || null,
-                            timestamp: d.timestamp ? (d.timestamp.toMillis ? d.timestamp.toMillis() : d.timestamp) : 0
-                        });
+            if (!db) { renderList(); return; }
+            db.collection(COLLECTION).onSnapshot(snapshot => {
+                contributions = [];
+                snapshot.forEach(doc => {
+                    const d = doc.data();
+                    contributions.push({
+                        id: doc.id,
+                        name: d.name || '',
+                        items: d.items || '',
+                        paid: d.paid || false,
+                        receiptUrl: d.receiptUrl || '',
+                        timestamp: d.timestamp ? (d.timestamp.toMillis ? d.timestamp.toMillis() : d.timestamp) : 0
                     });
-                    contributions.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-                    updateContributionsList();
-                    if (editingDocId) updateFormReceiptSection();
-                    const listEl = document.getElementById("contributionsList");
-                    if (listEl) listEl.style.display = contributions.length > 0 ? "block" : "none";
-                }, (error) => {
-                    console.error("Error loading contributions:", error);
-                    updateContributionsList();
-                    const listEl = document.getElementById("contributionsList");
-                    if (listEl) listEl.style.display = "none";
                 });
-        }
-
-        // Initialize on page load
-        window.addEventListener('DOMContentLoaded', () => {
-            loadContributions();
-        });
-
-        function openInvite() {
-            document.getElementById("inviteModal").style.display = "flex";
-        }
-
-        function closeInvite() {
-            document.getElementById("inviteModal").style.display = "none";
-        }
-
-        async function saveContribution(event) {
-            event.preventDefault();
-            if (!db) {
-                alert("Database not available. Open this page over HTTP (e.g. use a local server) and check Firebase config.");
-                return;
-            }
-            const name = document.getElementById("name").value.trim();
-            const items = document.getElementById("items").value.trim();
-            const submitBtn = document.getElementById("submitBtn");
-            
-            if (name && items) {
-                submitBtn.disabled = true;
-                const btnText = submitBtn.querySelector('.submit-btn-text');
-                if (btnText) btnText.textContent = "Saving...";
-                
-                try {
-                    if (editingDocId) {
-                        await db.collection(COLLECTION_NAME).doc(editingDocId).update({
-                            name: name,
-                            items: items
-                        });
-                    } else {
-                        await db.collection(COLLECTION_NAME).add({
-                            name: name,
-                            items: items,
-                            timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                        });
-                    }
-                    cancelEdit();
-                    showSuccessVideoPopup();
-                } catch (error) {
-                    console.error("Error saving contribution:", error);
-                    alert("Error saving contribution. Please try again.");
-                } finally {
-                    submitBtn.disabled = false;
-                    const btnText = submitBtn.querySelector('.submit-btn-text');
-                    if (btnText) btnText.textContent = editingDocId ? "Update" : "Submit";
-                }
-            }
-        }
-
-        function updateFormReceiptSection() {
-            const section = document.getElementById("formReceiptSection");
-            const controls = document.getElementById("formReceiptControls");
-            if (!section || !controls) return;
-            if (!editingDocId) {
-                section.style.display = "none";
-                return;
-            }
-            const contribution = contributions.find(c => c.id === editingDocId);
-            section.style.display = "block";
-            const hasReceipt = contribution && !!contribution.receipt;
-            if (hasReceipt) {
-                controls.innerHTML = `
-                    <span class="receipt-done-badge">✅ Receipt submitted</span>
-                    <button type="button" class="view-receipt-btn" onclick="viewReceipt('${editingDocId}')">👁️ View</button>
-                    <button type="button" class="upload-receipt-btn" onclick="uploadReceipt('${editingDocId}')">🔄 Replace receipt</button>
-                `;
-            } else {
-                controls.innerHTML = `
-                    <button type="button" class="upload-receipt-btn" onclick="uploadReceipt('${editingDocId}')">📎 Upload receipt</button>
-                `;
-            }
-        }
-
-        function editContribution(docId) {
-            const contribution = contributions.find(c => c.id === docId);
-            if (contribution) {
-                document.getElementById("name").value = contribution.name;
-                document.getElementById("items").value = contribution.items;
-                document.getElementById("editIndex").value = docId;
-                editingDocId = docId;
-                
-                // Update button text and show cancel button
-                const submitBtn = document.getElementById("submitBtn");
-                const btnText = submitBtn && submitBtn.querySelector('.submit-btn-text');
-                if (btnText) btnText.textContent = "Update";
-                document.getElementById("cancelBtn").style.display = "block";
-                
-                updateFormReceiptSection();
-                document.querySelector('.form-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        }
-
-        async function deleteContribution(docId) {
-            if (!db) return;
-            if (confirm("Are you sure you want to delete this contribution?")) {
-                try {
-                    await db.collection(COLLECTION_NAME).doc(docId).delete();
-                    if (editingDocId === docId) cancelEdit();
-                } catch (error) {
-                    console.error("Error deleting contribution:", error);
-                    alert("Error deleting contribution. Please try again.");
-                }
-            }
-        }
-
-        function cancelEdit() {
-            document.getElementById("contributionForm").reset();
-            document.getElementById("editIndex").value = "-1";
-            editingDocId = null;
-            const sb = document.getElementById("submitBtn");
-            const bt = sb && sb.querySelector('.submit-btn-text');
-            if (bt) bt.textContent = "Submit";
-            document.getElementById("cancelBtn").style.display = "none";
-            updateFormReceiptSection();
-        }
-
-        function updateContributionsList() {
-            const container = document.getElementById("contributionsContainer");
-            container.innerHTML = "";
-            
-            if (contributions.length === 0) {
-                container.innerHTML = "<p style='text-align: center; color: #0d3b66; padding: 20px; background: rgba(255,255,255,0.92); border-radius: 8px; margin: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.2);'>No contributions yet. Be the first to add one! 🎉</p>";
-                return;
-            }
-            
-            contributions.forEach((contribution) => {
-                const item = document.createElement("div");
-                item.className = "contribution-item";
-                const hasReceipt = !!contribution.receipt;
-                item.innerHTML = `
-                    <div class="contribution-item-header">
-                        <strong>${contribution.name}</strong>
-                        ${hasReceipt ? '<span class="receipt-done-badge">✅ Receipt Submitted</span>' : ''}
-                    </div>
-                    <span>${contribution.items}</span>
-                    <div class="contribution-actions">
-                        <button class="edit-btn" onclick="editContribution('${contribution.id}')">✏️ Edit</button>
-                        <button class="delete-btn" onclick="deleteContribution('${contribution.id}')">🗑️ Delete</button>
-                        ${hasReceipt
-                            ? `<button class="view-receipt-btn" onclick="viewReceipt('${contribution.id}')">👁️ View Receipt</button>`
-                            : `<button class="upload-receipt-btn" onclick="uploadReceipt('${contribution.id}')">📎 Upload Receipt</button>`
-                        }
-                    </div>
-                `;
-                container.appendChild(item);
+                contributions.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+                renderList();
+            }, err => {
+                console.error("Firestore error:", err);
+                renderList();
             });
         }
 
-        // ── Receipt helpers ──────────────────────────────────────────
+        window.addEventListener('DOMContentLoaded', loadContributions);
 
-        function compressImage(file, maxWidth, quality) {
-            return new Promise((resolve) => {
+        // ── RENDER PEOPLE LIST ───────────────────────────────────────
+        function renderList() {
+            const container = document.getElementById('peopleContainer');
+            const countEl   = document.getElementById('listCount');
+            if (!container) return;
+
+            if (countEl) countEl.textContent = contributions.length + ' people';
+
+            if (contributions.length === 0) {
+                container.innerHTML = '<div class="empty-msg">No one yet — be the first! 🎉</div>';
+                return;
+            }
+
+            container.innerHTML = '';
+            contributions.forEach(c => {
+                const div = document.createElement('div');
+                div.className = 'person-item' + (c.paid ? ' is-paid' : '');
+                const receiptBtn = c.paid && c.receiptUrl
+                    ? `<button class="pixel-btn receipt-btn" onclick="viewReceipt('${esc(c.receiptUrl)}','${esc(c.name)}')">🧾 Receipt</button>`
+                    : '';
+                div.innerHTML = `
+                    <div class="person-name">
+                        <span>${esc(c.name)}</span>
+                        <span class="badge ${c.paid ? 'badge-paid' : 'badge-unpaid'}">${c.paid ? 'PAID' : 'UNPAID'}</span>
+                    </div>
+                    <div class="person-items">${esc(c.items)}</div>
+                    <div class="person-actions">
+                        <button class="pixel-btn" onclick="openEditForm('${c.id}')">✏️ Edit</button>
+                        <button class="pixel-btn danger" onclick="deletePerson('${c.id}')">🗑️ Del</button>
+                        ${!c.paid
+                            ? `<button class="pixel-btn pay-btn" onclick="openPayment('${c.id}')">💳 Pay</button>`
+                            : `<span style="font-size:11px;color:#28a745;font-weight:bold;align-self:center;padding:2px 4px;">✅ Paid</span>`
+                        }
+                        ${receiptBtn}
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function esc(str) {
+            return String(str)
+                .replace(/&/g,'&amp;')
+                .replace(/</g,'&lt;')
+                .replace(/>/g,'&gt;')
+                .replace(/"/g,'&quot;');
+        }
+
+        // ── FORM: ADD ────────────────────────────────────────────────
+        function openAddForm() {
+            document.getElementById('formTitle').textContent = 'What will you bring? 🎒';
+            document.getElementById('contributionForm').reset();
+            document.getElementById('editDocId').value = '';
+            const bt = document.querySelector('.submit-btn-text');
+            if (bt) bt.textContent = 'Submit';
+            goTo('page-form');
+        }
+
+        // ── FORM: EDIT ───────────────────────────────────────────────
+        function openEditForm(docId) {
+            const c = contributions.find(x => x.id === docId);
+            if (!c) return;
+            document.getElementById('formTitle').textContent = 'Edit Entry ✏️';
+            document.getElementById('name').value  = c.name;
+            document.getElementById('items').value = c.items;
+            document.getElementById('editDocId').value = docId;
+            const bt = document.querySelector('.submit-btn-text');
+            if (bt) bt.textContent = 'Update';
+            goTo('page-form');
+        }
+
+        function cancelForm() {
+            document.getElementById('contributionForm').reset();
+            document.getElementById('editDocId').value = '';
+            goTo('page-people');
+        }
+
+        async function saveContribution(e) {
+            e.preventDefault();
+            if (!db) { alert("Database not available. Open over HTTP."); return; }
+
+            const name  = document.getElementById('name').value.trim();
+            const items = document.getElementById('items').value.trim();
+            const docId = document.getElementById('editDocId').value;
+            const btn   = document.getElementById('submitBtn');
+            const bt    = btn.querySelector('.submit-btn-text');
+
+            if (!name || !items) return;
+            btn.disabled = true;
+            if (bt) bt.textContent = 'Saving...';
+
+            try {
+                if (docId) {
+                    await db.collection(COLLECTION).doc(docId).update({ name, items });
+                } else {
+                    await db.collection(COLLECTION).add({
+                        name, items,
+                        paid: false,
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                }
+                cancelForm();
+            } catch (err) {
+                console.error(err);
+                alert('Error saving. Please try again.');
+            } finally {
+                btn.disabled = false;
+                if (bt) bt.textContent = docId ? 'Update' : 'Submit';
+            }
+        }
+
+        // ── DELETE ───────────────────────────────────────────────────
+        async function deletePerson(docId) {
+            if (!db) return;
+            if (!confirm('Delete this entry?')) return;
+            try {
+                await db.collection(COLLECTION).doc(docId).delete();
+            } catch (err) {
+                console.error(err);
+                alert('Error deleting. Please try again.');
+            }
+        }
+
+        // ── PAYMENT ──────────────────────────────────────────────────
+        function openPayment(docId) {
+            const c = contributions.find(x => x.id === docId);
+            if (!c) return;
+            currentPayDocId = docId;
+            document.getElementById('paymentFor').textContent = '👤 Payment for: ' + c.name;
+
+            // Reset upload UI
+            document.getElementById('receiptFile').value = '';
+            document.getElementById('receiptPreview').style.display = 'none';
+            document.getElementById('uploadText').textContent = 'Tap to upload receipt';
+            document.getElementById('uploadArea').classList.remove('has-file');
+            document.getElementById('uploadProgressWrap').style.display = 'none';
+            document.getElementById('uploadProgressBar').style.width = '0%';
+
+            const btn = document.getElementById('markPaidBtn');
+            btn.disabled = true;
+            btn.textContent = "✅ I've Paid!";
+            const hint = document.getElementById('receiptRequiredHint');
+            if (hint) hint.style.display = 'block';
+            goTo('page-payment');
+        }
+
+        function updatePaidButtonState() {
+            const file = document.getElementById('receiptFile').files[0];
+            const btn = document.getElementById('markPaidBtn');
+            const hint = document.getElementById('receiptRequiredHint');
+            const canPay = !!file;
+            btn.disabled = !canPay;
+            if (hint) hint.style.display = canPay ? 'none' : 'block';
+        }
+
+        function previewReceipt(event) {
+            const file = event.target.files[0];
+            if (!file) {
+                updatePaidButtonState();
+                return;
+            }
+            const preview = document.getElementById('receiptPreview');
+            const uploadText = document.getElementById('uploadText');
+            const uploadArea = document.getElementById('uploadArea');
+
+            uploadText.textContent = '📎 ' + file.name;
+            uploadArea.classList.add('has-file');
+
+            if (file.type.startsWith('image/')) {
                 const reader = new FileReader();
-                reader.onload = (e) => {
-                    const img = new Image();
-                    img.onload = () => {
-                        const canvas = document.createElement('canvas');
-                        let w = img.width, h = img.height;
-                        if (w > maxWidth) { h = Math.round(h * maxWidth / w); w = maxWidth; }
-                        canvas.width = w;
-                        canvas.height = h;
-                        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-                        resolve(canvas.toDataURL('image/jpeg', quality));
-                    };
-                    img.src = e.target.result;
+                reader.onload = e => {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
                 };
                 reader.readAsDataURL(file);
-            });
+            } else {
+                preview.style.display = 'none';
+            }
+            updatePaidButtonState();
         }
 
-        function uploadReceipt(docId) {
-            if (!db) { alert("Firebase not available."); return; }
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = 'image/*';
-            input.onchange = async (e) => {
-                const file = e.target.files[0];
-                if (!file) return;
-                const btn = document.querySelector(`[onclick="uploadReceipt('${docId}')"]`);
-                if (btn) { btn.disabled = true; btn.textContent = '⏳ Saving...'; }
-                try {
-                    const compressed = await compressImage(file, 900, 0.75);
-                    await db.collection(COLLECTION_NAME).doc(docId).update({ receipt: compressed });
-                } catch (err) {
-                    console.error("Receipt upload error:", err);
-                    alert("Failed to upload receipt. Please try again.");
-                    if (btn) { btn.disabled = false; btn.textContent = '📎 Upload Receipt'; }
-                }
-            };
-            input.click();
-        }
+        async function markAsPaid() {
+            if (!db || !currentPayDocId) return;
+            const btn  = document.getElementById('markPaidBtn');
+            const file = document.getElementById('receiptFile').files[0];
 
-        function viewReceipt(docId) {
-            const c = contributions.find(x => x.id === docId);
-            if (c && c.receipt) {
-                document.getElementById('receiptImage').src = c.receipt;
-                document.getElementById('receiptModal').style.display = 'flex';
+            if (!file) {
+                alert('Please upload your payment receipt before marking as paid.');
+                updatePaidButtonState();
+                return;
+            }
+            if (!storage) {
+                alert('Receipt upload is not available. Please open this page over HTTP and check Firebase Storage.');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Saving...';
+
+            try {
+                const progressWrap = document.getElementById('uploadProgressWrap');
+                const progressBar  = document.getElementById('uploadProgressBar');
+                const progressText = document.getElementById('uploadProgressText');
+                progressWrap.style.display = 'block';
+
+                const ext = file.name.split('.').pop();
+                const ref = storage.ref(`receipts/${currentPayDocId}_${Date.now()}.${ext}`);
+                const uploadTask = ref.put(file);
+
+                const receiptUrl = await new Promise((resolve, reject) => {
+                    uploadTask.on('state_changed',
+                        snap => {
+                            const pct = Math.round((snap.bytesTransferred / snap.totalBytes) * 100);
+                            progressBar.style.width = pct + '%';
+                            progressText.textContent = 'Uploading... ' + pct + '%';
+                        },
+                        reject,
+                        async () => {
+                            progressText.textContent = 'Upload complete! ✅';
+                            resolve(await uploadTask.snapshot.ref.getDownloadURL());
+                        }
+                    );
+                });
+
+                await db.collection(COLLECTION).doc(currentPayDocId).update({
+                    paid: true,
+                    receiptUrl
+                });
+
+                currentPayDocId = null;
+                goTo('page-people');
+
+            } catch (err) {
+                console.error(err);
+                alert('Error saving. Please try again.');
+                btn.textContent = "✅ I've Paid!";
+                updatePaidButtonState();
             }
         }
 
-        function closeReceiptModal() {
-            document.getElementById('receiptModal').style.display = 'none';
-            document.getElementById('receiptImage').src = '';
+        // ── RECEIPT LIGHTBOX ─────────────────────────────────────────
+        function viewReceipt(url, name) {
+            document.getElementById('lightboxImg').src = url;
+            document.getElementById('lightboxLabel').textContent = '🧾 Receipt — ' + name;
+            document.getElementById('receiptLightbox').classList.add('open');
         }
 
-        function showSuccessVideoPopup() {
-            const modal = document.getElementById('successVideoModal');
-            const video = document.getElementById('successVideo');
-            if (modal && video) {
-                modal.style.display = 'flex';
-                video.currentTime = 0;
-                video.onended = function() { closeSuccessVideoModal(); };
-                video.play().catch(function() {});
-            }
+        function closeLightbox() {
+            document.getElementById('receiptLightbox').classList.remove('open');
+            document.getElementById('lightboxImg').src = '';
         }
 
-        function closeSuccessVideoModal() {
-            const modal = document.getElementById('successVideoModal');
-            const video = document.getElementById('successVideo');
-            if (modal) modal.style.display = 'none';
-            if (video) { video.pause(); video.currentTime = 0; }
-        }
-
-        document.addEventListener('click', (e) => {
-            const receiptModal = document.getElementById('receiptModal');
-            if (e.target === receiptModal) closeReceiptModal();
-            const successModal = document.getElementById('successVideoModal');
-            if (e.target === successModal) closeSuccessVideoModal();
-        });
-
-        // ── Music Control ────────────────────────────────────────────
+        // ── MUSIC ────────────────────────────────────────────────────
         let isMusicPlaying = false;
 
         function toggleMusic() {
-            const music = document.getElementById("backgroundMusic");
-            const btn = document.getElementById("musicToggle");
-            const label = document.getElementById("musicLabel");
-
+            const music = document.getElementById('backgroundMusic');
+            const btn   = document.getElementById('musicToggle');
+            const label = document.getElementById('musicLabel');
             if (isMusicPlaying) {
                 music.pause();
-                btn.textContent = "🎵";
-                label.textContent = "Music";
+                btn.textContent = '🎵';
+                label.textContent = 'Music';
                 isMusicPlaying = false;
+                btn.style.animation = 'none';
             } else {
-                music.play().catch(error => {
-                    console.log("Auto-play was prevented. User interaction required.");
-                    // If autoplay is blocked, show a message
-                    alert("Click the music button to play background music!");
-                });
-                btn.textContent = "⏸️";
-                label.textContent = "Playing";
+                music.play().catch(() => {});
+                btn.textContent = '⏸️';
+                label.textContent = 'Playing';
                 isMusicPlaying = true;
+                btn.style.animation = 'musicPulse 1.5s ease-in-out infinite';
             }
         }
-
-        // Add pulsing effect to music button when playing
-        setInterval(() => {
-            const music = document.getElementById("backgroundMusic");
-            const btn = document.getElementById("musicToggle");
-            if (!music.paused && !music.ended) {
-                btn.style.animation = "pulse 1.5s ease-in-out infinite";
-            } else {
-                btn.style.animation = "none";
-            }
-        }, 100);
     </script>
-
 </body>
-
 </html>
