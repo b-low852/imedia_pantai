@@ -771,8 +771,8 @@
     <div class="music-player">
         <button class="music-btn" id="musicToggle" onclick="toggleMusic()">🎵</button>
         <span class="music-label" id="musicLabel">Music</span>
-        <audio id="backgroundMusic" loop>
-            <source src="wantan.mp3" type="audio/mpeg">
+        <audio id="backgroundMusic" loop autoplay playsinline preload="auto">
+            <source src="dai.mp3" type="audio/mpeg">
         </audio>
     </div>
 
@@ -996,7 +996,10 @@
             });
         }
 
-        window.addEventListener('DOMContentLoaded', loadContributions);
+        window.addEventListener('DOMContentLoaded', () => {
+            loadContributions();
+            initMusic();
+        });
 
         // ── RENDER PEOPLE LIST ───────────────────────────────────────
         function renderList() {
@@ -1326,23 +1329,60 @@
 
         // ── MUSIC ────────────────────────────────────────────────────
         let isMusicPlaying = false;
+        let musicUnlockBound = false;
+
+        function setMusicUI(playing) {
+            const btn   = document.getElementById('musicToggle');
+            const label = document.getElementById('musicLabel');
+            isMusicPlaying = playing;
+            if (playing) {
+                btn.textContent = '⏸️';
+                label.textContent = 'Playing';
+                btn.style.animation = 'musicPulse 1.5s ease-in-out infinite';
+            } else {
+                btn.textContent = '🎵';
+                label.textContent = 'Music';
+                btn.style.animation = 'none';
+            }
+        }
+
+        async function startMusic() {
+            const music = document.getElementById('backgroundMusic');
+            if (!music) return false;
+            try {
+                music.volume = 1;
+                await music.play();
+                setMusicUI(true);
+                return true;
+            } catch (e) {
+                return false;
+            }
+        }
+
+        function bindMusicUnlock() {
+            if (musicUnlockBound) return;
+            musicUnlockBound = true;
+            const unlock = () => {
+                if (!isMusicPlaying) startMusic();
+            };
+            document.addEventListener('click', unlock, { once: true });
+            document.addEventListener('touchstart', unlock, { once: true, passive: true });
+            document.addEventListener('keydown', unlock, { once: true });
+        }
+
+        function initMusic() {
+            startMusic().then(started => {
+                if (!started) bindMusicUnlock();
+            });
+        }
 
         function toggleMusic() {
             const music = document.getElementById('backgroundMusic');
-            const btn   = document.getElementById('musicToggle');
-            const label = document.getElementById('musicLabel');
             if (isMusicPlaying) {
                 music.pause();
-                btn.textContent = '🎵';
-                label.textContent = 'Music';
-                isMusicPlaying = false;
-                btn.style.animation = 'none';
+                setMusicUI(false);
             } else {
-                music.play().catch(() => {});
-                btn.textContent = '⏸️';
-                label.textContent = 'Playing';
-                isMusicPlaying = true;
-                btn.style.animation = 'musicPulse 1.5s ease-in-out infinite';
+                startMusic();
             }
         }
     </script>
