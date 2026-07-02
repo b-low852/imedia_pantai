@@ -564,6 +564,18 @@
             50%     { box-shadow:4px 4px 0 #1a3518; transform:scale(1.05); }
         }
 
+        .upload-source-row {
+            display: flex;
+            gap: 10px;
+            margin: 10px 0 0;
+        }
+
+        .upload-source-row .pixel-btn {
+            flex: 1;
+            font-size: 13px;
+            padding: 10px 8px;
+        }
+
         /* ── RECEIPT UPLOAD ───────────────────────────────── */
         .upload-area {
             border: 3px dashed rgba(255,255,255,0.5);
@@ -876,15 +888,24 @@
             <!-- Receipt Upload (required) -->
             <p style="text-align:center;font-size:13px;margin:10px 0 4px;">Upload your payment receipt <strong style="color:#ffd700;">*</strong> (required):</p>
 
-            <div class="upload-area" id="uploadArea" onclick="document.getElementById('receiptFile').click()">
+            <div class="upload-area" id="uploadArea">
                 <label class="upload-label">
                     <span>📎</span>
-                    <span id="uploadText">Tap to upload receipt</span>
-                    <small>JPG, PNG or PDF</small>
+                    <span id="uploadText">Choose receipt image</span>
+                    <small>Gallery or camera · JPG, PNG or PDF</small>
                 </label>
-                <input type="file" id="receiptFile" accept="image/*,application/pdf" capture="environment" onchange="previewReceipt(event)">
                 <img id="receiptPreview" class="receipt-preview" alt="Receipt preview">
             </div>
+
+            <div class="upload-source-row">
+                <button type="button" class="pixel-btn" onclick="openReceiptPicker('gallery')">🖼️ Gallery</button>
+                <button type="button" class="pixel-btn secondary" onclick="openReceiptPicker('camera')">📷 Camera</button>
+            </div>
+
+            <!-- Gallery: no capture → phone can open photo library -->
+            <input type="file" id="receiptFile" accept="image/jpeg,image/png,image/webp,image/heic,image/*,application/pdf" onchange="previewReceipt(event)" style="display:none">
+            <!-- Camera: optional take photo -->
+            <input type="file" id="receiptFileCamera" accept="image/*" capture="environment" onchange="previewReceipt(event)" style="display:none">
 
             <div class="upload-progress-wrap" id="uploadProgressWrap">
                 <p id="uploadProgressText">Uploading...</p>
@@ -1109,6 +1130,7 @@
 
             // Reset upload UI
             document.getElementById('receiptFile').value = '';
+            document.getElementById('receiptFileCamera').value = '';
             document.getElementById('receiptPreview').style.display = 'none';
             document.getElementById('uploadText').textContent = 'Tap to upload receipt';
             document.getElementById('uploadArea').classList.remove('has-file');
@@ -1123,8 +1145,24 @@
             goTo('page-payment');
         }
 
+        function getSelectedReceiptFile() {
+            const gallery = document.getElementById('receiptFile').files[0];
+            const camera  = document.getElementById('receiptFileCamera').files[0];
+            return gallery || camera || null;
+        }
+
+        function openReceiptPicker(source) {
+            document.getElementById('receiptFile').value = '';
+            document.getElementById('receiptFileCamera').value = '';
+            if (source === 'camera') {
+                document.getElementById('receiptFileCamera').click();
+            } else {
+                document.getElementById('receiptFile').click();
+            }
+        }
+
         function updatePaidButtonState() {
-            const file = document.getElementById('receiptFile').files[0];
+            const file = getSelectedReceiptFile();
             const btn = document.getElementById('markPaidBtn');
             const hint = document.getElementById('receiptRequiredHint');
             const canPay = !!file;
@@ -1204,7 +1242,7 @@
         async function markAsPaid() {
             if (!db || !currentPayDocId) return;
             const btn  = document.getElementById('markPaidBtn');
-            const file = document.getElementById('receiptFile').files[0];
+            const file = getSelectedReceiptFile();
 
             if (!file) {
                 alert('Please upload your payment receipt before marking as paid.');
