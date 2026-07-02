@@ -157,7 +157,7 @@
             align-items: center;
             justify-content: center;
             flex-direction: column;
-            padding: 20px;
+            padding: 72px 20px 20px; /* top padding keeps content below fixed music bar */
         }
 
         .page.active {
@@ -527,16 +527,17 @@
         /* ── MUSIC PLAYER ─────────────────────────────────── */
         .music-player {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            top: 14px;
+            right: 14px;
+            bottom: auto;
             z-index: 1000;
             background: #e8e0d0;
             border: 3px solid #5a5248;
             border-radius: 0;
-            padding: 8px 14px;
+            padding: 6px 12px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             box-shadow: 4px 4px 0 #5a5248;
         }
 
@@ -725,7 +726,7 @@
             .page-panel { padding:14px 11px; }
             .pixel-btn  { font-size:12px; padding:9px 12px; }
             .nav-row .pixel-btn { min-width:100px; }
-            .music-player { padding:6px 10px; }
+            .music-player { top:10px; right:10px; padding:5px 9px; }
             .music-btn { width:38px; height:38px; font-size:18px; }
         }
     </style>
