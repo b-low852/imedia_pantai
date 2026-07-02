@@ -9,7 +9,6 @@
     <meta http-equiv="Expires" content="0">
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
     <style>
         /* ── RESET ─────────────────────────────────────────── */
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -870,7 +869,7 @@
             </div>
 
             <div class="upload-progress-wrap" id="uploadProgressWrap">
-                <p id="uploadProgressText">Uploading... 0%</p>
+                <p id="uploadProgressText">Processing...</p>
                 <div class="upload-progress-bar-outer">
                     <div class="upload-progress-bar-inner" id="uploadProgressBar"></div>
                 </div>
@@ -907,12 +906,10 @@
         };
 
         let db = null;
-        let storage = null;
         try {
             if (typeof firebase !== 'undefined') {
                 firebase.initializeApp(firebaseConfig);
                 db = firebase.firestore();
-                storage = firebase.storage();
             }
         } catch (e) {
             console.warn("Firebase init failed:", e);
@@ -1137,6 +1134,32 @@
             updatePaidButtonState();
         }
 
+        // Compress image to base64 using canvas (max 900px, 0.75 quality)
+        function compressImageToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onerror = reject;
+                reader.onload = e => {
+                    const img = new Image();
+                    img.onerror = reject;
+                    img.onload = () => {
+                        const MAX = 900;
+                        let w = img.width, h = img.height;
+                        if (w > MAX || h > MAX) {
+                            if (w > h) { h = Math.round(h * MAX / w); w = MAX; }
+                            else       { w = Math.round(w * MAX / h); h = MAX; }
+                        }
+                        const canvas = document.createElement('canvas');
+                        canvas.width = w; canvas.height = h;
+                        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                        resolve(canvas.toDataURL('image/jpeg', 0.75));
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
         async function markAsPaid() {
             if (!db || !currentPayDocId) return;
             const btn  = document.getElementById('markPaidBtn');
@@ -1147,44 +1170,32 @@
                 updatePaidButtonState();
                 return;
             }
-            if (!storage) {
-                alert('Receipt upload is not available. Please open this page over HTTP and check Firebase Storage.');
-                return;
-            }
 
             btn.disabled = true;
             btn.textContent = 'Saving...';
 
+            const progressWrap = document.getElementById('uploadProgressWrap');
+            const progressBar  = document.getElementById('uploadProgressBar');
+            const progressText = document.getElementById('uploadProgressText');
+            progressWrap.style.display = 'block';
+            progressText.textContent = 'Processing receipt...';
+            progressBar.style.width = '40%';
+
             try {
-                const progressWrap = document.getElementById('uploadProgressWrap');
-                const progressBar  = document.getElementById('uploadProgressBar');
-                const progressText = document.getElementById('uploadProgressText');
-                progressWrap.style.display = 'block';
+                const receiptUrl = await compressImageToBase64(file);
 
-                const ext = file.name.split('.').pop();
-                const ref = storage.ref(`receipts/${currentPayDocId}_${Date.now()}.${ext}`);
-                const uploadTask = ref.put(file);
-
-                const receiptUrl = await new Promise((resolve, reject) => {
-                    uploadTask.on('state_changed',
-                        snap => {
-                            const pct = Math.round((snap.bytesTransferred / snap.totalBytes) * 100);
-                            progressBar.style.width = pct + '%';
-                            progressText.textContent = 'Uploading... ' + pct + '%';
-                        },
-                        reject,
-                        async () => {
-                            progressText.textContent = 'Upload complete! ✅';
-                            resolve(await uploadTask.snapshot.ref.getDownloadURL());
-                        }
-                    );
-                });
+                progressBar.style.width = '70%';
+                progressText.textContent = 'Saving to database...';
 
                 await db.collection(COLLECTION).doc(currentPayDocId).update({
                     paid: true,
                     receiptUrl
                 });
 
+                progressBar.style.width = '100%';
+                progressText.textContent = 'Saved! ✅';
+
+                await new Promise(r => setTimeout(r, 600));
                 currentPayDocId = null;
                 goTo('page-people');
 
@@ -1193,6 +1204,7 @@
                 alert('Error saving. Please try again.');
                 btn.textContent = "✅ I've Paid!";
                 updatePaidButtonState();
+                progressWrap.style.display = 'none';
             }
         }
 
