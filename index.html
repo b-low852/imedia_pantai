@@ -887,10 +887,16 @@
     </div>
 
     <!-- ── RECEIPT LIGHTBOX ──────────────────────────────── -->
-    <div class="lightbox" id="receiptLightbox" onclick="closeLightbox()">
+    <div class="lightbox" id="receiptLightbox">
         <p class="lightbox-label" id="lightboxLabel">Receipt</p>
-        <img class="lightbox-img" id="lightboxImg" src="" alt="Receipt">
-        <button class="lightbox-close" onclick="closeLightbox()">✖ Close</button>
+        <img class="lightbox-img" id="lightboxImg" src="" alt="Receipt" style="display:none;">
+        <p id="lightboxExtMsg" style="display:none;color:#ffd700;font-size:13px;text-align:center;text-shadow:0 1px 4px rgba(0,0,0,1);max-width:300px;">⚠️ This receipt was saved to external storage.<br>Click the button below to open it.</p>
+        <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;justify-content:center;">
+            <a id="lightboxOpenBtn" href="#" target="_blank" rel="noopener" style="display:none;">
+                <button class="lightbox-close" style="background:#1a4a7a;border-color:#0e2d4a;box-shadow:4px 4px 0 #0e2d4a;margin-top:0;">🔗 Open in New Tab</button>
+            </a>
+            <button class="lightbox-close" onclick="closeLightbox()">✖ Close</button>
+        </div>
     </div>
 
     <script>
@@ -971,7 +977,7 @@
                 const div = document.createElement('div');
                 div.className = 'person-item' + (c.paid ? ' is-paid' : '');
                 const receiptBtn = c.paid && c.receiptUrl
-                    ? `<button class="pixel-btn receipt-btn" onclick="viewReceipt('${esc(c.receiptUrl)}','${esc(c.name)}')">🧾 Receipt</button>`
+                    ? `<button class="pixel-btn receipt-btn" onclick="viewReceipt('${esc(c.id)}')">🧾 Receipt</button>`
                     : '';
                 div.innerHTML = `
                     <div class="person-name">
@@ -1209,9 +1215,34 @@
         }
 
         // ── RECEIPT LIGHTBOX ─────────────────────────────────────────
-        function viewReceipt(url, name) {
-            document.getElementById('lightboxImg').src = url;
-            document.getElementById('lightboxLabel').textContent = '🧾 Receipt — ' + name;
+        function viewReceipt(docId) {
+            const c = contributions.find(x => x.id === docId);
+            if (!c || !c.receiptUrl) return;
+
+            const label    = document.getElementById('lightboxLabel');
+            const img      = document.getElementById('lightboxImg');
+            const extMsg   = document.getElementById('lightboxExtMsg');
+            const openBtn  = document.getElementById('lightboxOpenBtn');
+
+            label.textContent = '🧾 Receipt — ' + c.name;
+
+            const isBase64 = c.receiptUrl.startsWith('data:');
+
+            if (isBase64) {
+                // New format: base64 stored in Firestore — display directly
+                img.src = c.receiptUrl;
+                img.style.display = 'block';
+                extMsg.style.display = 'none';
+                openBtn.style.display = 'none';
+            } else {
+                // Old format: Firebase Storage URL — can't display due to CORS, open in new tab
+                img.src = '';
+                img.style.display = 'none';
+                extMsg.style.display = 'block';
+                openBtn.href = c.receiptUrl;
+                openBtn.style.display = 'block';
+            }
+
             document.getElementById('receiptLightbox').classList.add('open');
         }
 
