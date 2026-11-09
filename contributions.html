@@ -274,15 +274,89 @@
         @media screen and (max-width: 700px) {
             body {
                 overflow-x: hidden;
+                padding: 16px 10px 28px;
+            }
+
+            .page {
+                max-width: 100%;
+            }
+
+            h1 {
+                font-size: 2.1rem;
+            }
+
+            .subtitle {
+                font-size: 0.92rem;
+                margin-bottom: 16px;
+            }
+
+            .list-panel {
+                padding: 12px 10px;
             }
 
             .contribution-item {
-                padding-right: 58px;
+                padding: 12px 52px 12px 12px;
+                margin-bottom: 10px;
+            }
+
+            .contribution-item strong {
+                font-size: 14px;
+                padding-right: 4px;
+                word-break: break-word;
+            }
+
+            .contribution-item span {
+                font-size: 13px;
+                word-break: break-word;
+            }
+
+            .contribution-actions {
+                gap: 6px;
+                max-width: calc(100% - 4px);
+            }
+
+            .action-btn {
+                padding: 4px 12px 5px;
+                font-size: 1rem;
             }
 
             .item-tree {
-                width: 40px;
-                right: 8px;
+                width: 36px;
+                right: 6px;
+                bottom: 6px;
+            }
+
+            .receipt-viewer {
+                padding: 12px;
+            }
+
+            .receipt-viewer img {
+                max-width: 92vw;
+                max-height: 68vh;
+            }
+
+            .edit-panel {
+                padding: 14px 12px;
+            }
+
+            .form-group input,
+            .form-group textarea {
+                font-size: 16px;
+            }
+        }
+
+        @media screen and (max-width: 400px) {
+            .contribution-item {
+                padding: 12px 46px 12px 10px;
+            }
+
+            .action-btn {
+                padding: 3px 10px 4px;
+                font-size: 0.95rem;
+            }
+
+            .item-tree {
+                width: 32px;
             }
         }
     </style>
