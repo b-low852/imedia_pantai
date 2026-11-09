@@ -85,15 +85,27 @@
         }
 
         .list-panel {
+            position: relative;
             background: rgba(0, 0, 0, 0.28);
             border: 1px solid rgba(255, 215, 120, 0.35);
             border-radius: 16px;
             padding: 18px 14px;
         }
 
+        .item-tree {
+            position: absolute;
+            right: 10px;
+            bottom: 8px;
+            width: 52px;
+            height: auto;
+            pointer-events: none;
+            image-rendering: pixelated;
+        }
+
         .contribution-item {
+            position: relative;
             background: rgba(255, 255, 255, 0.92);
-            padding: 14px;
+            padding: 14px 72px 14px 14px;
             margin-bottom: 10px;
             border-radius: 8px;
             border-left: 4px solid #0072ff;
@@ -116,24 +128,82 @@
 
         .contribution-actions {
             display: flex;
+            flex-wrap: wrap;
             gap: 8px;
             margin-top: 8px;
         }
 
-        .edit-btn, .delete-btn {
-            padding: 8px 14px;
-            border: none;
-            border-radius: 6px;
-            font-size: 13px;
+        .action-btn {
+            padding: 4px 16px 6px;
+            border-radius: 999px;
+            border: 1px solid #fff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+            color: #fff;
+            font-family: "Great Vibes", cursive;
+            font-size: 1.15rem;
             cursor: pointer;
-            font-weight: 600;
-            color: white;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
         }
 
-        .edit-btn { background: #28a745; }
-        .edit-btn:hover { background: #218838; }
-        .delete-btn { background: #dc3545; }
-        .delete-btn:hover { background: #c82333; }
+        .action-btn:hover {
+            filter: brightness(1.08);
+        }
+
+        .action-btn.delete-btn {
+            background: linear-gradient(180deg, #ff6b6b 0%, #e63946 45%, #c1121f 100%);
+            box-shadow: 0 2px 8px rgba(120, 0, 0, 0.3);
+        }
+
+        .action-btn.edit-btn {
+            background: linear-gradient(180deg, #ffe066 0%, #f4c430 45%, #d4a017 100%);
+            color: #5a3d00;
+            text-shadow: 0 1px 1px rgba(255, 255, 255, 0.35);
+            box-shadow: 0 2px 8px rgba(180, 140, 0, 0.35);
+        }
+
+        .action-btn.receipt-btn {
+            background: linear-gradient(180deg, #6bff8f 0%, #28a745 45%, #1e7e34 100%);
+            box-shadow: 0 2px 8px rgba(30, 100, 40, 0.35);
+        }
+
+        .no-receipt {
+            align-self: center;
+            font-size: 12px;
+            color: #8a8a8a;
+        }
+
+        .receipt-viewer {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            background: rgba(0, 0, 0, 0.85);
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .receipt-viewer.open {
+            display: flex;
+        }
+
+        .receipt-viewer p {
+            margin: 0 0 12px;
+            font-weight: bold;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 1);
+        }
+
+        .receipt-viewer img {
+            max-width: min(90vw, 480px);
+            max-height: 72vh;
+            border-radius: 8px;
+            background: #fff;
+        }
+
+        .receipt-viewer .action-btn {
+            margin-top: 14px;
+        }
 
         .empty {
             text-align: center;
@@ -200,6 +270,21 @@
             margin-top: 10px;
             background: #6c757d;
         }
+
+        @media screen and (max-width: 700px) {
+            body {
+                overflow-x: hidden;
+            }
+
+            .contribution-item {
+                padding-right: 58px;
+            }
+
+            .item-tree {
+                width: 40px;
+                right: 8px;
+            }
+        }
     </style>
 </head>
 
@@ -235,6 +320,12 @@
         </div>
     </div>
 
+    <div class="receipt-viewer" id="receiptViewer" onclick="closeReceipt(event)">
+        <p id="receiptTitle">Receipt</p>
+        <img id="receiptImg" alt="Receipt">
+        <button class="action-btn" onclick="closeReceipt()">Close</button>
+    </div>
+
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyAsMqAziqwXuTSqX16Cl09j7ZqNxnn1L_4",
@@ -262,7 +353,8 @@
                         contributions.push({
                             id: doc.id,
                             name: doc.data().name,
-                            items: doc.data().items
+                            items: doc.data().items,
+                            receipt: doc.data().receipt || ""
                         });
                     });
                     updateContributionsList();
@@ -286,15 +378,33 @@
                 const item = document.createElement("div");
                 item.className = "contribution-item";
                 item.innerHTML = `
+                    <img src="tree.png" alt="" class="item-tree" aria-hidden="true">
                     <strong>#${index + 1} ${contribution.name}</strong>
                     <span>${contribution.items}</span>
                     <div class="contribution-actions">
-                        <button class="edit-btn" onclick="startEdit('${contribution.id}')">✏️ Edit</button>
-                        <button class="delete-btn" onclick="deleteContribution('${contribution.id}')">🗑️ Delete</button>
+                        <button class="action-btn delete-btn" onclick="deleteContribution('${contribution.id}')">Delete</button>
+                        <button class="action-btn edit-btn" onclick="startEdit('${contribution.id}')">Edit</button>
+                        ${contribution.receipt
+                            ? `<button class="action-btn receipt-btn" onclick="showReceipt('${contribution.id}')">Receipt</button>`
+                            : `<span class="no-receipt">No receipt</span>`}
                     </div>
                 `;
                 container.appendChild(item);
             });
+        }
+
+        function showReceipt(docId) {
+            const contribution = contributions.find(c => c.id === docId);
+            if (!contribution || !contribution.receipt) return;
+            document.getElementById("receiptTitle").textContent = "Receipt — " + contribution.name;
+            document.getElementById("receiptImg").src = contribution.receipt;
+            document.getElementById("receiptViewer").classList.add("open");
+        }
+
+        function closeReceipt(event) {
+            if (event && event.target.id !== "receiptViewer") return;
+            document.getElementById("receiptViewer").classList.remove("open");
+            document.getElementById("receiptImg").src = "";
         }
 
         function startEdit(docId) {

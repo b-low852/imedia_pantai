@@ -422,13 +422,26 @@
         .lamp-frame.info-frame {
             margin-top: 8px;
             width: 100%;
-            min-height: 780px;
-            padding: 72px 70px 48px;
-            margin-bottom: -24px;
+            max-width: 520px;
+            margin-left: auto;
+            margin-right: auto;
+            min-height: 560px;
+            height: auto;
+            padding: 52px 48px 44px;
+            margin-bottom: 0;
+            background-size: 100% 100%;
+            box-sizing: border-box;
         }
 
         .lamp-frame.info-frame h2 {
-            margin-top: 8px;
+            margin-top: 6px;
+            font-size: 1.35rem;
+        }
+
+        .lamp-frame.info-frame .event-info p {
+            margin: 8px 0;
+            font-size: 0.98rem;
+            line-height: 1.45;
         }
 
         .contribution-frame {
@@ -1313,6 +1326,21 @@
                 -webkit-overflow-scrolling: touch;
             }
 
+            .lamp-frame.info-frame {
+                max-width: 400px;
+                min-height: 480px;
+                padding: 44px 40px 36px;
+            }
+
+            .lamp-frame.info-frame h2 {
+                font-size: 1.25rem;
+            }
+
+            .lamp-frame.info-frame .event-info p {
+                font-size: 0.95rem;
+                margin: 7px 0;
+            }
+
             .modal-content h2 {
                 font-size: 1.35rem;
             }
@@ -1371,6 +1399,12 @@
         @media screen and (max-width: 480px) {
             .events-heading {
                 font-size: 1.9rem;
+            }
+
+            .lamp-frame.info-frame {
+                max-width: 360px;
+                min-height: 440px;
+                padding: 40px 32px 32px;
             }
 
             .events-row {

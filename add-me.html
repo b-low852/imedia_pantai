@@ -53,23 +53,25 @@
         .qr-frame {
             position: relative;
             margin-top: 8px;
+            margin-bottom: -24px;
             width: 100%;
-            height: 640px;
+            height: 620px;
             background: url('lamp.gif') center center / 100% 100% no-repeat;
             text-align: center;
         }
 
         .qr-inner {
             position: absolute;
-            top: 12%;
-            left: 14%;
-            right: 14%;
-            bottom: 22%;
+            top: 72px;
+            left: 20%;
+            right: 20%;
+            bottom: 120px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            gap: 8px;
+            justify-content: flex-start;
+            padding-top: 8px;
+            gap: 6px;
         }
 
         .qr-frame h3 {
@@ -79,8 +81,8 @@
         }
 
         .qr-frame img {
-            max-width: 200px;
-            width: 78%;
+            max-width: 156px;
+            width: 70%;
             height: auto;
             border-radius: 8px;
         }
@@ -111,14 +113,14 @@
         }
 
         .contribution-frame {
-            margin-top: 8px;
-            min-height: 460px;
-            padding: 36px 28px 64px;
+            margin-top: 28px;
+            min-height: 420px;
+            padding: 72px 64px 110px;
             background: url('lamp.gif') center center / 100% 100% no-repeat;
         }
 
         .contribution-panel {
-            padding: 36px 4px 8px;
+            padding: 12px 4px 8px;
             background: transparent;
             border: none;
         }
@@ -158,6 +160,35 @@
         .form-group textarea {
             min-height: 56px;
             resize: vertical;
+        }
+
+        .receipt-upload {
+            display: block;
+            padding: 10px;
+            border: 2px dashed rgba(255, 255, 255, 0.6);
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.35);
+            text-align: center;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .receipt-upload.has-file {
+            border-color: #6bff8f;
+        }
+
+        .receipt-upload input {
+            display: none;
+        }
+
+        .receipt-preview {
+            display: none;
+            max-width: 100%;
+            max-height: 110px;
+            margin: 8px auto 0;
+            border-radius: 6px;
         }
 
         .submit-btn {
@@ -232,6 +263,14 @@
                         <label for="items">Items you're bringing:</label>
                         <textarea id="items" name="items" required placeholder="e.g., Drinks, Snacks, Chips, etc."></textarea>
                     </div>
+                    <div class="form-group">
+                        <label for="receipt">Upload receipt:</label>
+                        <label class="receipt-upload" id="receiptLabel">
+                            <span id="receiptText">📎 Tap to choose receipt image</span>
+                            <input type="file" id="receipt" accept="image/*" onchange="previewReceipt(event)">
+                        </label>
+                        <img id="receiptPreview" class="receipt-preview" alt="Receipt preview">
+                    </div>
                     <button type="submit" class="submit-btn" id="submitBtn"><span class="btn-text">Submit</span></button>
                 </form>
             </div>
@@ -255,27 +294,93 @@
         const db = firebase.firestore();
         const COLLECTION_NAME = "contributions";
 
+        // Firestore documents are capped at 1 MB, so the receipt is shrunk until it fits.
+        const MAX_RECEIPT_CHARS = 700000;
+
+        function previewReceipt(event) {
+            const file = event.target.files[0];
+            const preview = document.getElementById("receiptPreview");
+            const label = document.getElementById("receiptLabel");
+            const text = document.getElementById("receiptText");
+
+            if (!file) {
+                preview.style.display = "none";
+                label.classList.remove("has-file");
+                text.textContent = "📎 Tap to choose receipt image";
+                return;
+            }
+
+            text.textContent = "✅ " + file.name;
+            label.classList.add("has-file");
+            preview.src = URL.createObjectURL(file);
+            preview.style.display = "block";
+        }
+
+        function loadImage(file) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => resolve(img);
+                img.onerror = () => reject(new Error("Could not read that image. Please choose a JPG or PNG."));
+                img.src = URL.createObjectURL(file);
+            });
+        }
+
+        async function compressReceipt(file) {
+            const img = await loadImage(file);
+            let maxSide = 1000;
+            let quality = 0.7;
+
+            while (true) {
+                const scale = Math.min(1, maxSide / Math.max(img.width, img.height));
+                const canvas = document.createElement("canvas");
+                canvas.width = Math.round(img.width * scale);
+                canvas.height = Math.round(img.height * scale);
+                canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
+                const dataUrl = canvas.toDataURL("image/jpeg", quality);
+
+                if (dataUrl.length <= MAX_RECEIPT_CHARS) return dataUrl;
+                if (maxSide <= 400) throw new Error("Receipt image is too large. Please choose a smaller image.");
+
+                maxSide -= 150;
+                quality = Math.max(0.4, quality - 0.1);
+            }
+        }
+
         async function saveContribution(event) {
             event.preventDefault();
             const name = document.getElementById("name").value.trim();
             const items = document.getElementById("items").value.trim();
+            const file = document.getElementById("receipt").files[0];
             const submitBtn = document.getElementById("submitBtn");
 
             if (!name || !items) return;
+            if (!file) {
+                alert("Please upload your payment receipt.");
+                return;
+            }
 
             submitBtn.disabled = true;
-            submitBtn.innerHTML = '<span class="btn-text">Saving...</span>';
+            submitBtn.innerHTML = '<span class="btn-text">Uploading...</span>';
 
             try {
-                await db.collection(COLLECTION_NAME).add({
+                const receipt = await compressReceipt(file);
+                const docRef = await db.collection(COLLECTION_NAME).add({
                     name: name,
                     items: items,
+                    receipt: receipt,
+                    paid: true,
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 });
+
+                const saved = await docRef.get({ source: "server" });
+                if (!saved.exists || !saved.data().receipt) {
+                    throw new Error("Receipt was not saved. Please try again.");
+                }
+
                 window.location.href = "contributions.html";
             } catch (error) {
                 console.error(error);
-                alert("Error saving contribution. Please try again.");
+                alert(error.message || "Error saving contribution. Please try again.");
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = '<span class="btn-text">Submit</span>';
             }
