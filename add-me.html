@@ -53,25 +53,24 @@
         .qr-frame {
             position: relative;
             margin-top: 8px;
-            margin: 8px auto 0;
+            margin-bottom: -24px;
             width: 100%;
-            max-width: 460px;
-            height: auto;
-            padding: 18px 16px 12px;
-            box-sizing: border-box;
-            background: none;
-            border-style: solid;
-            border-color: transparent;
-            border-width: 34px 33px 66px 39px;
-            border-image: url('lamp.gif') 48 47 94 56 / 34px 33px 66px 39px round;
+            height: 620px;
+            background: url('lamp.gif') center center / 100% 100% no-repeat;
             text-align: center;
         }
 
         .qr-inner {
+            position: absolute;
+            top: 72px;
+            left: 20%;
+            right: 20%;
+            bottom: 120px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;
+            padding-top: 8px;
             gap: 6px;
         }
 
@@ -114,15 +113,10 @@
         }
 
         .contribution-frame {
-            margin-top: -22px;
-            min-height: 0;
-            padding: 18px 28px 12px;
-            box-sizing: border-box;
-            background: none;
-            border-style: solid;
-            border-color: transparent;
-            border-width: 34px 33px 66px 39px;
-            border-image: url('lamp.gif') 48 47 94 56 / 34px 33px 66px 39px round;
+            margin-top: 28px;
+            min-height: 420px;
+            padding: 72px 64px 110px;
+            background: url('lamp.gif') center center / 100% 100% no-repeat;
         }
 
         .contribution-panel {
@@ -246,15 +240,16 @@
                 max-width: 100%;
             }
 
-            .qr-frame,
-            .contribution-frame {
-                padding: 12px 10px 8px;
-                border-width: 29px 28px 56px 33px;
-                border-image-width: 29px 28px 56px 33px;
+            .qr-frame {
+                height: auto;
+                margin-bottom: 0;
+                padding: 60px 40px 120px;
             }
 
             .qr-inner {
-                gap: 4px;
+                position: static;
+                padding-top: 0;
+                gap: 6px;
             }
 
             .qr-frame h3 {
@@ -273,7 +268,9 @@
             }
 
             .contribution-frame {
-                margin-top: -18px;
+                margin-top: 18px;
+                min-height: 0;
+                padding: 52px 44px 120px;
             }
 
             .contribution-panel h3 {
@@ -296,13 +293,16 @@
         }
 
         @media screen and (max-width: 400px) {
+            .qr-frame {
+                padding: 56px 32px 112px;
+            }
+
             .qr-frame img {
                 max-width: 110px;
             }
 
-            .qr-frame,
             .contribution-frame {
-                padding: 10px 6px 6px;
+                padding: 48px 36px 112px;
             }
         }
     </style>
