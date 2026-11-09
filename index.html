@@ -1,739 +1,1424 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>BBQ Party — FIFA World Cup Special ⚽🔥</title>
+    <title>Christmas Invitation</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-
-    <!-- ── Open Graph (WhatsApp / Facebook / Telegram preview) ── -->
-    <meta property="og:title"       content="⚽🔥 BBQ Party — FIFA World Cup Special">
-    <meta property="og:description" content="Saturday · 11 July 2026 · Happy Seaside Miri · 2:30 PM – 7:00 PM · RM12 per person 🍖">
-    <meta property="og:image"       content="https://bitch-party.vercel.app/fifa.gif">
-    <meta property="og:image:width"  content="600">
-    <meta property="og:image:height" content="600">
-    <meta property="og:type"        content="website">
-    <meta property="og:url"         content="https://bitch-party.vercel.app">
-
-    <!-- Twitter Card (also used by some apps) -->
-    <meta name="twitter:card"        content="summary_large_image">
-    <meta name="twitter:title"       content="⚽🔥 BBQ Party — FIFA World Cup Special">
-    <meta name="twitter:description" content="Saturday · 11 July 2026 · Happy Seaside Miri · 2:30 PM – 7:00 PM · RM12 per person 🍖">
-    <meta name="twitter:image"       content="https://bitch-party.vercel.app/fifa.gif">
-
-    <!-- Page description for search / link unfurl -->
-    <meta name="description" content="BBQ Party — FIFA World Cup Special. Saturday, 11 July 2026 at Happy Seaside Miri. Wear your favourite team jersey! RM12 per person.">
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Mountains+of+Christmas:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
-        /* ── RESET ─────────────────────────────────────────── */
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * {
+            box-sizing: border-box;
+        }
 
         html {
             overflow-x: hidden;
             -webkit-text-size-adjust: 100%;
-            height: 100%;
-            min-height: 100vh;
-            min-height: 100dvh;
         }
 
         body {
             font-family: Arial, sans-serif;
-            background: url('fifa.gif') center center / cover no-repeat fixed;
+            background: url('xmas.gif') center center / cover no-repeat;
+            background-color: #0b1a2e;
+            height: 100vh;
             min-height: 100vh;
-            min-height: 100dvh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            position: relative;
             overflow-x: hidden;
             overflow-y: auto;
+            max-width: 100vw;
         }
 
-        /* ── BACKGROUND LAYER ──────────────────────────────── */
         .background-container {
             position: fixed;
-            inset: 0;
-            width: 100%; height: 100%;
-            min-height: 100vh;
-            min-height: 100dvh;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             z-index: 0;
             pointer-events: none;
-            overflow: hidden;
         }
 
         .wave {
             position: absolute;
-            bottom: 0; left: 0;
-            width: 200%; height: 100px;
-            background: linear-gradient(90deg,
-                rgba(255,255,255,0.1) 0%,
-                rgba(255,255,255,0.2) 50%,
-                rgba(255,255,255,0.1) 100%);
+            bottom: 0;
+            left: 0;
+            width: 200%;
+            height: 100px;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.1) 100%);
             border-radius: 50% 50% 0 0;
             animation: waveMove 8s ease-in-out infinite;
         }
-        .wave:nth-child(2) { animation-delay:-2s; height:80px; opacity:0.7; }
-        .wave:nth-child(3) { animation-delay:-4s; height:60px; opacity:0.5; }
+
+        .wave:nth-child(2) {
+            animation-delay: -2s;
+            height: 80px;
+            opacity: 0.7;
+        }
+
+        .wave:nth-child(3) {
+            animation-delay: -4s;
+            height: 60px;
+            opacity: 0.5;
+        }
 
         @keyframes waveMove {
-            0%,100% { transform:translateX(-50%) translateY(0); }
-            50%     { transform:translateX(-50%) translateY(-20px); }
+
+            0%,
+            100% {
+                transform: translateX(-50%) translateY(0);
+            }
+
+            50% {
+                transform: translateX(-50%) translateY(-20px);
+            }
         }
 
         .particle {
             position: absolute;
-            background: rgba(255,255,255,0.6);
+            background: rgba(255, 255, 255, 0.6);
             border-radius: 50%;
             animation: floatParticle 15s infinite ease-in-out;
         }
-        .particle:nth-child(1) { width:20px;height:20px;left:10%;animation-delay:0s;animation-duration:12s; }
-        .particle:nth-child(2) { width:15px;height:15px;left:30%;animation-delay:2s;animation-duration:14s; }
-        .particle:nth-child(3) { width:25px;height:25px;left:50%;animation-delay:4s;animation-duration:16s; }
-        .particle:nth-child(4) { width:18px;height:18px;left:70%;animation-delay:1s;animation-duration:13s; }
-        .particle:nth-child(5) { width:22px;height:22px;left:85%;animation-delay:3s;animation-duration:15s; }
+
+        .particle:nth-child(1) {
+            width: 20px;
+            height: 20px;
+            left: 10%;
+            animation-delay: 0s;
+            animation-duration: 12s;
+        }
+
+        .particle:nth-child(2) {
+            width: 15px;
+            height: 15px;
+            left: 30%;
+            animation-delay: 2s;
+            animation-duration: 14s;
+        }
+
+        .particle:nth-child(3) {
+            width: 25px;
+            height: 25px;
+            left: 50%;
+            animation-delay: 4s;
+            animation-duration: 16s;
+        }
+
+        .particle:nth-child(4) {
+            width: 18px;
+            height: 18px;
+            left: 70%;
+            animation-delay: 1s;
+            animation-duration: 13s;
+        }
+
+        .particle:nth-child(5) {
+            width: 22px;
+            height: 22px;
+            left: 85%;
+            animation-delay: 3s;
+            animation-duration: 15s;
+        }
 
         @keyframes floatParticle {
-            0%   { transform:translateY(100vh) translateX(0) scale(0); opacity:0; }
-            10%  { opacity:1; }
-            90%  { opacity:1; }
-            100% { transform:translateY(-100px) translateX(50px) scale(1); opacity:0; }
+            0% {
+                transform: translateY(100vh) translateX(0) scale(0);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-100px) translateX(50px) scale(1);
+                opacity: 0;
+            }
         }
 
-        .emoji-float { position:absolute; font-size:30px; animation:floatEmoji 20s infinite ease-in-out; opacity:0.4; }
-        .emoji-float:nth-child(6)  { left:15%; animation-delay:0s;  animation-duration:18s; }
-        .emoji-float:nth-child(7)  { left:45%; animation-delay:5s;  animation-duration:22s; }
-        .emoji-float:nth-child(8)  { left:75%; animation-delay:10s; animation-duration:20s; }
+        .emoji-float {
+            position: absolute;
+            font-size: 30px;
+            animation: floatEmoji 20s infinite ease-in-out;
+            opacity: 0.4;
+        }
+
+        .emoji-float:nth-child(6) {
+            left: 15%;
+            animation-delay: 0s;
+            animation-duration: 18s;
+        }
+
+        .emoji-float:nth-child(7) {
+            left: 45%;
+            animation-delay: 5s;
+            animation-duration: 22s;
+        }
+
+        .emoji-float:nth-child(8) {
+            left: 75%;
+            animation-delay: 10s;
+            animation-duration: 20s;
+        }
 
         @keyframes floatEmoji {
-            0%   { transform:translateY(100vh) translateX(0) rotate(0deg); opacity:0; }
-            10%  { opacity:0.4; }
-            90%  { opacity:0.4; }
-            100% { transform:translateY(-100px) translateX(100px) rotate(360deg); opacity:0; }
+            0% {
+                transform: translateY(100vh) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 0.4;
+            }
+
+            90% {
+                opacity: 0.4;
+            }
+
+            100% {
+                transform: translateY(-100px) translateX(100px) rotate(360deg);
+                opacity: 0;
+            }
         }
 
-        .star { position:absolute; color:rgba(255,255,255,0.8); font-size:20px; animation:twinkle 3s infinite ease-in-out; }
-        @keyframes twinkle {
-            0%,100% { opacity:0.3; transform:scale(1); }
-            50%     { opacity:1; transform:scale(1.2); }
-        }
-
-        .bubble { position:absolute; background:rgba(255,255,255,0.3); border-radius:50%; animation:bubbleFloat 20s infinite ease-in-out; }
-        @keyframes bubbleFloat {
-            0%   { transform:translateY(100vh) translateX(0) scale(0); opacity:0; }
-            10%  { opacity:0.6; }
-            90%  { opacity:0.6; }
-            100% { transform:translateY(-100px) translateX(100px) scale(1); opacity:0; }
-        }
-
-        .rotating-emoji { position:absolute; font-size:40px; animation:rotateFloat 15s infinite linear; opacity:0.5; }
-        @keyframes rotateFloat {
-            0%   { transform:translateY(100vh) translateX(0) rotate(0deg); opacity:0; }
-            10%  { opacity:0.5; }
-            90%  { opacity:0.5; }
-            100% { transform:translateY(-100px) translateX(200px) rotate(720deg); opacity:0; }
-        }
-
-        .sparkle { position:absolute; width:4px; height:4px; background:white; border-radius:50%; animation:sparkleMove 8s infinite ease-in-out; box-shadow:0 0 6px white; }
-        @keyframes sparkleMove {
-            0%,100% { transform:translate(0,0) scale(1); opacity:0; }
-            50%     { transform:translate(50px,-50px) scale(1.5); opacity:1; }
-        }
-
-        .floating-shapes { position:absolute; opacity:0.3; animation:floatShape 25s infinite ease-in-out; }
-        @keyframes floatShape {
-            0%,100% { transform:translateY(0) translateX(0) rotate(0deg); }
-            25%     { transform:translateY(-50px) translateX(30px) rotate(90deg); }
-            50%     { transform:translateY(-100px) translateX(0) rotate(180deg); }
-            75%     { transform:translateY(-50px) translateX(-30px) rotate(270deg); }
-        }
-
-        /* ── PAGE SYSTEM ──────────────────────────────────── */
-        .page {
-            display: none;
+        .card {
             position: relative;
             z-index: 10;
-            width: 100%;
-            min-height: 100vh;
-            min-height: 100dvh;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            padding: 72px 20px 20px; /* top padding keeps content below fixed music bar */
         }
 
-        .page.active {
-            display: flex;
-            animation: pageFadeIn 0.3s ease;
-        }
-
-        @keyframes pageFadeIn {
-            from { opacity:0; transform:translateY(8px); }
-            to   { opacity:1; transform:translateY(0); }
-        }
-
-        /* ── LANDING PAGE ─────────────────────────────────── */
         @keyframes cardEntrance {
-            0%   { opacity:0; transform:translateY(30px) scale(0.8); }
-            60%  { transform:translateY(-5px) scale(1.02); }
-            100% { opacity:1; transform:translateY(0) scale(1); }
+            0% {
+                opacity: 0;
+                transform: translateY(30px) scale(0.8);
+            }
+
+            60% {
+                transform: translateY(-5px) scale(1.02);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
+
         @keyframes floating {
-            0%,100% { transform:translateY(0); }
-            50%     { transform:translateY(-10px); }
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
         }
 
-        .card-wrapper {
-            display: inline-block;
-            padding: 28px;
-            background: url('coin.gif') center center / contain no-repeat;
-            background-color: transparent;
-            border-radius: 44px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.25);
-            animation: cardEntrance 0.8s ease-out, floating 3s ease-in-out infinite;
-            cursor: pointer;
-            position: relative;
-            width: 520px;
-            height: 520px;
-        }
-        .card-wrapper:hover { filter:brightness(1.06); }
+        @keyframes floatingHover {
 
-        .tap-hint {
-            color: rgba(255,255,255,0.85);
-            font-size: 14px;
-            margin-top: 14px;
-            text-shadow: 0 1px 4px rgba(0,0,0,0.8);
-            animation: pageFadeIn 1s ease 0.8s both;
+            0%,
+            100% {
+                transform: translateY(-5px) scale(1.08);
+            }
+
+            50% {
+                transform: translateY(-15px) scale(1.1);
+            }
         }
 
-        /* ── PAGE PANEL ───────────────────────────────────── */
-        .page-panel {
-            background: url('fifa.gif') center center / cover no-repeat;
-            border: 3px solid rgba(255,255,255,0.35);
-            padding: 26px 24px 24px;
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%) translateY(-100%) rotate(45deg);
+            }
+
+            100% {
+                transform: translateX(100%) translateY(100%) rotate(45deg);
+            }
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            }
+
+            50% {
+                box-shadow: 0 15px 40px rgba(0, 114, 255, 0.4);
+            }
+        }
+
+        .card h1 {
+            margin: 0;
+            font-size: 22px;
+            color: white;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.7);
+        }
+
+        .card p {
+            color: white;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.7);
+        }
+
+        @keyframes textFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            align-items: stretch;
+            justify-content: stretch;
+            padding: 0;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: #1a1a2e;
+            border-radius: 0;
+            max-width: none;
             width: 100%;
-            max-width: 520px;
-            max-height: calc(100vh - 40px);
-            max-height: calc(100dvh - 40px);
+            height: 100%;
+            max-height: 100%;
+            padding: 28px 20px 40px;
+            position: relative;
+            animation: fadeIn 0.35s ease;
             overflow-y: auto;
             overflow-x: hidden;
-            box-shadow: 6px 6px 0 rgba(0,0,0,0.5);
+            scroll-behavior: smooth;
+            box-shadow: none;
+            box-sizing: border-box;
         }
 
-        .page-panel::-webkit-scrollbar { width: 8px; }
-        .page-panel::-webkit-scrollbar-track { background: rgba(255,255,255,0.1); }
-        .page-panel::-webkit-scrollbar-thumb { background: #2d5a27; }
+        .modal-content.bbq-theme {
+            background:
+                linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, rgba(20, 0, 0, 0.25) 100%),
+                url('xmas.gif') center center / cover no-repeat;
+            background-color: #1a0a0a;
+        }
 
-        .page-panel h2 {
+        .modal-content.xmas-theme {
+            background:
+                linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, rgba(20, 0, 0, 0.25) 100%),
+                url('xmas.gif') center center / cover no-repeat;
+            background-color: #1a0a0a;
+        }
+
+        .modal-inner {
+            max-width: 760px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .modal-content::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .modal-content::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.15);
+            border-radius: 10px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb {
+            background: #0072ff;
+            border-radius: 10px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb:hover {
+            background: #0056b3;
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 22px;
+            cursor: pointer;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-content h2 {
             text-align: center;
             color: #fff;
-            font-size: 1.4rem;
-            font-weight: bold;
-            margin-bottom: 16px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid rgba(255,255,255,0.25);
             text-shadow: 0 2px 6px rgba(0,0,0,1), 0 0 20px rgba(0,0,0,0.6);
+            font-weight: bold;
         }
 
-        .page-panel p {
+        .modal-content p {
+            margin: 8px 0;
             color: #fff;
             text-shadow: 0 1px 4px rgba(0,0,0,1), 0 0 12px rgba(0,0,0,0.5);
-            line-height: 1.6;
-            margin: 8px 0;
+            line-height: 1.5;
         }
 
-        .page-panel strong { color:#fff; text-shadow:0 1px 4px rgba(0,0,0,1); }
-
-        /* ── EVENT INFO LIST ──────────────────────────────── */
-        .event-info-list {
-            list-style: none;
-            margin-bottom: 14px;
-        }
-
-        .event-info-list li {
-            display: flex;
-            gap: 10px;
-            padding: 9px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.15);
+        .modal-content strong {
             color: #fff;
-            font-size: 14px;
             text-shadow: 0 1px 4px rgba(0,0,0,1);
-            line-height: 1.4;
         }
-        .event-info-list li:last-child { border-bottom: none; }
 
-        .event-label {
-            color: #ffd700;
+        .modal-content .close {
+            color: #fff;
+            text-shadow: 0 1px 4px rgba(0,0,0,1);
             font-weight: bold;
-            min-width: 90px;
-            flex-shrink: 0;
+            position: fixed;
+            top: 14px;
+            right: 18px;
+            z-index: 1100;
+            background: rgba(0, 0, 0, 0.45);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .lamp-frame,
+        .contribution-frame {
+            margin-top: 8px;
+            margin-bottom: 0;
+            padding: 32px 28px 40px;
+            background: url('lamp.gif') center center / 100% 100% no-repeat;
+            border-radius: 0;
+            min-height: 0;
+        }
+
+        .lamp-frame.info-frame {
+            margin-top: 8px;
+            width: 100%;
+            min-height: 780px;
+            padding: 72px 70px 48px;
+            margin-bottom: -24px;
+        }
+
+        .lamp-frame.info-frame h2 {
+            margin-top: 8px;
+        }
+
+        .contribution-frame {
+            margin-top: 0;
+            min-height: 460px;
+            padding: 36px 28px 64px;
+        }
+
+        .contribution-panel {
+            margin-top: 0;
+            padding: 36px 4px 8px;
+            background: transparent !important;
+            border: none !important;
+            border-radius: 0;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            box-shadow: none !important;
+        }
+
+        .contribution-panel.form-section {
+            margin-top: 0;
+            padding-top: 36px;
+            border-top: none !important;
+        }
+
+        .contribution-panel h3 {
+            margin: 0 0 14px;
+            color: #fff;
+            text-align: center;
             text-shadow: 0 1px 4px rgba(0,0,0,1);
         }
 
-        .event-note {
-            text-align: center;
-            padding: 10px;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 0;
-            font-size: 13px;
-            margin-top: 4px;
+        .contribution-panel .form-group {
+            max-width: 260px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 12px;
         }
 
-        /* ── PIXEL BUTTONS ────────────────────────────────── */
-        .pixel-btn {
+        .contribution-panel .form-group input,
+        .contribution-panel .form-group textarea {
+            width: 100%;
+            max-width: 260px;
+            padding: 8px 10px;
+            font-size: 14px;
+        }
+
+        .contribution-panel .form-group textarea {
+            min-height: 56px;
+        }
+
+        .contribution-panel .submit-btn {
+            max-width: 140px;
+            margin: 0 auto;
+            display: block;
+            padding: 4px 18px 6px;
+            border-radius: 999px;
+            border: 1px solid #fff;
+            box-shadow: 0 2px 8px rgba(120, 0, 0, 0.3);
+            background: linear-gradient(180deg, #ff6b6b 0%, #e63946 45%, #c1121f 100%);
+            color: #fff;
+            transition: transform 0.15s ease, filter 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .contribution-panel .submit-btn .btn-text {
+            font-family: "Great Vibes", cursive;
+            font-size: 1.25rem;
+            font-weight: 400;
+            letter-spacing: 0.02em;
+            color: #fff;
+            -webkit-text-fill-color: #fff;
+            background: none;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+        }
+
+        .contribution-panel .submit-btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.06);
+            box-shadow: 0 6px 16px rgba(120, 0, 0, 0.4);
+        }
+
+        .contribution-panel .submit-btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 8px rgba(120, 0, 0, 0.3);
+        }
+
+        .invite-actions {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin: -8px auto 28px;
+            max-width: 420px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .add-me-btn,
+        .list-link-btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 7px;
-            background: #2d5a27;
-            color: #fff;
-            border: 3px solid #1a3518;
+            width: 190px;
+            height: 126px;
+            padding: 0 28px 6px;
+            border: none;
             border-radius: 0;
-            padding: 10px 16px;
-            font-size: 14px;
-            font-weight: bold;
-            font-family: Arial, sans-serif;
-            cursor: pointer;
-            transition: transform 0.12s, box-shadow 0.12s;
-            box-shadow: 4px 4px 0 #1a3518;
-            white-space: nowrap;
+            background: url('bt.png') center center / contain no-repeat;
+            background-color: transparent;
+            color: #fff;
+            text-decoration: none;
+            font-family: "Mountains of Christmas", cursive;
+            font-size: 1.35rem;
+            font-weight: 700;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85), 0 0 6px rgba(0, 0, 0, 0.5);
+            box-shadow: none;
+            transition: transform 0.15s ease, filter 0.15s ease;
         }
-        .pixel-btn:hover  { transform:translate(-1px,-1px); box-shadow:5px 5px 0 #1a3518; }
-        .pixel-btn:active { transform:translate(2px,2px); box-shadow:2px 2px 0 #1a3518; }
-        .pixel-btn:disabled { opacity:0.6; cursor:not-allowed; transform:none !important; }
 
-        .pixel-btn.secondary {
-            background:#4a4a4a; border-color:#2d2d2d; box-shadow:4px 4px 0 #2d2d2d;
+        .add-me-btn span,
+        .list-link-btn span {
+            display: inline-block;
+            animation: btnTextPulse 1.6s ease-in-out infinite;
         }
-        .pixel-btn.secondary:hover  { box-shadow:5px 5px 0 #2d2d2d; }
-        .pixel-btn.secondary:active { box-shadow:2px 2px 0 #2d2d2d; }
 
-        .pixel-btn.danger {
-            background:#8b1a1a; border-color:#5a0e0e; box-shadow:4px 4px 0 #5a0e0e;
+        .add-me-btn:hover,
+        .list-link-btn:hover {
+            color: #fff;
+            transform: translateY(-2px) scale(1.04);
+            filter: brightness(1.08);
         }
-        .pixel-btn.danger:hover  { box-shadow:5px 5px 0 #5a0e0e; }
-        .pixel-btn.danger:active { box-shadow:2px 2px 0 #5a0e0e; }
 
-        .pixel-btn.pay-btn {
-            background:#1a4a7a; border-color:#0e2d4a; box-shadow:4px 4px 0 #0e2d4a;
+        .add-me-btn:hover span,
+        .list-link-btn:hover span {
+            animation: btnTextBounce 0.45s ease;
+            transform: scale(1.12);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.9), 0 1px 3px rgba(0, 0, 0, 0.85);
         }
-        .pixel-btn.pay-btn:hover  { box-shadow:5px 5px 0 #0e2d4a; }
-        .pixel-btn.pay-btn:active { box-shadow:2px 2px 0 #0e2d4a; }
 
-        .pixel-btn.success-big {
-            background:#1a6b3a; border-color:#0e4a28; box-shadow:4px 4px 0 #0e4a28;
-            font-size:16px; padding:14px 24px; width:100%; margin-top:6px;
+        .add-me-btn:active,
+        .list-link-btn:active {
+            transform: translateY(1px) scale(0.98);
         }
-        .pixel-btn.success-big:hover  { box-shadow:5px 5px 0 #0e4a28; }
-        .pixel-btn.success-big:active { box-shadow:2px 2px 0 #0e4a28; }
 
-        /* ── NAV ROW ──────────────────────────────────────── */
-        .nav-row {
-            display: flex;
-            gap: 10px;
-            margin-top: 16px;
-            flex-wrap: wrap;
+        @keyframes btnTextPulse {
+            0%, 100% { transform: scale(1); opacity: 0.92; }
+            50% { transform: scale(1.06); opacity: 1; }
         }
-        .nav-row .pixel-btn { flex: 1; min-width: 120px; }
-        .nav-row .pixel-btn.full { width:100%; flex:none; }
 
-        /* ── FORM ─────────────────────────────────────────── */
-        .form-group { margin-bottom: 14px; }
+        @keyframes btnTextBounce {
+            0% { transform: scale(1); }
+            40% { transform: scale(1.18); }
+            100% { transform: scale(1.12); }
+        }
+
+        .event-info {
+            margin: 0 0 1rem 0;
+        }
+
+        .event-info p {
+            margin: 10px 0;
+            line-height: 1.5;
+        }
+
+        .form-section {
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 2px solid rgba(255,255,255,0.25);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
 
         .form-group label {
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             font-weight: bold;
             color: #fff;
-            text-shadow: 0 1px 4px rgba(0,0,0,1);
-            font-size: 14px;
+            text-shadow: 0 1px 4px rgba(0,0,0,1), 0 0 8px rgba(0,0,0,0.6);
+            font-size: 15px;
         }
 
         .form-group input,
         .form-group textarea {
             width: 100%;
-            padding: 10px 12px;
-            border: 3px solid rgba(255,255,255,0.6);
-            border-radius: 0;
-            font-size: 15px;
+            padding: 12px 14px;
+            border: 2px solid rgba(255,255,255,0.6);
+            border-radius: 8px;
+            font-size: 16px;
             font-family: Arial, sans-serif;
+            box-sizing: border-box;
+            transition: border-color 0.3s, box-shadow 0.3s;
             background: #fff;
             color: #0d3b66;
-            box-shadow: 3px 3px 0 rgba(0,0,0,0.3);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #5a7a9a;
+        }
+
         .form-group input:focus,
         .form-group textarea:focus {
             outline: none;
-            border-color: #ffd700;
-            box-shadow: 3px 3px 0 rgba(255,215,0,0.4);
+            border-color: #0072ff;
+            box-shadow: 0 2px 12px rgba(0,114,255,0.4);
         }
-        .form-group input::placeholder,
-        .form-group textarea::placeholder { color:#5a7a9a; }
-        .form-group textarea { resize:vertical; min-height:80px; }
 
-        /* Duck submit button */
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
         .submit-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            background: #2d5a27;
-            color: #fff;
-            border: 3px solid #1a3518;
-            border-radius: 0;
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            color: white;
+            border: none;
             padding: 12px 24px;
+            border-radius: 8px;
             font-size: 16px;
             font-weight: bold;
-            font-family: Arial, sans-serif;
             cursor: pointer;
             width: 100%;
-            transition: transform 0.12s, box-shadow 0.12s;
-            box-shadow: 4px 4px 0 #1a3518;
-        }
-        .submit-btn:hover  { transform:translate(-1px,-1px); box-shadow:5px 5px 0 #1a3518; }
-        .submit-btn:active { transform:translate(2px,2px); box-shadow:2px 2px 0 #1a3518; }
-        .submit-btn:disabled { opacity:0.6; cursor:not-allowed; transform:none; }
-
-        .submit-btn-icon {
-            width:28px; height:28px;
-            object-fit: contain;
-            image-rendering: pixelated;
-            image-rendering: crisp-edges;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
-        /* ── PEOPLE LIST ──────────────────────────────────── */
-        .list-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 12px;
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 114, 255, 0.3);
         }
 
-        .list-count {
-            font-size: 12px;
-            color: rgba(255,255,255,0.7);
-            text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+        .submit-btn:active {
+            transform: translateY(0);
         }
 
-        .person-item {
-            background: rgba(255,255,255,0.93);
-            border: 3px solid #ddd;
-            border-left: 5px solid #4a4a6a;
-            padding: 12px 14px;
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .contributions-list {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid rgba(255,255,255,0.25);
+        }
+
+        #contributionsContainer {
+            max-height: 300px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding-right: 5px;
+        }
+
+        #contributionsContainer::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #contributionsContainer::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.15);
+            border-radius: 10px;
+        }
+
+        #contributionsContainer::-webkit-scrollbar-thumb {
+            background: #0072ff;
+            border-radius: 10px;
+        }
+
+        #contributionsContainer::-webkit-scrollbar-thumb:hover {
+            background: #0056b3;
+        }
+
+        .contributions-list h3 {
+            margin-bottom: 15px;
+            color: #fff;
+            text-shadow: 0 1px 4px rgba(0,0,0,1), 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        .contribution-item {
+            background: rgba(255,255,255,0.92);
+            padding: 14px;
             margin-bottom: 10px;
-            box-shadow: 3px 3px 0 rgba(0,0,0,0.2);
+            border-radius: 8px;
+            border-left: 4px solid #0072ff;
+            position: relative;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
         }
-        .person-item.is-paid { border-left-color: #28a745; }
 
-        .person-name {
+        .contribution-item strong {
             color: #0d3b66;
-            font-weight: bold;
+            display: block;
+            margin-bottom: 6px;
             font-size: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 8px;
-            margin-bottom: 4px;
         }
 
-        .person-items {
+        .contribution-item span {
             color: #1e4d6b;
-            font-size: 13px;
+            display: block;
             margin-bottom: 8px;
             line-height: 1.4;
         }
 
-        .badge {
-            display: inline-block;
-            padding: 3px 8px;
-            font-size: 10px;
-            font-weight: bold;
-            letter-spacing: 1px;
-            border: 2px solid;
-            flex-shrink: 0;
-        }
-        .badge-paid   { background:#28a745; color:#fff; border-color:#1a7032; }
-        .badge-unpaid { background:#6c757d; color:#fff; border-color:#495057; }
-
-        .person-actions {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-        }
-
-        .person-actions .pixel-btn {
-            font-size: 11px;
-            padding: 5px 9px;
-            box-shadow: 2px 2px 0 #1a3518;
-            flex: none;
-        }
-        .person-actions .pixel-btn.secondary { box-shadow:2px 2px 0 #2d2d2d; }
-        .person-actions .pixel-btn.danger    { box-shadow:2px 2px 0 #5a0e0e; }
-        .person-actions .pixel-btn.pay-btn   { box-shadow:2px 2px 0 #0e2d4a; }
-
-        .empty-msg {
-            text-align: center;
-            padding: 20px;
-            background: rgba(255,255,255,0.85);
-            color: #0d3b66;
-            font-size: 14px;
-            border: 2px dashed #4a4a6a;
-        }
-
-        /* ── PAYMENT PAGE ─────────────────────────────────── */
-        .payment-for {
-            text-align: center;
-            padding: 12px;
-            background: rgba(255,255,255,0.15);
-            border: 2px solid rgba(255,255,255,0.4);
-            font-size: 16px;
-            font-weight: bold;
-            color: #fff;
-            text-shadow: 0 1px 4px rgba(0,0,0,1);
-            margin-bottom: 12px;
-        }
-
         .qr-section {
             text-align: center;
-            padding: 16px;
-            background: rgba(255,255,255,0.15);
-            border: 2px solid rgba(255,255,255,0.25);
-            margin: 10px 0 16px;
+            margin: 0;
+            padding: 12px 4px 0;
+            background: transparent;
+            border-radius: 0;
+            border: none;
+            width: 100%;
+        }
+
+        .qr-section h3 {
+            margin: 0 0 12px 0;
+            color: #fff;
+            font-size: 16px;
+            text-shadow: 0 1px 4px rgba(0,0,0,1), 0 0 10px rgba(0,0,0,0.5);
         }
 
         .qr-code {
             max-width: 200px;
             width: 100%;
             height: auto;
-            display: block;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             margin: 0 auto;
-            box-shadow: 4px 4px 0 rgba(0,0,0,0.3);
-        }
-
-        .amount-badge {
-            display: inline-block;
-            background: #ffd700;
-            color: #0d3b66;
-            font-size: 22px;
-            font-weight: bold;
-            padding: 8px 20px;
-            border: 3px solid #b8960c;
-            box-shadow: 4px 4px 0 #b8960c;
-            margin: 8px auto;
             display: block;
-            width: fit-content;
-            text-align: center;
         }
 
-        /* ── MUSIC PLAYER ─────────────────────────────────── */
+        /* Additional Animations */
+        .star {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 20px;
+            animation: twinkle 3s infinite ease-in-out;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        .bubble {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            animation: bubbleFloat 20s infinite ease-in-out;
+        }
+
+        @keyframes bubbleFloat {
+            0% {
+                transform: translateY(100vh) translateX(0) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100px) translateX(100px) scale(1);
+                opacity: 0;
+            }
+        }
+
+        .rotating-emoji {
+            position: absolute;
+            font-size: 40px;
+            animation: rotateFloat 15s infinite linear;
+            opacity: 0.5;
+        }
+
+        @keyframes rotateFloat {
+            0% {
+                transform: translateY(100vh) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.5;
+            }
+            90% {
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(-100px) translateX(200px) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            animation: sparkleMove 8s infinite ease-in-out;
+            box-shadow: 0 0 6px white;
+        }
+
+        @keyframes sparkleMove {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0;
+            }
+            50% {
+                transform: translate(50px, -50px) scale(1.5);
+                opacity: 1;
+            }
+        }
+
+        /* Music Player */
         .music-player {
             position: fixed;
-            top: 10px;
-            right: 10px;
-            bottom: auto;
+            bottom: 16px;
+            right: 16px;
             z-index: 1000;
-            background: #e8e0d0;
-            border: 2px solid #5a5248;
+            background: transparent;
             border-radius: 0;
-            padding: 4px 8px;
+            padding: 0;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 6px;
-            box-shadow: 3px 3px 0 #5a5248;
+            gap: 4px;
+            box-shadow: none;
+            backdrop-filter: none;
         }
 
         .music-btn {
-            background: #2d5a27;
-            border: 2px solid #1a3518;
+            position: relative;
+            background: transparent;
+            border: none;
             border-radius: 0;
-            width: 30px; height: 30px;
+            width: 110px;
+            height: 130px;
+            padding: 0;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
-            color: white;
-            transition: transform 0.12s, box-shadow 0.12s;
-            box-shadow: 2px 2px 0 #1a3518;
-        }
-        .music-btn:hover  { transform:translate(-1px,-1px); box-shadow:3px 3px 0 #1a3518; }
-        .music-btn:active { transform:translate(1px,1px); box-shadow:1px 1px 0 #1a3518; }
-
-        .music-label { font-size:11px; color:#2d2d2d; font-weight:bold; }
-
-        @keyframes musicPulse {
-            0%,100% { box-shadow:3px 3px 0 #1a3518; }
-            50%     { box-shadow:4px 4px 0 #1a3518; transform:scale(1.05); }
+            transition: transform 0.2s ease;
+            box-shadow: none;
+            overflow: visible;
         }
 
-        .upload-source-row {
-            display: flex;
-            gap: 10px;
-            margin: 10px 0 0;
+        .music-btn img.play-icon {
+            width: 110px;
+            height: auto;
+            display: block;
+            filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.45));
+            transition: transform 0.25s ease, filter 0.25s ease;
+            pointer-events: none;
+            position: relative;
+            z-index: 1;
         }
 
-        .upload-source-row .pixel-btn {
-            flex: 1;
+        .music-btn:hover {
+            transform: scale(1.08);
+        }
+
+        .music-btn:hover img.play-icon {
+            filter: drop-shadow(0 6px 14px rgba(212, 175, 55, 0.55));
+        }
+
+        .music-btn:active {
+            transform: scale(0.96);
+        }
+
+        .music-btn.playing img.play-icon {
+            animation: gramophoneBob 1.2s ease-in-out infinite;
+        }
+
+        .music-note {
+            position: absolute;
+            left: 8px;
+            top: 28px;
+            z-index: 2;
+            font-size: 20px;
+            line-height: 1;
+            color: #ffffff;
+            opacity: 0;
+            pointer-events: none;
+            text-shadow: 0 0 6px rgba(255, 255, 255, 0.9), 0 2px 4px rgba(0, 0, 0, 0.7);
+        }
+
+        .music-btn.playing .music-note.n1 {
+            animation: noteFloat 1.8s ease-out infinite;
+            animation-delay: 0s;
+        }
+
+        .music-btn.playing .music-note.n2 {
+            left: 22px;
+            top: 16px;
+            font-size: 17px;
+            animation: noteFloat 1.8s ease-out infinite;
+            animation-delay: 0.4s;
+        }
+
+        .music-btn.playing .music-note.n3 {
+            left: 0;
+            top: 40px;
+            font-size: 18px;
+            animation: noteFloat 1.8s ease-out infinite;
+            animation-delay: 0.85s;
+        }
+
+        .music-label {
             font-size: 13px;
-            padding: 10px 8px;
-        }
-
-        /* ── RECEIPT UPLOAD ───────────────────────────────── */
-        .upload-area {
-            border: 3px dashed rgba(255,255,255,0.5);
-            padding: 16px;
-            text-align: center;
-            margin: 12px 0;
-            cursor: pointer;
-            transition: border-color 0.2s, background 0.2s;
-            background: rgba(255,255,255,0.08);
-        }
-        .upload-area:hover { border-color:#ffd700; background:rgba(255,255,255,0.14); }
-        .upload-area.has-file { border-color:#28a745; background:rgba(40,167,69,0.12); }
-
-        .upload-area input[type="file"] {
-            display: none;
-        }
-
-        .upload-label {
             color: #fff;
-            font-size: 13px;
             font-weight: bold;
-            text-shadow: 0 1px 4px rgba(0,0,0,1);
-            cursor: pointer;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        @keyframes gramophoneBob {
+            0%, 100% { transform: translateY(0) rotate(-1deg); }
+            50% { transform: translateY(-5px) rotate(1deg); }
+        }
+
+        @keyframes noteFloat {
+            0% {
+                opacity: 0;
+                transform: translate(0, 0) scale(0.6) rotate(0deg);
+            }
+            15% {
+                opacity: 1;
+            }
+            70% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-28px, -55px) scale(1.25) rotate(-25deg);
+            }
+        }
+
+        .pulse-ring {
+            position: absolute;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: pulseRing 2s infinite;
+        }
+
+        @keyframes pulseRing {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(2);
+                opacity: 0;
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 2px 8px rgba(0, 114, 255, 0.3);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 4px 15px rgba(0, 114, 255, 0.5);
+            }
+        }
+
+        .floating-shapes {
+            position: absolute;
+            opacity: 0.3;
+            animation: floatShape 25s infinite ease-in-out;
+        }
+
+        @keyframes floatShape {
+            0%, 100% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+            }
+            25% {
+                transform: translateY(-50px) translateX(30px) rotate(90deg);
+            }
+            50% {
+                transform: translateY(-100px) translateX(0) rotate(180deg);
+            }
+            75% {
+                transform: translateY(-50px) translateX(-30px) rotate(270deg);
+            }
+        }
+
+        .contribution-actions {
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 6px;
+            gap: 8px;
+            margin-top: 8px;
         }
 
-        .upload-label span { font-size: 28px; }
-        .upload-label small { font-size: 11px; opacity: 0.75; font-weight: normal; }
-
-        .receipt-preview {
-            max-width: 100%;
-            max-height: 160px;
-            object-fit: contain;
-            display: none;
-            margin: 8px auto 0;
-            border: 2px solid #28a745;
-            box-shadow: 3px 3px 0 rgba(0,0,0,0.3);
-        }
-
-        /* Upload progress bar */
-        .upload-progress-wrap {
-            display: none;
-            margin: 8px 0 2px;
-        }
-        .upload-progress-wrap p {
+        .edit-btn, .delete-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
             font-size: 12px;
-            color: #fff;
-            text-shadow: 0 1px 3px rgba(0,0,0,1);
-            margin-bottom: 4px;
-            text-align: center;
-        }
-        .upload-progress-bar-outer {
-            width: 100%;
-            height: 14px;
-            border: 2px solid rgba(255,255,255,0.4);
-            background: rgba(0,0,0,0.3);
-        }
-        .upload-progress-bar-inner {
-            height: 100%;
-            width: 0%;
-            background: #28a745;
-            transition: width 0.2s;
-        }
-
-        /* Receipt view button */
-        .receipt-btn {
-            background: #6a3d9a;
-            border-color: #3d1f5a;
-            box-shadow: 2px 2px 0 #3d1f5a;
-        }
-        .receipt-btn:hover { box-shadow:3px 3px 0 #3d1f5a; }
-
-        /* ── LIGHTBOX ─────────────────────────────────────── */
-        .lightbox {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.85);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            padding: 20px;
-        }
-        .lightbox.open { display: flex; }
-
-        .lightbox-img {
-            max-width: min(90vw, 500px);
-            max-height: 75vh;
-            object-fit: contain;
-            border: 4px solid #fff;
-            box-shadow: 6px 6px 0 rgba(0,0,0,0.5);
-        }
-
-        .lightbox-label {
-            color: #fff;
-            font-size: 13px;
-            font-weight: bold;
-            margin-bottom: 12px;
-            text-shadow: 0 1px 4px rgba(0,0,0,1);
-        }
-
-        .lightbox-close {
-            margin-top: 14px;
-            background: #8b1a1a;
-            color: #fff;
-            border: 3px solid #5a0e0e;
-            padding: 10px 24px;
-            font-size: 15px;
-            font-weight: bold;
-            font-family: Arial, sans-serif;
             cursor: pointer;
-            box-shadow: 4px 4px 0 #5a0e0e;
-        }
-        .lightbox-close:hover { transform:translate(-1px,-1px); box-shadow:5px 5px 0 #5a0e0e; }
-
-        /* ── RESPONSIVE ───────────────────────────────────── */
-        @media (max-width: 900px) {
-            .page { padding: 12px; }
-
-            .card-wrapper {
-                width: min(94vw, 90vmin, 420px);
-                height: min(94vw, 90vmin, 420px);
-                padding: 18px;
-            }
-
-            .page-panel {
-                max-width: 100%;
-                padding: 18px 14px;
-                max-height: calc(100vh - 24px);
-                max-height: calc(100dvh - 24px);
-            }
-
-            .page-panel h2 { font-size:1.2rem; }
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-weight: bold;
         }
 
-        @media (max-width: 480px) {
-            .card-wrapper {
-                width: min(96vw, 92vmin, 380px);
-                height: min(96vw, 92vmin, 380px);
-                padding: 14px;
+        .edit-btn {
+            background: #28a745;
+            color: white;
+            font-weight: 600;
+        }
+
+        .edit-btn:hover {
+            background: #218838;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(40, 167, 69, 0.3);
+        }
+
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+            font-weight: 600;
+        }
+
+        .delete-btn:hover {
+            background: #c82333;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(220, 53, 69, 0.3);
+        }
+
+        .events-section {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 18px;
+            width: min(94vw, 720px);
+            padding: 12px;
+        }
+
+        .events-heading {
+            margin: 0;
+            font-family: "Great Vibes", cursive;
+            font-size: 2.6rem;
+            font-weight: 400;
+            text-align: center;
+            letter-spacing: 0.02em;
+            background: linear-gradient(90deg, #ff6b6b, #e63946, #ff8fab, #c1121f, #ff6b6b);
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.55));
+            animation: headingFloat 2.8s ease-in-out infinite, headingShine 3.5s linear infinite;
+        }
+
+        @keyframes headingFloat {
+            0%, 100% {
+                transform: translateY(0) rotate(-1deg);
+            }
+            50% {
+                transform: translateY(-8px) rotate(1deg);
+            }
+        }
+
+        @keyframes headingShine {
+            0% {
+                background-position: 0% 50%;
+            }
+            100% {
+                background-position: 200% 50%;
+            }
+        }
+
+        .events-row {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 28px;
+            width: 100%;
+            flex-wrap: wrap;
+        }
+
+        .card-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 8px;
+            padding: 8px;
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            box-shadow: none;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            animation: cardEntrance 0.8s ease-out;
+            cursor: pointer;
+            z-index: 10;
+            position: relative;
+            min-width: 0;
+            min-height: 0;
+            width: min(46vw, 280px);
+            flex: 0 0 auto;
+            max-width: 280px;
+            transition: transform 0.25s ease;
+        }
+
+        .card-wrapper:hover {
+            transform: translateY(-4px);
+        }
+
+        .event-top {
+            height: 72px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .xmas-text-img {
+            display: block;
+            width: 130px;
+            max-width: 90%;
+            height: auto;
+            max-height: 72px;
+            object-fit: contain;
+            margin: 0 auto;
+            filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.45));
+            animation: titleSparkle 2.4s ease-in-out infinite;
+        }
+
+        .event-main-img {
+            display: block;
+            width: 130px;
+            height: 130px;
+            object-fit: contain;
+            margin: 0 auto;
+            filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.4));
+            transform-origin: center bottom;
+            animation: letterFloat 3s ease-in-out infinite, letterGlow 2.5s ease-in-out infinite;
+            transition: transform 0.35s ease, filter 0.35s ease;
+        }
+
+        .bbq-img {
+            border-radius: 12px;
+        }
+
+        .card-wrapper:hover .event-main-img {
+            animation: letterBounce 0.7s ease, letterGlow 2.5s ease-in-out infinite;
+            filter: drop-shadow(0 12px 22px rgba(212, 175, 55, 0.55));
+            transform: scale(1.08) rotate(-2deg);
+        }
+
+        .card-wrapper:hover .bbq-img {
+            filter: drop-shadow(0 12px 22px rgba(255, 140, 0, 0.55));
+        }
+
+        .card {
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            padding: 0;
+            text-align: center;
+            width: 100%;
+            min-height: 0;
+            cursor: pointer;
+            transition: transform 0.3s;
+            position: relative;
+            overflow: visible;
+            z-index: 10;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .card p {
+            margin: 8px 0 0;
+            color: rgba(255, 255, 255, 0.92);
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.75);
+            font-size: 0.85rem;
+            animation: tapPulse 1.8s ease-in-out infinite;
+        }
+
+        @keyframes letterFloat {
+            0%, 100% {
+                transform: translateY(0) rotate(-2deg);
+            }
+            25% {
+                transform: translateY(-10px) rotate(2deg);
+            }
+            50% {
+                transform: translateY(-4px) rotate(-1deg);
+            }
+            75% {
+                transform: translateY(-12px) rotate(1.5deg);
+            }
+        }
+
+        @keyframes letterGlow {
+            0%, 100% {
+                filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.4));
+            }
+            50% {
+                filter: drop-shadow(0 10px 20px rgba(196, 30, 58, 0.55)) drop-shadow(0 0 12px rgba(255, 215, 120, 0.35));
+            }
+        }
+
+        @keyframes letterBounce {
+            0% { transform: scale(1) rotate(-2deg); }
+            30% { transform: scale(1.12) rotate(3deg) translateY(-8px); }
+            55% { transform: scale(0.96) rotate(-2deg) translateY(2px); }
+            100% { transform: scale(1.08) rotate(-2deg); }
+        }
+
+        @keyframes titleSparkle {
+            0%, 100% {
+                transform: scale(1);
+                filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.45));
+            }
+            50% {
+                transform: scale(1.05);
+                filter: drop-shadow(0 6px 16px rgba(255, 215, 120, 0.55)) drop-shadow(0 0 10px rgba(196, 30, 58, 0.4));
+            }
+        }
+
+        @keyframes tapPulse {
+            0%, 100% { opacity: 0.85; transform: translateY(0); }
+            50% { opacity: 1; transform: translateY(-2px); }
+        }
+
+        /* Tablet and phone: make card and modal fit screen */
+        @media screen and (max-width: 900px) {
+            body {
+                padding: 10px;
+                box-sizing: border-box;
+                overflow-x: hidden;
             }
 
-            .page-panel { padding:14px 11px; }
-            .pixel-btn  { font-size:12px; padding:9px 12px; }
-            .nav-row .pixel-btn { min-width:100px; }
-            .music-player { top:8px; right:8px; padding:3px 7px; }
-            .music-btn { width:28px; height:28px; font-size:13px; }
+            .events-heading {
+                font-size: 2.2rem;
+            }
+
+            .events-row {
+                gap: 14px;
+            }
+
+            .card-wrapper {
+                width: min(46vw, 260px);
+                padding: 8px;
+            }
+
+            .event-top {
+                height: 64px;
+            }
+
+            .xmas-text-img {
+                width: 110px;
+                max-height: 64px;
+            }
+
+            .event-main-img {
+                width: 110px;
+                height: 110px;
+            }
+
+            .modal {
+                padding: 0;
+                align-items: stretch;
+                overflow: hidden;
+            }
+
+            .modal-content {
+                max-width: none !important;
+                width: 100% !important;
+                height: 100% !important;
+                max-height: 100% !important;
+                padding: 24px 16px 36px;
+                margin: 0;
+                border-radius: 0;
+                box-sizing: border-box;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .modal-content h2 {
+                font-size: 1.35rem;
+            }
+
+            .modal-content p {
+                font-size: 0.95rem;
+            }
+
+            .event-info {
+                padding: 0 4px;
+                margin-bottom: 1rem;
+            }
+
+            .event-info p {
+                font-size: 1rem;
+                line-height: 1.6;
+                margin: 12px 0;
+            }
+
+            .form-group input,
+            .form-group textarea {
+                padding: 12px 14px;
+                font-size: 16px;
+            }
+
+            .form-section,
+            .contributions-list {
+                margin-top: 18px;
+                padding-top: 18px;
+            }
+
+            .contribution-item {
+                padding: 12px;
+            }
+
+            .edit-btn, .delete-btn {
+                padding: 8px 14px;
+                font-size: 13px;
+            }
+
+            .qr-section {
+                padding: 12px;
+            }
+
+            .qr-code {
+                max-width: 180px;
+            }
+
+            .close {
+                top: 8px;
+                right: 12px;
+                font-size: 20px;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .events-heading {
+                font-size: 1.9rem;
+            }
+
+            .events-row {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .card-wrapper {
+                width: min(88vw, 260px);
+                max-width: 260px;
+            }
+
+            .event-top {
+                height: 58px;
+            }
+
+            .xmas-text-img {
+                width: 100px;
+                max-height: 58px;
+            }
+
+            .event-main-img {
+                width: 100px;
+                height: 100px;
+            }
+
+            .modal-content {
+                padding: 20px 12px 32px;
+            }
+
+            .modal-content h2 {
+                font-size: 1.25rem;
+            }
+
+            .event-info p {
+                font-size: 1.05rem;
+                margin: 10px 0;
+            }
+
+            .submit-btn {
+                padding: 14px 20px;
+                font-size: 15px;
+            }
         }
     </style>
 </head>
-<body>
 
-    <!-- ── BACKGROUND ───────────────────────────────────── -->
+<body>
     <div class="background-container">
         <div class="wave"></div>
         <div class="wave"></div>
@@ -743,648 +1428,168 @@
         <div class="particle"></div>
         <div class="particle"></div>
         <div class="particle"></div>
-        <div class="emoji-float">🌴</div>
-        <div class="emoji-float">🔥</div>
-        <div class="emoji-float">🏖️</div>
-        <div class="emoji-float">🌊</div>
-        <div class="emoji-float">☀️</div>
-        <div class="emoji-float">🍹</div>
-        <div class="rotating-emoji" style="left:20%;animation-delay:0s;">🌺</div>
-        <div class="rotating-emoji" style="left:60%;animation-delay:3s;">🦩</div>
-        <div class="rotating-emoji" style="left:80%;animation-delay:6s;">🐚</div>
-        <div class="star" style="top:15%;left:25%;animation-delay:0s;">⭐</div>
-        <div class="star" style="top:30%;left:70%;animation-delay:1s;">✨</div>
-        <div class="star" style="top:50%;left:15%;animation-delay:2s;">⭐</div>
-        <div class="star" style="top:70%;left:85%;animation-delay:0.5s;">✨</div>
-        <div class="bubble" style="width:30px;height:30px;left:25%;animation-delay:0s;"></div>
-        <div class="bubble" style="width:40px;height:40px;left:55%;animation-delay:2s;"></div>
-        <div class="bubble" style="width:25px;height:25px;left:75%;animation-delay:4s;"></div>
-        <div class="bubble" style="width:35px;height:35px;left:40%;animation-delay:6s;"></div>
-        <div class="sparkle" style="top:20%;left:10%;animation-delay:0s;"></div>
-        <div class="sparkle" style="top:40%;left:50%;animation-delay:2s;"></div>
-        <div class="sparkle" style="top:60%;left:30%;animation-delay:4s;"></div>
-        <div class="sparkle" style="top:80%;left:70%;animation-delay:1s;"></div>
-        <div class="floating-shapes" style="width:60px;height:60px;background:rgba(255,255,255,0.2);border-radius:50%;top:10%;left:5%;"></div>
-        <div class="floating-shapes" style="width:40px;height:40px;background:rgba(255,255,255,0.15);border-radius:20%;top:60%;left:90%;animation-delay:2s;"></div>
+        <div class="emoji-float">🎄</div>
+        <div class="emoji-float">❄️</div>
+        <div class="emoji-float">🎅</div>
+        <div class="emoji-float">🎁</div>
+        <div class="emoji-float">⭐</div>
+        <div class="emoji-float">🔔</div>
+        <div class="rotating-emoji" style="left: 20%; animation-delay: 0s;">⛄</div>
+        <div class="rotating-emoji" style="left: 60%; animation-delay: 3s;">🦌</div>
+        <div class="rotating-emoji" style="left: 80%; animation-delay: 6s;">🎀</div>
+        <div class="star" style="top: 15%; left: 25%; animation-delay: 0s;">⭐</div>
+        <div class="star" style="top: 30%; left: 70%; animation-delay: 1s;">✨</div>
+        <div class="star" style="top: 50%; left: 15%; animation-delay: 2s;">⭐</div>
+        <div class="star" style="top: 70%; left: 85%; animation-delay: 0.5s;">✨</div>
+        <div class="bubble" style="width: 30px; height: 30px; left: 25%; animation-delay: 0s;"></div>
+        <div class="bubble" style="width: 40px; height: 40px; left: 55%; animation-delay: 2s;"></div>
+        <div class="bubble" style="width: 25px; height: 25px; left: 75%; animation-delay: 4s;"></div>
+        <div class="bubble" style="width: 35px; height: 35px; left: 40%; animation-delay: 6s;"></div>
+        <div class="sparkle" style="top: 20%; left: 10%; animation-delay: 0s;"></div>
+        <div class="sparkle" style="top: 40%; left: 50%; animation-delay: 2s;"></div>
+        <div class="sparkle" style="top: 60%; left: 30%; animation-delay: 4s;"></div>
+        <div class="sparkle" style="top: 80%; left: 70%; animation-delay: 1s;"></div>
+        <div class="floating-shapes" style="width: 60px; height: 60px; background: rgba(255, 255, 255, 0.2); border-radius: 50%; top: 10%; left: 5%;"></div>
+        <div class="floating-shapes" style="width: 40px; height: 40px; background: rgba(255, 255, 255, 0.15); border-radius: 20%; top: 60%; left: 90%; animation-delay: 2s;"></div>
     </div>
 
-    <!-- ── MUSIC PLAYER ──────────────────────────────────── -->
+    <!-- Music Player -->
     <div class="music-player">
-        <button class="music-btn" id="musicToggle" onclick="toggleMusic()">🎵</button>
-        <span class="music-label" id="musicLabel">Tap ▶ Music</span>
-        <audio id="backgroundMusic" loop playsinline preload="auto">
-            <source src="dai.mp3" type="audio/mpeg">
+        <button class="music-btn" id="musicToggle" onclick="toggleMusic()" aria-label="Toggle music">
+            <img src="play.png" alt="Play music" class="play-icon">
+            <span class="music-note n1">♪</span>
+            <span class="music-note n2">♫</span>
+            <span class="music-note n3">♪</span>
+        </button>
+        <span class="music-label" id="musicLabel">Music</span>
+        <audio id="backgroundMusic" loop>
+            <source src="wantan.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
         </audio>
     </div>
 
-    <!-- ════════════════════════════════════════════════════ -->
-    <!-- PAGE 1 · LANDING                                     -->
-    <!-- ════════════════════════════════════════════════════ -->
-    <div id="page-landing" class="page active">
-        <div class="card-wrapper" onclick="goTo('page-details')"></div>
-        <p class="tap-hint">Tap to open invite ✨</p>
-    </div>
-
-    <!-- ════════════════════════════════════════════════════ -->
-    <!-- PAGE 2 · EVENT DETAILS                               -->
-    <!-- ════════════════════════════════════════════════════ -->
-    <div id="page-details" class="page">
-        <div class="page-panel">
-            <h2>🔥 BBQ Party — FIFA World Cup Special ⚽</h2>
-
-            <ul class="event-info-list">
-                <li><span class="event-label">Theme</span><span>FIFA World Cup ⚽🏆</span></li>
-                <li><span class="event-label">Day</span><span>Saturday</span></li>
-                <li><span class="event-label">Date</span><span>11 July 2026</span></li>
-                <li><span class="event-label">Time</span><span>2:30 PM – 7:00 PM</span></li>
-                <li><span class="event-label">Venue</span><span>📍 Happy Seaside Miri</span></li>
-                <li><span class="event-label">Dress Code</span><span>FIFA team outfit</span></li>
-                <li><span class="event-label">Payment</span><span>💰 RM12 per person</span></li>
-            </ul>
-
-            <div class="event-note">
-                <p>✨ Wear your favourite team jersey</p>
-                <p>✨ Bring your own drinks &amp; snacks</p>
-                <p style="margin-top:6px;">🔥⚽ See you at the BBQ!</p>
-            </div>
-
-            <div class="nav-row">
-                <button class="pixel-btn secondary" onclick="goTo('page-landing')">← Back</button>
-                <button class="pixel-btn" onclick="goTo('page-people')">Who's Coming? →</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ════════════════════════════════════════════════════ -->
-    <!-- PAGE 3 · PEOPLE LIST                                 -->
-    <!-- ════════════════════════════════════════════════════ -->
-    <div id="page-people" class="page">
-        <div class="page-panel">
-            <div class="list-header">
-                <h2 style="margin-bottom:0;border-bottom:none;padding-bottom:0;font-size:1.2rem;">Who's Coming? 🎉</h2>
-                <span class="list-count" id="listCount">0 people</span>
-            </div>
-            <div style="border-bottom:2px solid rgba(255,255,255,0.25);margin-bottom:14px;"></div>
-
-            <div id="peopleContainer">
-                <div class="empty-msg">Loading... 🌊</div>
-            </div>
-
-            <div class="nav-row">
-                <button class="pixel-btn secondary" onclick="goTo('page-details')">← Details</button>
-                <button class="pixel-btn" onclick="openAddForm()">+ Add Me 🦆</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ════════════════════════════════════════════════════ -->
-    <!-- PAGE 4 · ADD / EDIT FORM                             -->
-    <!-- ════════════════════════════════════════════════════ -->
-    <div id="page-form" class="page">
-        <div class="page-panel">
-            <h2 id="formTitle">What will you bring? 🎒</h2>
-
-            <form id="contributionForm" onsubmit="saveContribution(event)">
-                <input type="hidden" id="editDocId" value="">
-
-                <div class="form-group">
-                    <label for="name">Your Name:</label>
-                    <input type="text" id="name" required placeholder="Enter your name">
+    <div class="events-section">
+        <h2 class="events-heading">Upcoming Events</h2>
+        <div class="events-row">
+            <div class="card-wrapper" onclick="openInvite('xmas')">
+                <div class="event-top">
+                    <img src="xmastext.png" alt="Merry Christmas" class="xmas-text-img">
                 </div>
-
-                <div class="form-group">
-                    <label for="items">Items you're bringing:</label>
-                    <textarea id="items" required placeholder="e.g., Drinks, Snacks, Chips, etc."></textarea>
-                </div>
-
-                <button type="submit" class="submit-btn" id="submitBtn">
-                    <img src="duck.gif" alt="" class="submit-btn-icon">
-                    <span class="submit-btn-text">Submit</span>
-                </button>
-            </form>
-
-            <div class="nav-row" style="margin-top:10px;">
-                <button class="pixel-btn secondary full" onclick="cancelForm()">← Cancel</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ════════════════════════════════════════════════════ -->
-    <!-- PAGE 5 · PAYMENT                                     -->
-    <!-- ════════════════════════════════════════════════════ -->
-    <div id="page-payment" class="page">
-        <div class="page-panel">
-            <h2>💳 Payment</h2>
-
-            <div id="paymentFor" class="payment-for">—</div>
-
-            <span class="amount-badge">RM 12.00</span>
-
-            <p style="text-align:center;font-size:13px;margin-top:10px;">Scan QR code below to pay:</p>
-
-            <div class="qr-section">
-                <img src="qr.jpeg" alt="QR Code" class="qr-code">
-            </div>
-
-            <!-- Receipt Upload (required) -->
-            <p style="text-align:center;font-size:13px;margin:10px 0 4px;">Upload your payment receipt <strong style="color:#ffd700;">*</strong> (required):</p>
-
-            <div class="upload-area" id="uploadArea">
-                <label class="upload-label">
-                    <span>📎</span>
-                    <span id="uploadText">Choose receipt image</span>
-                    <small>Gallery or camera · JPG, PNG or PDF</small>
-                </label>
-                <img id="receiptPreview" class="receipt-preview" alt="Receipt preview">
-            </div>
-
-            <div class="upload-source-row">
-                <button type="button" class="pixel-btn" onclick="openReceiptPicker('gallery')">🖼️ Gallery</button>
-                <button type="button" class="pixel-btn secondary" onclick="openReceiptPicker('camera')">📷 Camera</button>
-            </div>
-
-            <!-- Gallery: no capture → phone can open photo library -->
-            <input type="file" id="receiptFile" accept="image/jpeg,image/png,image/webp,image/heic,image/*,application/pdf" onchange="previewReceipt(event)" style="display:none">
-            <!-- Camera: optional take photo -->
-            <input type="file" id="receiptFileCamera" accept="image/*" capture="environment" onchange="previewReceipt(event)" style="display:none">
-
-            <div class="upload-progress-wrap" id="uploadProgressWrap">
-                <p id="uploadProgressText">Uploading...</p>
-                <div class="upload-progress-bar-outer">
-                    <div class="upload-progress-bar-inner" id="uploadProgressBar"></div>
+                <div class="card">
+                    <img src="letter.png" alt="Christmas letter invitation" class="event-main-img letter-img">
+                    <p>Tap to view invitation</p>
                 </div>
             </div>
 
-            <button class="pixel-btn success-big" id="markPaidBtn" onclick="markAsPaid()" disabled>
-                ✅ I've Paid!
-            </button>
-            <p id="receiptRequiredHint" style="text-align:center;font-size:12px;color:#ffd700;margin-top:8px;text-shadow:0 1px 3px rgba(0,0,0,1);">Upload receipt first to continue</p>
-
-            <div class="nav-row" style="margin-top:10px;">
-                <button class="pixel-btn secondary full" onclick="goTo('page-people')">← Back to List</button>
+            <div class="card-wrapper" onclick="openInvite('bbq')">
+                <div class="event-top" aria-hidden="true"></div>
+                <div class="card">
+                    <img src="bbq.gif" alt="BBQ Party invitation" class="event-main-img bbq-img">
+                    <p>Tap to view invitation</p>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- ── RECEIPT LIGHTBOX ──────────────────────────────── -->
-    <div class="lightbox" id="receiptLightbox">
-        <p class="lightbox-label" id="lightboxLabel">Receipt</p>
-        <img class="lightbox-img" id="lightboxImg" src="" alt="Receipt" style="display:none;">
-        <p id="lightboxExtMsg" style="display:none;color:#ffd700;font-size:13px;text-align:center;text-shadow:0 1px 4px rgba(0,0,0,1);max-width:300px;">⚠️ This receipt was saved to external storage.<br>Click the button below to open it.</p>
-        <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;justify-content:center;">
-            <a id="lightboxOpenBtn" href="#" target="_blank" rel="noopener" style="display:none;">
-                <button class="lightbox-close" style="background:#1a4a7a;border-color:#0e2d4a;box-shadow:4px 4px 0 #0e2d4a;margin-top:0;">🔗 Open in New Tab</button>
-            </a>
-            <button class="lightbox-close" onclick="closeLightbox()">✖ Close</button>
+    <div class="modal" id="xmasModal">
+        <div class="modal-content xmas-theme">
+            <span class="close" onclick="closeInvite('xmas')">✖</span>
+            <div class="modal-inner">
+                <div class="lamp-frame info-frame">
+                    <h2>Christmas Gathering</h2>
+                    <div class="event-info">
+                        <p><strong>Theme:</strong> Merry & Bright 🎄✨</p>
+                        <p>Warm lights, good company, and festive cheer — come celebrate Christmas with us!</p>
+                        <p>📅 <strong>Day:</strong> Saturday</p>
+                        <p>🗓️ <strong>Date:</strong> 28 Februari 2026</p>
+                        <p>⏰ <strong>Time:</strong> 2:30 PM – 7:00 PM</p>
+                        <p>📍 <strong>Place:</strong> Luak Esplanade</p>
+                        <p><strong>Dress Code:</strong> Festive / Christmas casual<br>
+                            (Red, green, or cozy holiday outfits)
+                        </p>
+                        <p>💰 <strong>Contribution:</strong> RM12 per person</p>
+                        <p>✨ Bring your own drinks & snacks<br>
+                            ✨ Optional: a small gift for Secret Santa
+                        </p>
+                        <p style="text-align:center;">🎄🎅 See you there! 🎁❄️</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="bbqModal">
+        <div class="modal-content bbq-theme">
+            <span class="close" onclick="closeInvite('bbq')">✖</span>
+            <div class="modal-inner">
+                <div class="lamp-frame info-frame">
+                    <h2>Beach Barbecue Party</h2>
+                    <div class="event-info">
+                        <p><strong>Theme:</strong> Island Chill 🌴😎</p>
+                        <p>Sunset skies, ocean breeze, and sizzling BBQ — let’s unwind beach-style!</p>
+                        <p>📅 <strong>Day:</strong> Saturday</p>
+                        <p>🗓️ <strong>Date:</strong> 28 Februari 2026</p>
+                        <p>⏰ <strong>Time:</strong> 2:30 PM – 7:00 PM</p>
+                        <p>📍 <strong>Place:</strong> Luak Esplanade</p>
+                        <p><strong>Dress Code:</strong> Tropical / Beachwear<br>
+                            (Comfy outfits, beach shorts)
+                        </p>
+                        <p>💰 <strong>Contribution:</strong> RM12 per person</p>
+                        <p>✨ Bring your own drinks & snacks<br>
+                            ✨ Don’t forget sunscreen and a picnic mat
+                        </p>
+                        <p style="text-align:center;">🔥🏖️ See you at the beach! 🌅</p>
+                    </div>
+                </div>
+                <div class="invite-actions">
+                    <a class="list-link-btn" href="contributions.html"><span>List</span></a>
+                    <a class="add-me-btn" href="add-me.html"><span>Add me</span></a>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        // ── FIREBASE ─────────────────────────────────────────────────
-        const firebaseConfig = {
-            apiKey: "AIzaSyAsMqAziqwXuTSqX16Cl09j7ZqNxnn1L_4",
-            authDomain: "beach-e0f41.firebaseapp.com",
-            projectId: "beach-e0f41",
-            storageBucket: "beach-e0f41.firebasestorage.app",
-            messagingSenderId: "491840385634",
-            appId: "1:491840385634:web:601d11fa61a2bb3cf4173b",
-            measurementId: "G-S6X60G886D"
-        };
-
-        let db = null;
-        try {
-            if (typeof firebase !== 'undefined') {
-                firebase.initializeApp(firebaseConfig);
-                db = firebase.firestore();
-            }
-        } catch (e) {
-            console.warn("Firebase init failed:", e);
+        function openInvite(type) {
+            const id = type === 'bbq' ? 'bbqModal' : 'xmasModal';
+            document.getElementById(id).style.display = "flex";
+            document.body.style.overflow = "hidden";
         }
 
-        const COLLECTION = "contributions";
-        let contributions = [];
-        let currentPayDocId = null;
-
-        // ── NAVIGATION ───────────────────────────────────────────────
-        function goTo(pageId) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            const pg = document.getElementById(pageId);
-            if (pg) pg.classList.add('active');
-            window.scrollTo(0, 0);
-            if (!musicStarted) playMusic();
+        function closeInvite(type) {
+            const id = type === 'bbq' ? 'bbqModal' : 'xmasModal';
+            document.getElementById(id).style.display = "none";
+            document.body.style.overflow = "";
         }
 
-        // ── FIREBASE LISTENER ────────────────────────────────────────
-        function loadContributions() {
-            if (!db) { renderList(); return; }
-            db.collection(COLLECTION).onSnapshot(snapshot => {
-                contributions = [];
-                snapshot.forEach(doc => {
-                    const d = doc.data();
-                    contributions.push({
-                        id: doc.id,
-                        name: d.name || '',
-                        items: d.items || '',
-                        paid: d.paid || false,
-                        receiptUrl: d.receiptUrl || '',
-                        timestamp: d.timestamp ? (d.timestamp.toMillis ? d.timestamp.toMillis() : d.timestamp) : 0
-                    });
-                });
-                contributions.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-                renderList();
-            }, err => {
-                console.error("Firestore error:", err);
-                renderList();
-            });
-        }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            loadContributions();
-            initMusic();
-        });
-
-
-        // ── RENDER PEOPLE LIST ───────────────────────────────────────
-        function renderList() {
-            const container = document.getElementById('peopleContainer');
-            const countEl   = document.getElementById('listCount');
-            if (!container) return;
-
-            if (countEl) countEl.textContent = contributions.length + ' people';
-
-            if (contributions.length === 0) {
-                container.innerHTML = '<div class="empty-msg">No one yet — be the first! 🎉</div>';
-                return;
-            }
-
-            container.innerHTML = '';
-            contributions.forEach(c => {
-                const div = document.createElement('div');
-                div.className = 'person-item' + (c.paid ? ' is-paid' : '');
-                const receiptBtn = c.paid && c.receiptUrl
-                    ? `<button class="pixel-btn receipt-btn" onclick="viewReceipt('${esc(c.id)}')">🧾 Receipt</button>`
-                    : '';
-                div.innerHTML = `
-                    <div class="person-name">
-                        <span>${esc(c.name)}</span>
-                        <span class="badge ${c.paid ? 'badge-paid' : 'badge-unpaid'}">${c.paid ? 'PAID' : 'UNPAID'}</span>
-                    </div>
-                    <div class="person-items">${esc(c.items)}</div>
-                    <div class="person-actions">
-                        <button class="pixel-btn" onclick="openEditForm('${c.id}')">✏️ Edit</button>
-                        <button class="pixel-btn danger" onclick="deletePerson('${c.id}')">🗑️ Del</button>
-                        ${!c.paid
-                            ? `<button class="pixel-btn pay-btn" onclick="openPayment('${c.id}')">💳 Pay</button>`
-                            : `<span style="font-size:11px;color:#28a745;font-weight:bold;align-self:center;padding:2px 4px;">✅ Paid</span>`
-                        }
-                        ${receiptBtn}
-                    </div>
-                `;
-                container.appendChild(div);
-            });
-        }
-
-        function esc(str) {
-            return String(str)
-                .replace(/&/g,'&amp;')
-                .replace(/</g,'&lt;')
-                .replace(/>/g,'&gt;')
-                .replace(/"/g,'&quot;');
-        }
-
-        // ── FORM: ADD ────────────────────────────────────────────────
-        function openAddForm() {
-            document.getElementById('formTitle').textContent = 'What will you bring? 🎒';
-            document.getElementById('contributionForm').reset();
-            document.getElementById('editDocId').value = '';
-            const bt = document.querySelector('.submit-btn-text');
-            if (bt) bt.textContent = 'Submit';
-            goTo('page-form');
-        }
-
-        // ── FORM: EDIT ───────────────────────────────────────────────
-        function openEditForm(docId) {
-            const c = contributions.find(x => x.id === docId);
-            if (!c) return;
-            document.getElementById('formTitle').textContent = 'Edit Entry ✏️';
-            document.getElementById('name').value  = c.name;
-            document.getElementById('items').value = c.items;
-            document.getElementById('editDocId').value = docId;
-            const bt = document.querySelector('.submit-btn-text');
-            if (bt) bt.textContent = 'Update';
-            goTo('page-form');
-        }
-
-        function cancelForm() {
-            document.getElementById('contributionForm').reset();
-            document.getElementById('editDocId').value = '';
-            goTo('page-people');
-        }
-
-        async function saveContribution(e) {
-            e.preventDefault();
-            if (!db) { alert("Database not available. Open over HTTP."); return; }
-
-            const name  = document.getElementById('name').value.trim();
-            const items = document.getElementById('items').value.trim();
-            const docId = document.getElementById('editDocId').value;
-            const btn   = document.getElementById('submitBtn');
-            const bt    = btn.querySelector('.submit-btn-text');
-
-            if (!name || !items) return;
-            btn.disabled = true;
-            if (bt) bt.textContent = 'Saving...';
-
-            try {
-                if (docId) {
-                    await db.collection(COLLECTION).doc(docId).update({ name, items });
-                } else {
-                    await db.collection(COLLECTION).add({
-                        name, items,
-                        paid: false,
-                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                }
-                cancelForm();
-            } catch (err) {
-                console.error(err);
-                alert('Error saving. Please try again.');
-            } finally {
-                btn.disabled = false;
-                if (bt) bt.textContent = docId ? 'Update' : 'Submit';
-            }
-        }
-
-        // ── DELETE ───────────────────────────────────────────────────
-        async function deletePerson(docId) {
-            if (!db) return;
-            if (!confirm('Delete this entry?')) return;
-            try {
-                await db.collection(COLLECTION).doc(docId).delete();
-            } catch (err) {
-                console.error(err);
-                alert('Error deleting. Please try again.');
-            }
-        }
-
-        // ── PAYMENT ──────────────────────────────────────────────────
-        function openPayment(docId) {
-            const c = contributions.find(x => x.id === docId);
-            if (!c) return;
-            currentPayDocId = docId;
-            document.getElementById('paymentFor').textContent = '👤 Payment for: ' + c.name;
-
-            // Reset upload UI
-            document.getElementById('receiptFile').value = '';
-            document.getElementById('receiptFileCamera').value = '';
-            document.getElementById('receiptPreview').style.display = 'none';
-            document.getElementById('uploadText').textContent = 'Tap to upload receipt';
-            document.getElementById('uploadArea').classList.remove('has-file');
-            document.getElementById('uploadProgressWrap').style.display = 'none';
-            document.getElementById('uploadProgressBar').style.width = '0%';
-
-            const btn = document.getElementById('markPaidBtn');
-            btn.disabled = true;
-            btn.textContent = "✅ I've Paid!";
-            const hint = document.getElementById('receiptRequiredHint');
-            if (hint) hint.style.display = 'block';
-            goTo('page-payment');
-        }
-
-        function getSelectedReceiptFile() {
-            const gallery = document.getElementById('receiptFile').files[0];
-            const camera  = document.getElementById('receiptFileCamera').files[0];
-            return gallery || camera || null;
-        }
-
-        function openReceiptPicker(source) {
-            document.getElementById('receiptFile').value = '';
-            document.getElementById('receiptFileCamera').value = '';
-            if (source === 'camera') {
-                document.getElementById('receiptFileCamera').click();
-            } else {
-                document.getElementById('receiptFile').click();
-            }
-        }
-
-        function updatePaidButtonState() {
-            const file = getSelectedReceiptFile();
-            const btn = document.getElementById('markPaidBtn');
-            const hint = document.getElementById('receiptRequiredHint');
-            const canPay = !!file;
-            btn.disabled = !canPay;
-            if (hint) hint.style.display = canPay ? 'none' : 'block';
-        }
-
-        function previewReceipt(event) {
-            const file = event.target.files[0];
-            if (!file) {
-                updatePaidButtonState();
-                return;
-            }
-            const preview = document.getElementById('receiptPreview');
-            const uploadText = document.getElementById('uploadText');
-            const uploadArea = document.getElementById('uploadArea');
-
-            uploadText.textContent = '📎 ' + file.name;
-            uploadArea.classList.add('has-file');
-
-            if (file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = e => {
-                    preview.src = e.target.result;
-                    preview.style.display = 'block';
-                };
-                reader.readAsDataURL(file);
-            } else {
-                preview.style.display = 'none';
-            }
-            updatePaidButtonState();
-        }
-
-        // Compress image to base64 — max 700px, quality 0.6, keeps well under Firestore 1MB limit
-        function compressImageToBase64(file) {
-            return new Promise((resolve, reject) => {
-                // PDFs: just read as base64 without canvas (can't render PDF to canvas easily)
-                if (file.type === 'application/pdf') {
-                    const reader = new FileReader();
-                    reader.onerror = reject;
-                    reader.onload = e => resolve(e.target.result);
-                    reader.readAsDataURL(file);
-                    return;
-                }
-                const reader = new FileReader();
-                reader.onerror = reject;
-                reader.onload = e => {
-                    const img = new Image();
-                    img.onerror = reject;
-                    img.onload = () => {
-                        const MAX = 700;
-                        let w = img.width, h = img.height;
-                        if (w > MAX || h > MAX) {
-                            if (w > h) { h = Math.round(h * MAX / w); w = MAX; }
-                            else       { w = Math.round(w * MAX / h); h = MAX; }
-                        }
-                        const canvas = document.createElement('canvas');
-                        canvas.width = w;
-                        canvas.height = h;
-                        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-                        // Quality 0.6 keeps image under ~200KB base64 for most receipts
-                        const dataUrl = canvas.toDataURL('image/jpeg', 0.6);
-                        // Safety check: warn if still too large (Firestore doc limit ~950KB safe)
-                        const sizeKB = Math.round(dataUrl.length * 0.75 / 1024);
-                        if (sizeKB > 900) {
-                            reject(new Error('Receipt image is too large (' + sizeKB + 'KB). Please use a smaller image.'));
-                        } else {
-                            resolve(dataUrl);
-                        }
-                    };
-                    img.src = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            });
-        }
-
-        async function markAsPaid() {
-            if (!db || !currentPayDocId) return;
-            const btn  = document.getElementById('markPaidBtn');
-            const file = getSelectedReceiptFile();
-
-            if (!file) {
-                alert('Please upload your payment receipt before marking as paid.');
-                updatePaidButtonState();
-                return;
-            }
-
-            btn.disabled = true;
-            btn.textContent = 'Uploading...';
-
-            const progressWrap = document.getElementById('uploadProgressWrap');
-            const progressBar  = document.getElementById('uploadProgressBar');
-            const progressText = document.getElementById('uploadProgressText');
-            progressWrap.style.display = 'block';
-            progressText.textContent = 'Uploading...';
-            progressBar.style.width = '40%';
-
-            try {
-                const receiptUrl = await compressImageToBase64(file);
-
-                progressBar.style.width = '70%';
-                progressText.textContent = 'Uploading...';
-
-                await db.collection(COLLECTION).doc(currentPayDocId).update({
-                    paid: true,
-                    receiptUrl
-                });
-
-                progressBar.style.width = '100%';
-                progressText.textContent = 'Uploaded! ✅';
-
-                await new Promise(r => setTimeout(r, 600));
-                currentPayDocId = null;
-                goTo('page-people');
-
-            } catch (err) {
-                console.error(err);
-                alert('Error: ' + (err.message || 'Could not save. Please try again.'));
-                btn.textContent = "✅ I've Paid!";
-                updatePaidButtonState();
-                progressWrap.style.display = 'none';
-            }
-        }
-
-        // ── RECEIPT LIGHTBOX ─────────────────────────────────────────
-        function viewReceipt(docId) {
-            const c = contributions.find(x => x.id === docId);
-            if (!c || !c.receiptUrl) return;
-
-            const label    = document.getElementById('lightboxLabel');
-            const img      = document.getElementById('lightboxImg');
-            const extMsg   = document.getElementById('lightboxExtMsg');
-            const openBtn  = document.getElementById('lightboxOpenBtn');
-
-            label.textContent = '🧾 Receipt — ' + c.name;
-
-            const isBase64 = c.receiptUrl.startsWith('data:');
-
-            if (isBase64) {
-                // New format: base64 stored in Firestore — display directly
-                img.src = c.receiptUrl;
-                img.style.display = 'block';
-                extMsg.style.display = 'none';
-                openBtn.style.display = 'none';
-            } else {
-                // Old format: Firebase Storage URL — can't display due to CORS, open in new tab
-                img.src = '';
-                img.style.display = 'none';
-                extMsg.style.display = 'block';
-                openBtn.href = c.receiptUrl;
-                openBtn.style.display = 'block';
-            }
-
-            document.getElementById('receiptLightbox').classList.add('open');
-        }
-
-        function closeLightbox() {
-            document.getElementById('receiptLightbox').classList.remove('open');
-            document.getElementById('lightboxImg').src = '';
-        }
-
-        // ── MUSIC ────────────────────────────────────────────────────
-        // Rules:
-        //  - Never mark as "Playing" unless sound is audible (not muted)
-        //  - Autoplay with sound is only allowed after user interaction (browser rule)
-        //  - On first tap anywhere, start audible music automatically
+        // Music Control
         let isMusicPlaying = false;
-        let musicStarted    = false;
-
-        function setMusicUI(playing) {
-            const btn   = document.getElementById('musicToggle');
-            const label = document.getElementById('musicLabel');
-            isMusicPlaying = playing;
-            btn.textContent      = playing ? '⏸️' : '🎵';
-            label.textContent    = playing ? 'Playing' : 'Tap ▶ Music';
-            btn.style.animation  = playing ? 'musicPulse 1.5s ease-in-out infinite' : 'none';
-        }
-
-        async function playMusic() {
-            const music = document.getElementById('backgroundMusic');
-            if (!music) return;
-            music.muted  = false;
-            music.volume = 1;
-            try {
-                await music.play();
-                musicStarted = true;
-                setMusicUI(true);
-            } catch (e) {
-                // Play failed (still no user interaction) — do nothing, stay silent
-                setMusicUI(false);
-            }
-        }
-
-        function initMusic() {
-            // On first ANY user interaction, start music with sound
-            const startOnInteraction = () => {
-                if (!musicStarted) playMusic();
-            };
-            document.addEventListener('click',      startOnInteraction, { passive: true });
-            document.addEventListener('touchstart', startOnInteraction, { passive: true });
-            document.addEventListener('keydown',    startOnInteraction, { passive: true });
-
-            // Try autoplay immediately — works in Chrome if user has previously interacted with the site
-            playMusic();
-        }
 
         function toggleMusic() {
-            const music = document.getElementById('backgroundMusic');
-            if (!music) return;
+            const music = document.getElementById("backgroundMusic");
+            const btn = document.getElementById("musicToggle");
+            const label = document.getElementById("musicLabel");
+
             if (isMusicPlaying) {
                 music.pause();
-                setMusicUI(false);
+                btn.classList.remove("playing");
+                label.textContent = "Music";
+                isMusicPlaying = false;
             } else {
-                playMusic();
+                btn.classList.add("playing");
+                label.textContent = "Playing";
+                isMusicPlaying = true;
+                music.play().catch(error => {
+                    console.log("Auto-play was prevented. User interaction required.");
+                    btn.classList.remove("playing");
+                    label.textContent = "Music";
+                    isMusicPlaying = false;
+                    alert("Click the music button to play background music!");
+                });
             }
         }
     </script>
+
 </body>
+
 </html>

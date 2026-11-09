@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Contribution List</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background:
+                linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, rgba(20, 0, 0, 0.25) 100%),
+                url('xmas.gif') center center / cover no-repeat;
+            background-color: #1a0a0a;
+            background-attachment: fixed;
+            color: #fff;
+            padding: 24px 16px 40px;
+        }
+
+        .page {
+            max-width: 560px;
+            margin: 0 auto;
+        }
+
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 14px;
+            border-radius: 999px;
+            background: rgba(0, 0, 0, 0.45);
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+
+        .back-btn:hover {
+            background: rgba(0, 0, 0, 0.65);
+        }
+
+        h1 {
+            margin: 0 0 8px;
+            font-family: "Great Vibes", cursive;
+            font-size: 2.6rem;
+            text-align: center;
+            background: linear-gradient(90deg, #ff6b6b, #e63946, #ff8fab, #c1121f, #ff6b6b);
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.55));
+            animation: headingShine 3.5s linear infinite;
+        }
+
+        @keyframes headingShine {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+
+        .subtitle {
+            text-align: center;
+            margin: 0 0 22px;
+            color: rgba(255, 255, 255, 0.9);
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .list-panel {
+            background: rgba(0, 0, 0, 0.28);
+            border: 1px solid rgba(255, 215, 120, 0.35);
+            border-radius: 16px;
+            padding: 18px 14px;
+        }
+
+        .contribution-item {
+            background: rgba(255, 255, 255, 0.92);
+            padding: 14px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border-left: 4px solid #0072ff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .contribution-item strong {
+            color: #0d3b66;
+            display: block;
+            margin-bottom: 6px;
+            font-size: 15px;
+        }
+
+        .contribution-item span {
+            color: #1e4d6b;
+            display: block;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .contribution-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .edit-btn, .delete-btn {
+            padding: 8px 14px;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            font-weight: 600;
+            color: white;
+        }
+
+        .edit-btn { background: #28a745; }
+        .edit-btn:hover { background: #218838; }
+        .delete-btn { background: #dc3545; }
+        .delete-btn:hover { background: #c82333; }
+
+        .empty {
+            text-align: center;
+            color: #0d3b66;
+            padding: 24px;
+            background: rgba(255, 255, 255, 0.92);
+            border-radius: 8px;
+            margin: 0;
+        }
+
+        .edit-panel {
+            display: none;
+            margin-bottom: 18px;
+            padding: 18px 14px;
+            background: rgba(255, 255, 255, 0.14);
+            border: 1px solid rgba(255, 255, 255, 0.28);
+            border-radius: 16px;
+        }
+
+        .edit-panel h3 {
+            margin: 0 0 12px;
+            text-align: center;
+            color: #fff;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 1);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: Arial, sans-serif;
+            background: #fff;
+            color: #0d3b66;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .cancel-btn {
+            margin-top: 10px;
+            background: #6c757d;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page">
+        <div class="top-bar">
+            <a class="back-btn" href="index.html">← Back</a>
+        </div>
+
+        <h1>Contribution List</h1>
+        <p class="subtitle">Beach Barbecue Party — who’s bringing what</p>
+
+        <div class="edit-panel" id="editPanel">
+            <h3>Edit Contribution</h3>
+            <form id="editForm" onsubmit="saveEdit(event)">
+                <div class="form-group">
+                    <label for="editName">Your Name:</label>
+                    <input type="text" id="editName" required>
+                </div>
+                <div class="form-group">
+                    <label for="editItems">Items:</label>
+                    <textarea id="editItems" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="submit-btn" id="saveEditBtn">Update ✨</button>
+                <button type="button" class="submit-btn cancel-btn" onclick="cancelEdit()">Cancel</button>
+            </form>
+        </div>
+
+        <div class="list-panel">
+            <div id="contributionsContainer">
+                <p class="empty">Loading...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyAsMqAziqwXuTSqX16Cl09j7ZqNxnn1L_4",
+            authDomain: "beach-e0f41.firebaseapp.com",
+            projectId: "beach-e0f41",
+            storageBucket: "beach-e0f41.firebasestorage.app",
+            messagingSenderId: "491840385634",
+            appId: "1:491840385634:web:601d11fa61a2bb3cf4173b",
+            measurementId: "G-S6X60G886D"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const COLLECTION_NAME = "contributions";
+
+        let contributions = [];
+        let editingDocId = null;
+
+        function loadContributions() {
+            db.collection(COLLECTION_NAME)
+                .orderBy("timestamp", "desc")
+                .onSnapshot((snapshot) => {
+                    contributions = [];
+                    snapshot.forEach((doc) => {
+                        contributions.push({
+                            id: doc.id,
+                            name: doc.data().name,
+                            items: doc.data().items
+                        });
+                    });
+                    updateContributionsList();
+                }, (error) => {
+                    console.error(error);
+                    document.getElementById("contributionsContainer").innerHTML =
+                        "<p class='empty'>Could not load contributions.</p>";
+                });
+        }
+
+        function updateContributionsList() {
+            const container = document.getElementById("contributionsContainer");
+            container.innerHTML = "";
+
+            if (contributions.length === 0) {
+                container.innerHTML = "<p class='empty'>No contributions yet. Be the first to add one! 🎉</p>";
+                return;
+            }
+
+            contributions.forEach((contribution, index) => {
+                const item = document.createElement("div");
+                item.className = "contribution-item";
+                item.innerHTML = `
+                    <strong>#${index + 1} ${contribution.name}</strong>
+                    <span>${contribution.items}</span>
+                    <div class="contribution-actions">
+                        <button class="edit-btn" onclick="startEdit('${contribution.id}')">✏️ Edit</button>
+                        <button class="delete-btn" onclick="deleteContribution('${contribution.id}')">🗑️ Delete</button>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function startEdit(docId) {
+            const contribution = contributions.find(c => c.id === docId);
+            if (!contribution) return;
+            editingDocId = docId;
+            document.getElementById("editName").value = contribution.name;
+            document.getElementById("editItems").value = contribution.items;
+            document.getElementById("editPanel").style.display = "block";
+            document.getElementById("editPanel").scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+
+        function cancelEdit() {
+            editingDocId = null;
+            document.getElementById("editForm").reset();
+            document.getElementById("editPanel").style.display = "none";
+        }
+
+        async function saveEdit(event) {
+            event.preventDefault();
+            if (!editingDocId) return;
+
+            const name = document.getElementById("editName").value.trim();
+            const items = document.getElementById("editItems").value.trim();
+            const btn = document.getElementById("saveEditBtn");
+            btn.disabled = true;
+            btn.textContent = "Saving...";
+
+            try {
+                await db.collection(COLLECTION_NAME).doc(editingDocId).update({ name, items });
+                cancelEdit();
+            } catch (error) {
+                console.error(error);
+                alert("Error updating contribution. Please try again.");
+            } finally {
+                btn.disabled = false;
+                btn.textContent = "Update ✨";
+            }
+        }
+
+        async function deleteContribution(docId) {
+            if (!confirm("Are you sure you want to delete this contribution?")) return;
+            try {
+                await db.collection(COLLECTION_NAME).doc(docId).delete();
+                if (editingDocId === docId) cancelEdit();
+            } catch (error) {
+                console.error(error);
+                alert("Error deleting contribution. Please try again.");
+            }
+        }
+
+        window.addEventListener("DOMContentLoaded", loadContributions);
+    </script>
+</body>
+
+</html>
