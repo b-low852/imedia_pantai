@@ -15,7 +15,7 @@
                 <span class="music-note n3">♪</span>
             </button>
             <span class="music-label" id="musicLabel">Music</span>
-            <audio id="backgroundMusic" loop autoplay playsinline></audio>
+            <audio id="backgroundMusic" loop playsinline></audio>
         `;
         const style = document.createElement("style");
         style.textContent = `
@@ -86,9 +86,11 @@
     }
 
     audio.loop = true;
-    audio.autoplay = true;
+    audio.autoplay = !userPaused;
+    if (userPaused) audio.removeAttribute("autoplay");
     audio.setAttribute("playsinline", "");
     audio.preload = "auto";
+    if (userPaused) audio.pause();
 
     function setUi(playing) {
         const btn = document.getElementById("musicToggle");
@@ -154,7 +156,14 @@
 
     audio.addEventListener("loadedmetadata", restoreTime);
     audio.addEventListener("timeupdate", remember);
-    audio.addEventListener("play", () => setUi(true));
+    audio.addEventListener("play", () => {
+        if (userPaused) {
+            audio.pause();
+            setUi(false);
+            return;
+        }
+        setUi(true);
+    });
     audio.addEventListener("pause", () => {
         if (userPaused) setUi(false);
     });

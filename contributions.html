@@ -342,21 +342,34 @@
             color: #0d3b66;
         }
 
+        .edit-actions {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 4px;
+        }
+
         .submit-btn {
-            background: linear-gradient(135deg, #00c6ff, #0072ff);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
+            padding: 4px 22px 6px;
+            border-radius: 999px;
+            border: 1px solid #fff;
+            box-shadow: 0 2px 8px rgba(120, 0, 0, 0.3);
+            background: linear-gradient(180deg, #ff6b6b 0%, #e63946 45%, #c1121f 100%);
+            color: #fff;
+            font-family: "Mountains of Christmas", cursive;
+            font-size: 1.35rem;
             cursor: pointer;
-            width: 100%;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+        }
+
+        .submit-btn:hover {
+            filter: brightness(1.08);
         }
 
         .cancel-btn {
-            margin-top: 10px;
-            background: #6c757d;
+            background: linear-gradient(180deg, #8d8d8d 0%, #5c636a 45%, #3d4349 100%);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
         }
 
         @media screen and (max-width: 700px) {
@@ -503,8 +516,10 @@
                     <label for="editItems">Items:</label>
                     <textarea id="editItems" rows="3" required></textarea>
                 </div>
-                <button type="submit" class="submit-btn" id="saveEditBtn">Update ✨</button>
-                <button type="button" class="submit-btn cancel-btn" onclick="cancelEdit()">Cancel</button>
+                <div class="edit-actions">
+                    <button type="submit" class="submit-btn" id="saveEditBtn">Update</button>
+                    <button type="button" class="submit-btn cancel-btn" onclick="cancelEdit()">Cancel</button>
+                </div>
             </form>
         </div>
 
@@ -645,7 +660,7 @@
                 alert("Error updating contribution. Please try again.");
             } finally {
                 btn.disabled = false;
-                btn.textContent = "Update ✨";
+                btn.textContent = "Update";
             }
         }
 
