@@ -427,9 +427,9 @@
             max-width: 520px;
             margin-left: auto;
             margin-right: auto;
-            min-height: 560px;
+            min-height: 0;
             height: auto;
-            padding: 52px 48px 44px;
+            padding: 72px 64px 150px;
             margin-bottom: 0;
             background-size: 100% 100%;
             box-sizing: border-box;
@@ -1358,8 +1358,8 @@
 
             .lamp-frame.info-frame {
                 max-width: 400px;
-                min-height: 480px;
-                padding: 44px 40px 36px;
+                min-height: 0;
+                padding: 64px 52px 130px;
             }
 
             .lamp-frame.info-frame h2 {
@@ -1448,7 +1448,7 @@
             .lamp-frame.info-frame {
                 max-width: min(92vw, 360px);
                 min-height: 0;
-                padding: 40px 34px 76px;
+                padding: 56px 40px 110px;
             }
 
             .lamp-frame.info-frame h2 {
@@ -1686,11 +1686,36 @@
     </div>
 
     <script>
+        function fitInfoFrames() {
+            document.querySelectorAll(".lamp-frame.info-frame").forEach((frame) => {
+                const modal = frame.closest(".modal");
+                if (!modal || getComputedStyle(modal).display === "none" || frame.dataset.fitting === "1") return;
+                frame.dataset.fitting = "1";
+                frame.style.padding = "0px";
+                let contentH = frame.scrollHeight;
+                const side = Math.round(frame.clientWidth * 0.12);
+                const topFrac = 0.12;
+                const botFrac = 0.2;
+                for (let i = 0; i < 2; i++) {
+                    const total = contentH / (1 - topFrac - botFrac);
+                    const padTop = Math.round(total * topFrac);
+                    const padBottom = Math.round(total * botFrac);
+                    frame.style.padding = padTop + "px " + side + "px " + padBottom + "px";
+                    contentH = frame.scrollHeight - padTop - padBottom;
+                }
+                frame.dataset.fitting = "0";
+            });
+        }
+
         function openInvite(type) {
             const id = type === 'bbq' ? 'bbqModal' : 'xmasModal';
             document.getElementById(id).style.display = "flex";
             document.body.style.overflow = "hidden";
+            requestAnimationFrame(fitInfoFrames);
         }
+
+        window.addEventListener("resize", fitInfoFrames);
+        if (document.fonts) document.fonts.ready.then(fitInfoFrames);
 
         function closeInvite(type) {
             const id = type === 'bbq' ? 'bbqModal' : 'xmasModal';
