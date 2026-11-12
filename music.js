@@ -5,85 +5,11 @@
 
     let audio = document.getElementById("backgroundMusic");
     if (!audio) {
-        const player = document.createElement("div");
-        player.className = "music-player music-player-mini";
-        player.innerHTML = `
-            <button class="music-btn" id="musicToggle" type="button" aria-label="Toggle music">
-                <img src="play.png" alt="Play music" class="play-icon">
-                <span class="music-note n1">♪</span>
-                <span class="music-note n2">♫</span>
-                <span class="music-note n3">♪</span>
-            </button>
-            <span class="music-label" id="musicLabel">Music</span>
-            <audio id="backgroundMusic" loop playsinline></audio>
-        `;
-        const style = document.createElement("style");
-        style.textContent = `
-            .music-player-mini {
-                position: relative;
-                z-index: 2;
-                width: fit-content;
-                margin: 18px 16px 20px auto;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 2px;
-            }
-            .music-player-mini .music-btn {
-                position: relative;
-                width: 64px;
-                height: 76px;
-                padding: 0;
-                border: none;
-                background: transparent;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-            .music-player-mini .play-icon {
-                width: 64px;
-                height: auto;
-                display: block;
-                filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.45));
-                pointer-events: none;
-            }
-            .music-player-mini .music-label {
-                color: #fff;
-                font-size: 13px;
-                font-weight: bold;
-                text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
-            }
-            .music-player-mini .music-note {
-                position: absolute;
-                left: 8px;
-                top: 28px;
-                color: #fff;
-                font-size: 20px;
-                opacity: 0;
-                pointer-events: none;
-            }
-            .music-player-mini .music-btn.playing .play-icon {
-                animation: miniBob 1.2s ease-in-out infinite;
-            }
-            .music-player-mini .music-btn.playing .music-note {
-                animation: miniNote 1.8s ease-out infinite;
-            }
-            @keyframes miniBob {
-                0%, 100% { transform: translateY(0) rotate(-1deg); }
-                50% { transform: translateY(-5px) rotate(1deg); }
-            }
-            @keyframes miniNote {
-                0% { opacity: 0; transform: translate(0, 0); }
-                20% { opacity: 1; }
-                100% { opacity: 0; transform: translate(-24px, -48px); }
-            }
-        `;
-        document.head.appendChild(style);
-        const page = document.querySelector(".page") || document.body;
-        page.appendChild(player);
-        audio = player.querySelector("audio");
-        player.querySelector("#musicToggle").addEventListener("click", () => window.toggleMusic());
+        audio = document.createElement("audio");
+        audio.id = "backgroundMusic";
+        audio.loop = true;
+        audio.setAttribute("playsinline", "");
+        document.body.appendChild(audio);
     }
 
     audio.loop = true;

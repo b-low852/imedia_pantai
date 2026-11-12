@@ -901,10 +901,10 @@
 
         /* Music Player */
         .music-player {
-            position: relative;
-            z-index: 2;
-            width: fit-content;
-            margin: 8px 16px 28px auto;
+            position: fixed;
+            bottom: 16px;
+            right: 16px;
+            z-index: 1300;
             background: transparent;
             border-radius: 0;
             padding: 0;
@@ -921,8 +921,8 @@
             background: transparent;
             border: none;
             border-radius: 0;
-            width: 64px;
-            height: 76px;
+            width: 110px;
+            height: 130px;
             padding: 0;
             cursor: pointer;
             display: flex;
@@ -934,7 +934,7 @@
         }
 
         .music-btn img.play-icon {
-            width: 64px;
+            width: 110px;
             height: auto;
             display: block;
             filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.45));
@@ -1727,10 +1727,8 @@
 
         function openInvite(type) {
             const id = type === 'bbq' ? 'bbqModal' : 'xmasModal';
-            const modal = document.getElementById(id);
-            modal.style.display = "flex";
+            document.getElementById(id).style.display = "flex";
             document.body.style.overflow = "hidden";
-            modal.querySelector(".modal-inner").appendChild(document.querySelector(".music-player"));
             requestAnimationFrame(fitInfoFrames);
         }
 
@@ -1738,7 +1736,6 @@
             const id = type === 'bbq' ? 'bbqModal' : 'xmasModal';
             document.getElementById(id).style.display = "none";
             document.body.style.overflow = "";
-            document.getElementById("musicSpot").appendChild(document.querySelector(".music-player"));
         }
 
         window.addEventListener("resize", fitInfoFrames);
