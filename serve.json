@@ -1,0 +1,7 @@
+{
+  "cleanUrls": true,
+  "redirects": [
+    { "source": "/add-me", "destination": "/k8xq2mw", "type": 302 },
+    { "source": "/contributions", "destination": "/p4nwhjs", "type": 302 }
+  ]
+}
