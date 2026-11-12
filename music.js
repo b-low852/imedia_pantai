@@ -26,20 +26,29 @@
         if (label) label.textContent = playing ? "Playing" : "Music";
     }
 
+    let restored = false;
+
     function restoreTime() {
         const saved = parseFloat(sessionStorage.getItem(TIME_KEY) || "0");
-        if (saved > 0 && audio.duration && saved < audio.duration) {
-            audio.currentTime = saved;
+        if (audio.readyState >= 1 && saved > 0.25 && audio.duration && saved < audio.duration - 0.25) {
+            if (Math.abs((audio.currentTime || 0) - saved) > 0.35) {
+                audio.currentTime = saved;
+            }
         }
+        restored = audio.readyState >= 1;
     }
 
     function remember() {
-        sessionStorage.setItem(TIME_KEY, String(audio.currentTime || 0));
+        if (!restored) return;
+        const time = audio.currentTime || 0;
+        const saved = parseFloat(sessionStorage.getItem(TIME_KEY) || "0");
+        if (time < 0.35 && saved > 1) return;
+        sessionStorage.setItem(TIME_KEY, String(time));
         sessionStorage.setItem(ON_KEY, userPaused ? "0" : "1");
     }
 
     function tryPlay() {
-        if (userPaused) return;
+        if (userPaused || !restored) return;
         const play = audio.play();
         if (!play) return;
         play.then(() => setUi(true)).catch(() => setUi(false));
@@ -81,9 +90,15 @@
         tryPlay();
     };
 
-    audio.addEventListener("loadedmetadata", restoreTime);
+    function resumeFromSaved() {
+        restoreTime();
+        tryPlay();
+    }
+
+    audio.addEventListener("loadedmetadata", resumeFromSaved);
     audio.addEventListener("timeupdate", remember);
     audio.addEventListener("play", () => {
+        if (!restored) restoreTime();
         if (userPaused) {
             audio.pause();
             setUi(false);
@@ -94,18 +109,27 @@
     audio.addEventListener("pause", () => {
         if (userPaused) setUi(false);
     });
-    audio.src = "snowman.mp3";
+
+    const wanted = new URL("snowman.mp3", window.location.href).href;
+    if (audio.currentSrc !== wanted) {
+        audio.src = "snowman.mp3";
+    } else {
+        resumeFromSaved();
+    }
+
+    document.addEventListener("click", (event) => {
+        const link = event.target.closest && event.target.closest("a[href]");
+        if (link) remember();
+    }, true);
     window.addEventListener("pagehide", remember);
     window.addEventListener("pageshow", tryPlay);
     document.addEventListener("visibilitychange", () => {
-        if (!document.hidden) tryPlay();
+        if (document.hidden) remember();
+        else tryPlay();
     });
 
     document.addEventListener("pointerdown", onGesture, true);
     document.addEventListener("touchstart", onGesture, true);
     document.addEventListener("click", onGesture, true);
     document.addEventListener("keydown", onGesture, true);
-
-    tryPlay();
-    window.addEventListener("load", tryPlay);
 })();
