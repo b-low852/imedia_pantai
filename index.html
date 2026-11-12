@@ -435,13 +435,33 @@
 
         .lamp-frame.info-frame h2 {
             margin-top: 6px;
-            font-size: 1.35rem;
+            font-family: "Mountains of Christmas", cursive;
+            font-size: 2rem;
+            letter-spacing: 0.02em;
+            animation: infoGlow 2.6s ease-in-out infinite;
         }
 
         .lamp-frame.info-frame .event-info p {
             margin: 8px 0;
-            font-size: 0.98rem;
-            line-height: 1.45;
+            font-family: "Mountains of Christmas", cursive;
+            font-size: 1.28rem;
+            font-weight: 700;
+            line-height: 1.35;
+            animation: infoSway 3.4s ease-in-out infinite;
+        }
+
+        .lamp-frame.info-frame .event-info p:nth-child(odd) {
+            animation-delay: 0.45s;
+        }
+
+        @keyframes infoSway {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+
+        @keyframes infoGlow {
+            0%, 100% { text-shadow: 0 2px 6px rgba(0, 0, 0, 1); }
+            50% { text-shadow: 0 0 14px rgba(255, 215, 120, 0.95), 0 2px 6px rgba(0, 0, 0, 1); }
         }
 
         .contribution-frame {
@@ -1333,11 +1353,11 @@
             }
 
             .lamp-frame.info-frame h2 {
-                font-size: 1.25rem;
+                font-size: 1.7rem;
             }
 
             .lamp-frame.info-frame .event-info p {
-                font-size: 0.95rem;
+                font-size: 1.12rem;
                 margin: 7px 0;
             }
 
@@ -1422,13 +1442,13 @@
             }
 
             .lamp-frame.info-frame h2 {
-                font-size: 1.05rem;
+                font-size: 1.45rem;
                 margin: 4px 0 6px;
             }
 
             .lamp-frame.info-frame .event-info p {
-                font-size: 0.8rem;
-                line-height: 1.35;
+                font-size: 1.02rem;
+                line-height: 1.3;
                 margin: 4px 0;
             }
 

@@ -1,0 +1,144 @@
+.background-container {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.wave {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 200%;
+    height: 100px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.1) 100%);
+    border-radius: 50% 50% 0 0;
+    animation: waveMove 8s ease-in-out infinite;
+}
+
+.wave:nth-child(2) {
+    animation-delay: -2s;
+    height: 80px;
+    opacity: 0.7;
+}
+
+.wave:nth-child(3) {
+    animation-delay: -4s;
+    height: 60px;
+    opacity: 0.5;
+}
+
+@keyframes waveMove {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(-20px); }
+}
+
+.particle {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 50%;
+    animation: floatParticle 15s infinite ease-in-out;
+}
+
+.particle:nth-child(4) { width: 20px; height: 20px; left: 10%; animation-duration: 12s; }
+.particle:nth-child(5) { width: 15px; height: 15px; left: 30%; animation-delay: 2s; animation-duration: 14s; }
+.particle:nth-child(6) { width: 25px; height: 25px; left: 50%; animation-delay: 4s; animation-duration: 16s; }
+.particle:nth-child(7) { width: 18px; height: 18px; left: 70%; animation-delay: 1s; animation-duration: 13s; }
+.particle:nth-child(8) { width: 22px; height: 22px; left: 85%; animation-delay: 3s; animation-duration: 15s; }
+
+@keyframes floatParticle {
+    0% { transform: translateY(100vh) translateX(0) scale(0); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(-100px) translateX(50px) scale(1); opacity: 0; }
+}
+
+.emoji-float {
+    position: absolute;
+    font-size: 30px;
+    animation: floatEmoji 20s infinite ease-in-out;
+    opacity: 0.4;
+}
+
+.emoji-float:nth-child(9) { left: 15%; animation-duration: 18s; }
+.emoji-float:nth-child(10) { left: 45%; animation-delay: 5s; animation-duration: 22s; }
+.emoji-float:nth-child(11) { left: 75%; animation-delay: 10s; animation-duration: 20s; }
+.emoji-float:nth-child(12) { left: 28%; animation-delay: 7s; animation-duration: 19s; }
+.emoji-float:nth-child(13) { left: 58%; animation-delay: 3s; animation-duration: 21s; }
+.emoji-float:nth-child(14) { left: 88%; animation-delay: 12s; animation-duration: 17s; }
+
+@keyframes floatEmoji {
+    0% { transform: translateY(100vh) translateX(0) rotate(0deg); opacity: 0; }
+    10% { opacity: 0.4; }
+    90% { opacity: 0.4; }
+    100% { transform: translateY(-100px) translateX(100px) rotate(360deg); opacity: 0; }
+}
+
+.star {
+    position: absolute;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 20px;
+    animation: twinkle 3s infinite ease-in-out;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.2); }
+}
+
+.bubble {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    animation: bubbleFloat 20s infinite ease-in-out;
+}
+
+@keyframes bubbleFloat {
+    0% { transform: translateY(100vh) translateX(0) scale(0); opacity: 0; }
+    10% { opacity: 0.6; }
+    90% { opacity: 0.6; }
+    100% { transform: translateY(-100px) translateX(100px) scale(1); opacity: 0; }
+}
+
+.rotating-emoji {
+    position: absolute;
+    font-size: 40px;
+    animation: rotateFloat 15s infinite linear;
+    opacity: 0.5;
+}
+
+@keyframes rotateFloat {
+    0% { transform: translateY(100vh) translateX(0) rotate(0deg); opacity: 0; }
+    10% { opacity: 0.5; }
+    90% { opacity: 0.5; }
+    100% { transform: translateY(-100px) translateX(200px) rotate(720deg); opacity: 0; }
+}
+
+.sparkle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: white;
+    border-radius: 50%;
+    animation: sparkleMove 8s infinite ease-in-out;
+    box-shadow: 0 0 6px white;
+}
+
+@keyframes sparkleMove {
+    0%, 100% { transform: translate(0, 0) scale(1); opacity: 0; }
+    50% { transform: translate(50px, -50px) scale(1.5); opacity: 1; }
+}
+
+.floating-shapes {
+    position: absolute;
+    opacity: 0.3;
+    animation: floatShape 25s infinite ease-in-out;
+}
+
+@keyframes floatShape {
+    0%, 100% { transform: translateY(0) translateX(0) rotate(0deg); }
+    25% { transform: translateY(-50px) translateX(30px) rotate(90deg); }
+    50% { transform: translateY(-100px) translateX(0) rotate(180deg); }
+    75% { transform: translateY(-50px) translateX(-30px) rotate(270deg); }
+}
