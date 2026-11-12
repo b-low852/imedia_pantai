@@ -58,24 +58,19 @@
         .qr-frame {
             position: relative;
             margin-top: 8px;
-            margin-bottom: -24px;
             width: 100%;
-            height: 620px;
+            height: auto;
+            box-sizing: border-box;
+            padding: 88px 18% 110px;
             background: url('lamp.gif') center center / 100% 100% no-repeat;
             text-align: center;
         }
 
         .qr-inner {
-            position: absolute;
-            top: 72px;
-            left: 20%;
-            right: 20%;
-            bottom: 120px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;
-            padding-top: 8px;
             gap: 6px;
         }
 
@@ -117,15 +112,10 @@
             margin-bottom: 4px;
         }
 
-        .contribution-frame {
-            margin-top: 28px;
-            min-height: 420px;
-            padding: 72px 64px 110px;
-            background: url('lamp.gif') center center / 100% 100% no-repeat;
-        }
-
         .contribution-panel {
-            padding: 12px 4px 8px;
+            width: 100%;
+            margin-top: 10px;
+            padding: 4px 0 0;
             background: transparent;
             border: none;
         }
@@ -247,13 +237,10 @@
 
             .qr-frame {
                 height: auto;
-                margin-bottom: 0;
-                padding: 60px 40px 120px;
+                padding: 72px 14% 96px;
             }
 
             .qr-inner {
-                position: static;
-                padding-top: 0;
                 gap: 6px;
             }
 
@@ -270,12 +257,6 @@
                 max-width: 220px;
                 font-size: 0.82rem;
                 line-height: 1.3;
-            }
-
-            .contribution-frame {
-                margin-top: 18px;
-                min-height: 0;
-                padding: 52px 44px 120px;
             }
 
             .contribution-panel h3 {
@@ -299,15 +280,11 @@
 
         @media screen and (max-width: 400px) {
             .qr-frame {
-                padding: 56px 32px 112px;
+                padding: 64px 12% 88px;
             }
 
             .qr-frame img {
                 max-width: 110px;
-            }
-
-            .contribution-frame {
-                padding: 48px 36px 112px;
             }
         }
     </style>
@@ -329,31 +306,28 @@
                         <li>Upload your receipt</li>
                     </ol>
                 </div>
-            </div>
-        </div>
-
-        <div class="contribution-frame">
-            <div class="contribution-panel">
-                <h3>What will you bring? 🎒</h3>
-                <form id="contributionForm" onsubmit="saveContribution(event)">
-                    <div class="form-group">
-                        <label for="name">Your Name:</label>
-                        <input type="text" id="name" name="name" required placeholder="Enter your name">
-                    </div>
-                    <div class="form-group">
-                        <label for="items">Items you're bringing:</label>
-                        <textarea id="items" name="items" required placeholder="e.g., Drinks, Snacks, Chips, etc."></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="receipt">Upload receipt:</label>
-                        <label class="receipt-upload" id="receiptLabel">
-                            <span id="receiptText">📎 Tap to choose receipt image</span>
-                            <input type="file" id="receipt" accept="image/*" onchange="previewReceipt(event)">
-                        </label>
-                        <img id="receiptPreview" class="receipt-preview" alt="Receipt preview">
-                    </div>
-                    <button type="submit" class="submit-btn" id="submitBtn"><span class="btn-text">Submit</span></button>
-                </form>
+                <div class="contribution-panel">
+                    <h3>What will you bring? 🎒</h3>
+                    <form id="contributionForm" onsubmit="saveContribution(event)">
+                        <div class="form-group">
+                            <label for="name">Your Name:</label>
+                            <input type="text" id="name" name="name" required placeholder="Enter your name">
+                        </div>
+                        <div class="form-group">
+                            <label for="items">Items you're bringing:</label>
+                            <textarea id="items" name="items" required placeholder="e.g., Drinks, Snacks, Chips, etc."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="receipt">Upload receipt:</label>
+                            <label class="receipt-upload" id="receiptLabel">
+                                <span id="receiptText">📎 Tap to choose receipt image</span>
+                                <input type="file" id="receipt" accept="image/*" onchange="previewReceipt(event)">
+                            </label>
+                            <img id="receiptPreview" class="receipt-preview" alt="Receipt preview">
+                        </div>
+                        <button type="submit" class="submit-btn" id="submitBtn"><span class="btn-text">Submit</span></button>
+                    </form>
+                </div>
             </div>
         </div>
 
@@ -375,6 +349,26 @@
         const db = firebase.firestore();
         const COLLECTION_NAME = "contributions";
 
+        // lamp.gif is stretched over the whole frame, so the light border
+        // grows with the frame. Keep the QR and form inside that border.
+        function fitLampFrame() {
+            const frame = document.querySelector(".qr-frame");
+            if (!frame || frame.dataset.fitting === "1") return;
+            frame.dataset.fitting = "1";
+            frame.style.padding = "0px";
+            const contentH = frame.scrollHeight;
+            const side = Math.round(frame.clientWidth * 0.14);
+            const topFrac = 0.11;
+            const botFrac = 0.14;
+            const total = contentH / (1 - topFrac - botFrac);
+            frame.style.padding = Math.round(total * topFrac) + "px " + side + "px " + Math.round(total * botFrac) + "px";
+            frame.dataset.fitting = "0";
+        }
+
+        window.addEventListener("load", fitLampFrame);
+        window.addEventListener("resize", fitLampFrame);
+        document.querySelector(".qr-frame img").addEventListener("load", fitLampFrame);
+
         // Firestore documents are capped at 1 MB, so the receipt is shrunk until it fits.
         const MAX_RECEIPT_CHARS = 700000;
 
@@ -388,6 +382,7 @@
                 preview.style.display = "none";
                 label.classList.remove("has-file");
                 text.textContent = "📎 Tap to choose receipt image";
+                fitLampFrame();
                 return;
             }
 
@@ -395,6 +390,8 @@
             label.classList.add("has-file");
             preview.src = URL.createObjectURL(file);
             preview.style.display = "block";
+            preview.onload = fitLampFrame;
+            fitLampFrame();
         }
 
         function loadImage(file) {
