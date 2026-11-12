@@ -329,6 +329,8 @@
         }
 
         .modal-inner {
+            position: relative;
+            z-index: 2;
             max-width: 760px;
             width: 100%;
             margin: 0 auto;
@@ -552,11 +554,19 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 10px;
-            margin: -8px auto 28px;
-            max-width: 420px;
+            gap: 0;
+            margin: -42px auto 12px;
+            max-width: 360px;
             position: relative;
             z-index: 2;
+        }
+
+        .invite-actions .list-link-btn {
+            margin-right: -16px;
+        }
+
+        .invite-actions .add-me-btn {
+            margin-left: -16px;
         }
 
         .add-me-btn,
@@ -1417,8 +1427,8 @@
 
             .invite-actions {
                 max-width: 100%;
-                gap: 8px;
-                margin: 4px auto 20px;
+                gap: 0;
+                margin: -34px auto 8px;
             }
 
             .add-me-btn,
@@ -1455,7 +1465,8 @@
             .invite-actions {
                 flex-direction: row;
                 justify-content: center;
-                gap: 6px;
+                gap: 0;
+                margin: -30px auto 6px;
             }
 
             .add-me-btn,
@@ -1585,6 +1596,39 @@
 
     <div class="modal" id="xmasModal">
         <div class="modal-content xmas-theme">
+            <div class="background-container">
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="emoji-float">🎄</div>
+                <div class="emoji-float">❄️</div>
+                <div class="emoji-float">🎅</div>
+                <div class="emoji-float">🎁</div>
+                <div class="emoji-float">⭐</div>
+                <div class="emoji-float">🔔</div>
+                <div class="rotating-emoji" style="left: 20%; animation-delay: 0s;">⛄</div>
+                <div class="rotating-emoji" style="left: 60%; animation-delay: 3s;">🦌</div>
+                <div class="rotating-emoji" style="left: 80%; animation-delay: 6s;">🎀</div>
+                <div class="star" style="top: 15%; left: 25%; animation-delay: 0s;">⭐</div>
+                <div class="star" style="top: 30%; left: 70%; animation-delay: 1s;">✨</div>
+                <div class="star" style="top: 50%; left: 15%; animation-delay: 2s;">⭐</div>
+                <div class="star" style="top: 70%; left: 85%; animation-delay: 0.5s;">✨</div>
+                <div class="bubble" style="width: 30px; height: 30px; left: 25%; animation-delay: 0s;"></div>
+                <div class="bubble" style="width: 40px; height: 40px; left: 55%; animation-delay: 2s;"></div>
+                <div class="bubble" style="width: 25px; height: 25px; left: 75%; animation-delay: 4s;"></div>
+                <div class="bubble" style="width: 35px; height: 35px; left: 40%; animation-delay: 6s;"></div>
+                <div class="sparkle" style="top: 20%; left: 10%; animation-delay: 0s;"></div>
+                <div class="sparkle" style="top: 40%; left: 50%; animation-delay: 2s;"></div>
+                <div class="sparkle" style="top: 60%; left: 30%; animation-delay: 4s;"></div>
+                <div class="sparkle" style="top: 80%; left: 70%; animation-delay: 1s;"></div>
+                <div class="floating-shapes" style="width: 60px; height: 60px; background: rgba(255, 255, 255, 0.2); border-radius: 50%; top: 10%; left: 5%;"></div>
+                <div class="floating-shapes" style="width: 40px; height: 40px; background: rgba(255, 255, 255, 0.15); border-radius: 20%; top: 60%; left: 90%; animation-delay: 2s;"></div>
+            </div>
             <span class="close" onclick="closeInvite('xmas')">✖</span>
             <div class="modal-inner">
                 <div class="lamp-frame info-frame">
