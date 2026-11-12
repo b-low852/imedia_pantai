@@ -904,7 +904,7 @@
             position: fixed;
             bottom: 16px;
             right: 16px;
-            z-index: 1000;
+            z-index: 1300;
             background: transparent;
             border-radius: 0;
             padding: 0;
@@ -1729,57 +1729,17 @@
             requestAnimationFrame(fitInfoFrames);
         }
 
-        window.addEventListener("resize", fitInfoFrames);
-        if (document.fonts) document.fonts.ready.then(fitInfoFrames);
-
         function closeInvite(type) {
             const id = type === 'bbq' ? 'bbqModal' : 'xmasModal';
             document.getElementById(id).style.display = "none";
             document.body.style.overflow = "";
         }
 
-        // Music Control
-        let isMusicPlaying = false;
-
-        function markMusicPlaying(playing) {
-            const btn = document.getElementById("musicToggle");
-            const label = document.getElementById("musicLabel");
-            isMusicPlaying = playing;
-            btn.classList.toggle("playing", playing);
-            label.textContent = playing ? "Playing" : "Music";
-        }
-
-        function startMusic() {
-            const music = document.getElementById("backgroundMusic");
-            return music.play().then(() => markMusicPlaying(true));
-        }
-
-        function toggleMusic() {
-            const music = document.getElementById("backgroundMusic");
-            if (isMusicPlaying) {
-                music.pause();
-                markMusicPlaying(false);
-                return;
-            }
-            startMusic().catch(() => markMusicPlaying(false));
-        }
-
-        function resumeMusicOnFirstGesture(event) {
-            if (event.target.closest && event.target.closest("#musicToggle")) return;
-            startMusic().then(() => {
-                document.removeEventListener("pointerdown", resumeMusicOnFirstGesture);
-                document.removeEventListener("keydown", resumeMusicOnFirstGesture);
-            }).catch(() => {});
-        }
-
-        window.addEventListener("load", () => {
-            startMusic().catch(() => {
-                document.addEventListener("pointerdown", resumeMusicOnFirstGesture);
-                document.addEventListener("keydown", resumeMusicOnFirstGesture);
-            });
-        });
+        window.addEventListener("resize", fitInfoFrames);
+        if (document.fonts) document.fonts.ready.then(fitInfoFrames);
     </script>
 
+    <script src="music.js"></script>
     <script src="touch-stars.js"></script>
 </body>
 
