@@ -4,6 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <title>Christmas Invitation</title>
+    <link rel="icon" href="tree.png" type="image/png">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://bitch-party.vercel.app/">
+    <meta property="og:title" content="Christmas Gathering">
+    <meta property="og:description" content="Saturday, 12 December 2026 · 2:30 PM – 7:00 PM · Luak Esplanade">
+    <meta property="og:image" content="https://bitch-party.vercel.app/pos.jpeg">
+    <meta property="og:image:secure_url" content="https://bitch-party.vercel.app/pos.jpeg">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:width" content="1408">
+    <meta property="og:image:height" content="768">
+    <meta property="og:image:alt" content="Christmas Gathering invitation">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Christmas Gathering">
+    <meta name="twitter:description" content="Saturday, 12 December 2026 · 2:30 PM – 7:00 PM · Luak Esplanade">
+    <meta name="twitter:image" content="https://bitch-party.vercel.app/pos.jpeg">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
@@ -1565,8 +1580,8 @@
             <span class="music-note n3">♪</span>
         </button>
         <span class="music-label" id="musicLabel">Music</span>
-        <audio id="backgroundMusic" loop>
-            <source src="wantan.mp3" type="audio/mpeg">
+        <audio id="backgroundMusic" loop autoplay>
+            <source src="snowman.mp3" type="audio/mpeg">
             Your browser does not support the audio element.
         </audio>
     </div>
@@ -1726,29 +1741,43 @@
         // Music Control
         let isMusicPlaying = false;
 
-        function toggleMusic() {
-            const music = document.getElementById("backgroundMusic");
+        function markMusicPlaying(playing) {
             const btn = document.getElementById("musicToggle");
             const label = document.getElementById("musicLabel");
+            isMusicPlaying = playing;
+            btn.classList.toggle("playing", playing);
+            label.textContent = playing ? "Playing" : "Music";
+        }
 
+        function startMusic() {
+            const music = document.getElementById("backgroundMusic");
+            return music.play().then(() => markMusicPlaying(true));
+        }
+
+        function toggleMusic() {
+            const music = document.getElementById("backgroundMusic");
             if (isMusicPlaying) {
                 music.pause();
-                btn.classList.remove("playing");
-                label.textContent = "Music";
-                isMusicPlaying = false;
-            } else {
-                btn.classList.add("playing");
-                label.textContent = "Playing";
-                isMusicPlaying = true;
-                music.play().catch(error => {
-                    console.log("Auto-play was prevented. User interaction required.");
-                    btn.classList.remove("playing");
-                    label.textContent = "Music";
-                    isMusicPlaying = false;
-                    alert("Click the music button to play background music!");
-                });
+                markMusicPlaying(false);
+                return;
             }
+            startMusic().catch(() => markMusicPlaying(false));
         }
+
+        function resumeMusicOnFirstGesture(event) {
+            if (event.target.closest && event.target.closest("#musicToggle")) return;
+            startMusic().then(() => {
+                document.removeEventListener("pointerdown", resumeMusicOnFirstGesture);
+                document.removeEventListener("keydown", resumeMusicOnFirstGesture);
+            }).catch(() => {});
+        }
+
+        window.addEventListener("load", () => {
+            startMusic().catch(() => {
+                document.addEventListener("pointerdown", resumeMusicOnFirstGesture);
+                document.addEventListener("keydown", resumeMusicOnFirstGesture);
+            });
+        });
     </script>
 
     <script src="touch-stars.js"></script>
