@@ -19,22 +19,11 @@
         `;
         const style = document.createElement("style");
         style.textContent = `
-            body {
-                box-sizing: border-box;
-                height: 100dvh;
-                overflow: hidden;
-                padding-bottom: 112px !important;
-            }
-            .page {
-                max-height: 100%;
-                overflow-y: auto;
-                -webkit-overflow-scrolling: touch;
-            }
             .music-player-mini {
-                position: fixed;
-                right: 8px;
-                bottom: 4px;
-                z-index: 1300;
+                position: relative;
+                z-index: 2;
+                width: fit-content;
+                margin: 18px 16px 20px auto;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
@@ -91,7 +80,8 @@
             }
         `;
         document.head.appendChild(style);
-        document.body.appendChild(player);
+        const page = document.querySelector(".page") || document.body;
+        page.appendChild(player);
         audio = player.querySelector("audio");
         player.querySelector("#musicToggle").addEventListener("click", () => window.toggleMusic());
     }
