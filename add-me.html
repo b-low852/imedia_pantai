@@ -61,9 +61,19 @@
             width: 100%;
             height: auto;
             box-sizing: border-box;
-            padding: 88px 18% 110px;
-            background: url('lamp.gif') center center / 100% 100% no-repeat;
+            padding: 18px 16px 20px;
+            background: rgba(0, 0, 0, 0.28);
+            border: 1px solid rgba(255, 215, 120, 0.35);
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
             text-align: center;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+
+        .qr-frame:hover {
+            transform: translateY(-3px);
+            border-color: rgba(255, 215, 120, 0.7);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
         }
 
         .qr-inner {
@@ -80,7 +90,7 @@
             text-shadow: 0 1px 4px rgba(0, 0, 0, 1);
         }
 
-        .qr-frame img {
+        .qr-code {
             max-width: 156px;
             width: 70%;
             height: auto;
@@ -237,7 +247,7 @@
 
             .qr-frame {
                 height: auto;
-                padding: 72px 14% 96px;
+                padding: 16px 12px 18px;
             }
 
             .qr-inner {
@@ -248,7 +258,7 @@
                 font-size: 1rem;
             }
 
-            .qr-frame img {
+            .qr-code {
                 max-width: 130px;
                 width: 58%;
             }
@@ -280,10 +290,10 @@
 
         @media screen and (max-width: 400px) {
             .qr-frame {
-                padding: 64px 12% 88px;
+                padding: 14px 10px 16px;
             }
 
-            .qr-frame img {
+            .qr-code {
                 max-width: 110px;
             }
         }
@@ -297,7 +307,7 @@
         <div class="qr-frame">
             <div class="qr-inner">
                 <h3>📱 Scan QR Code</h3>
-                <img src="qrr.png" alt="QR Code">
+                <img class="qr-code" src="qrr.png" alt="QR Code">
                 <div class="qr-steps">
                     <p>Please follow these steps:</p>
                     <ol>
@@ -349,26 +359,6 @@
         const db = firebase.firestore();
         const COLLECTION_NAME = "contributions";
 
-        // lamp.gif is stretched over the whole frame, so the light border
-        // grows with the frame. Keep the QR and form inside that border.
-        function fitLampFrame() {
-            const frame = document.querySelector(".qr-frame");
-            if (!frame || frame.dataset.fitting === "1") return;
-            frame.dataset.fitting = "1";
-            frame.style.padding = "0px";
-            const contentH = frame.scrollHeight;
-            const side = Math.round(frame.clientWidth * 0.14);
-            const topFrac = 0.11;
-            const botFrac = 0.14;
-            const total = contentH / (1 - topFrac - botFrac);
-            frame.style.padding = Math.round(total * topFrac) + "px " + side + "px " + Math.round(total * botFrac) + "px";
-            frame.dataset.fitting = "0";
-        }
-
-        window.addEventListener("load", fitLampFrame);
-        window.addEventListener("resize", fitLampFrame);
-        document.querySelector(".qr-frame img").addEventListener("load", fitLampFrame);
-
         // Firestore documents are capped at 1 MB, so the receipt is shrunk until it fits.
         const MAX_RECEIPT_CHARS = 700000;
 
@@ -382,7 +372,6 @@
                 preview.style.display = "none";
                 label.classList.remove("has-file");
                 text.textContent = "📎 Tap to choose receipt image";
-                fitLampFrame();
                 return;
             }
 
@@ -390,8 +379,6 @@
             label.classList.add("has-file");
             preview.src = URL.createObjectURL(file);
             preview.style.display = "block";
-            preview.onload = fitLampFrame;
-            fitLampFrame();
         }
 
         function loadImage(file) {
