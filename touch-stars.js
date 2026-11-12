@@ -130,10 +130,10 @@
         follow(event.clientX, event.clientY, false);
     });
 
-    window.addEventListener("scroll", () => {
+    document.addEventListener("scroll", () => {
         if (Date.now() - lastTouch > 450) return;
         follow(lastX, lastY, false);
-    }, { passive: true });
+    }, { passive: true, capture: true });
 
     const hint = document.createElement("button");
     hint.className = "scroll-hint";
@@ -148,6 +148,8 @@
             const inner = modal.querySelector(".modal-content");
             if (inner && inner.scrollHeight > inner.clientHeight + 24) return inner;
         }
+        const page = document.querySelector(".page");
+        if (page && page.scrollHeight > page.clientHeight + 24) return page;
         return document.scrollingElement || document.documentElement;
     }
 

@@ -19,20 +19,31 @@
         `;
         const style = document.createElement("style");
         style.textContent = `
+            body {
+                box-sizing: border-box;
+                height: 100dvh;
+                overflow: hidden;
+                padding-bottom: 112px !important;
+            }
+            .page {
+                max-height: 100%;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+            }
             .music-player-mini {
                 position: fixed;
-                right: 12px;
-                bottom: 12px;
+                right: 8px;
+                bottom: 4px;
                 z-index: 1300;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                gap: 4px;
+                gap: 2px;
             }
             .music-player-mini .music-btn {
                 position: relative;
-                width: 110px;
-                height: 130px;
+                width: 64px;
+                height: 76px;
                 padding: 0;
                 border: none;
                 background: transparent;
@@ -42,7 +53,7 @@
                 justify-content: center;
             }
             .music-player-mini .play-icon {
-                width: 110px;
+                width: 64px;
                 height: auto;
                 display: block;
                 filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.45));
