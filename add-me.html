@@ -122,9 +122,17 @@
             margin-bottom: 4px;
         }
 
+        .section-divider {
+            width: 82%;
+            height: 1px;
+            margin: 14px auto 4px;
+            border: none;
+            background: linear-gradient(90deg, transparent, rgba(255, 215, 120, 0.85), transparent);
+        }
+
         .contribution-panel {
             width: 100%;
-            margin-top: 10px;
+            margin-top: 8px;
             padding: 4px 0 0;
             background: transparent;
             border: none;
@@ -302,7 +310,7 @@
 
 <body>
     <div class="page">
-        <a class="back-btn" href="index.html">← Back</a>
+        <a class="back-btn" href="index.html" onclick="return goBack(event)">← Back</a>
 
         <div class="qr-frame">
             <div class="qr-inner">
@@ -316,6 +324,7 @@
                         <li>Upload your receipt</li>
                     </ol>
                 </div>
+                <hr class="section-divider">
                 <div class="contribution-panel">
                     <h3>What will you bring? 🎒</h3>
                     <form id="contributionForm" onsubmit="saveContribution(event)">
@@ -345,6 +354,15 @@
     </div>
 
     <script>
+        function goBack(event) {
+            if (window.history.length > 1) {
+                event.preventDefault();
+                history.back();
+                return false;
+            }
+            return true;
+        }
+
         const firebaseConfig = {
             apiKey: "AIzaSyAsMqAziqwXuTSqX16Cl09j7ZqNxnn1L_4",
             authDomain: "beach-e0f41.firebaseapp.com",

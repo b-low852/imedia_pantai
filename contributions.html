@@ -370,11 +370,11 @@
 <body>
     <div class="page">
         <div class="top-bar">
-            <a class="back-btn" href="index.html">← Back</a>
+            <a class="back-btn" href="index.html" onclick="return goBack(event)">← Back</a>
         </div>
 
         <h1>Contribution List</h1>
-        <p class="subtitle">Beach Barbecue Party — who’s bringing what</p>
+        <p class="subtitle">Christmas Gathering — who’s bringing what</p>
 
         <div class="edit-panel" id="editPanel">
             <h3>Edit Contribution</h3>
@@ -406,6 +406,15 @@
     </div>
 
     <script>
+        function goBack(event) {
+            if (window.history.length > 1) {
+                event.preventDefault();
+                history.back();
+                return false;
+            }
+            return true;
+        }
+
         const firebaseConfig = {
             apiKey: "AIzaSyAsMqAziqwXuTSqX16Cl09j7ZqNxnn1L_4",
             authDomain: "beach-e0f41.firebaseapp.com",
